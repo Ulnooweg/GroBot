@@ -13,6 +13,7 @@ This section currently only goes through the steps necessary to install/update t
 
 ### Installing/Updating - keeping user settings intact
 This instruction set will install/update the GroBot software while keeping user settings intact.
+**Please fully read all instructions carefully before implementing them.**
 
 #### Downloads
 1. Download the latest release of the GroBot software from [the release page](https://github.com/TNarakol-UEC/GroBot/releases/latest).
@@ -23,7 +24,7 @@ This instruction set will install/update the GroBot software while keeping user 
 1. Shutdown the GroBot.
 2. Remove the USB drive from the GroBot Raspberry Pi and plug it in to the computer.
 3. Navigate to the USB drive and open the folder "code".
-4. Inside the "code" folder, **except grobot_cfg.ini**, delete every existing file and folder in the folder "code" **except grobot_cfg.ini** to ensure that there is no old code files that could conflict with the new version. Keep "grobot_cfg.ini" to ensure user settings are saved.
+4. Inside the "code" folder, delete every existing file and folder **except grobot_cfg.ini** in the folder "code" to ensure that there is no old code files that could conflict with the new version. Keep "grobot_cfg.ini" to ensure user settings are saved.
    - If there is no "grobot_cfg.ini" in the code folder or it is empty already, please instead use [Installing/Updating - reset GroBot to factory settings](#installingupdating---reset-grobot-to-factory-settings) instructions instead.
 5. Copy all the content of the folder "code" from the extracted GroBot Release-keepsettings zip file to the folder "code" on the USB drive.
 6. Remove the USB drive from the computer and reinsert it into the GroBot.
