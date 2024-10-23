@@ -5,6 +5,12 @@ This file contains instructions for setting up/building the GroBot hardware and 
 Please contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca) for more details on hardware setup and building instructions.
 
 ## Software
-This section goes through the entire process of installing the GroBot software starting from OS installation.
-1. Install the appropriate Raspberry Pi OS:
->  Raspberry Pi OS (64-bit) Bookworm (Standard)
+
+### Notice
+This section currently only goes through the steps necessary to install/update the GroBot software, assuming that a properly configured Raspbeery Pi OS running inside a GroBot hardware already exist. The steps required to completely install GroBot software onto a fresh Raspberry Pi installation will be published at a later date. Please contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca) for more details.
+
+### Downloads
+
+### Installation
+
+### Testing
