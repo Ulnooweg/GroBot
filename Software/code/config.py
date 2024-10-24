@@ -1,18 +1,21 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-#Config file readout code
-#V1.0.3
-#
-#This code defines several important function to read config files including
-#get_plant _settings() which read config and return plant settings as a tuple of data
+#GroBot
+#Code: config
+#Version: 1.0.4
+#Description: Code to read and manipulate configuration file grobot_cfg.ini
+#Function: get_plant _settings(), read config and return plant settings as a tuple of data
+#          read_config(), read config.ini and return a dictionary value of all data
+#          update_config(section, parameter, value), write "value" to config file under "parameter" parameter in "section" section
+#Input: update_config requires section and parameter in strings and value in any form convertible to strings. 
+#Output: returns dictionary variable in string for read_config() and in integer for get_plant_settings(); output data to file for update_config(...)
+#Error Handling: NONE
 #
 ########################################
 

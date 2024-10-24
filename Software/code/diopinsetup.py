@@ -1,18 +1,19 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-#This function setup digital IO pins, their directions and sensor objects
-#V1.0.3
-#
-#This functions execute without input and return s1 thru s6, ths, and sms objects on success
-#returns 0 on failure
+#GroBot
+#Code: diopinsetup
+#Version: 1.0.4
+#Description: This function setup digital IO pins, their directions and sensor objects
+#Function: diopinset(), setup digitalIO pins and sensors and return them as object when called
+#Input: NONE
+#Output: returns a tuple of pins s1 thru s6, temp/humidity sensor, and soil moisture sensor objects
+#Error Handling: returns 0 on failure
 #
 ########################################
 #MODULE IMPORTS

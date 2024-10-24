@@ -16,7 +16,7 @@ This instruction set will install/update the GroBot software while keeping user 
 **Please fully read all instructions carefully before implementing them.**
 
 #### Downloads
-1. Download the latest release of the GroBot software from [the release page](https://github.com/TNarakol-UEC/GroBot/releases/latest).
+1. Download the latest release of the GroBot software from [the release page](https://github.com/Ulnooweg/GroBot/releases/latest).
    - Download the file titled "Release-keepsettings.zip".
 2. Extract the zip file content. You should see a directory called "Release-keepsettings" containing 2 directory "code" and "systemd_bootfile".
 
@@ -39,7 +39,7 @@ This instruction set will install/update the GroBot software and reset its setti
 **Note: All settings will be reverted to factory defaults. This action is irreversible**
 
 #### Downloads
-1. Download the latest release of the GroBot software from [the release page](https://github.com/TNarakol-UEC/GroBot/releases/latest).
+1. Download the latest release of the GroBot software from [the release page](https://github.com/Ulnooweg/GroBot/releases/latest).
    - Download the file titled "Release.zip".
 2. Extract the zip file content. You should see a directory called "Release" containing 2 directory "code" and "systemd_bootfile".
 

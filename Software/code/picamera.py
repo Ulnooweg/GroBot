@@ -1,18 +1,19 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-#This function takes picture using pi camera
-#V1.0.3
-#
-#This functions execute without input and export timestamped image to external drive, if not fallback to code/pictures
-#returns 0 on failure, 1 on success, 2 onfallback
+#GroBot
+#Code: picamera
+#Version: 1.0.4
+#Description: This function takes picture using pi camera
+#Function: picam_capture(), capture image using rpi-still the using imagemagic convert to add annotations (timestamps)
+#Input: NONE
+#Output: Timestamped image from Pi Camera to fixed location or fallback directory.
+#Error Handling: returns 0 on failure, 1 on success, 2 on usage of fallback directory
 #
 ########################################
 #MODULE IMPORTS

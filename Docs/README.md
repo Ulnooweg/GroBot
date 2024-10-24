@@ -20,7 +20,7 @@ Software setup and hardware setup/building instructions can be found in the [set
 Please consult the [FAQ](FAQ.md) and [Troubleshooting](Troubleshooting.md) for commonly asked questions on usage and troubleshooting. Or contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca).
 
 ### Latest release
-Latest software release can be found [here](https://github.com/TNarakol-UEC/GroBot/releases/latest)
+Latest software release can be found [here](https://github.com/Ulnooweg/GroBot/releases/latest)
 
 ## Contributing
 For more information on contributing to the project, please consult [contributing instructions](CONTRIBUTING.md)

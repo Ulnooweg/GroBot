@@ -1,18 +1,19 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-# This function read sensor feeds
-#V1.0.3
-#
-# This function executes without input and returns Temp, %RH, and soilRH to main in raw form
-# returns single number 0 on failure
+#GroBot
+#Code: sensorfeed
+#Version: 1.0.4
+#Description: This function read sensor feeds and return its value
+#Function: feedread(), read sensor values and return it as a tuple of values
+#Input: NONE
+#Output: Returns value of temperature, relative humidity, and soil humidity in order as a tuple of numbers
+#Error Handling: returns 0 on failure
 #
 ########################################
 # MODULE IMPORTS

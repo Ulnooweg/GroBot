@@ -1,18 +1,19 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-#This function write data to output excel file
-#V1.0.3
-#
-#This functions execute with inputs Temp, %RH, and soil RH and writes them along with time to an excel file
-#returns 0 on failure, 1 on success, 2 on secondary fallback storage used
+#GroBot
+#Code: dataout
+#Version: 1.0.4
+#Description: Code to write data to output excel file
+#Function: excelout(T,RH,SRH), write timestamp, "T" temperature, "RH" relative humidity, "SRH" soil humidity to excel file once called
+#Input: excelout(...) requires Temperature, Relative Humidity, Soil humidity as a numerical input
+#Output: data output to excel file in fixed directory or fallback location for excelout(...)
+#Error Handling: returns 0 on failure, 1 on success, 2 on secondary fallback storage used
 #
 ########################################
 #MODULE IMPORTS

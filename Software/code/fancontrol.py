@@ -1,18 +1,20 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-# This function controls the right fan
-#V1.0.3
-#
-# This functions execute with desired time to turn fan on
-# returns 0 on failure, 1 on success
+#GroBot
+#Code: fancontrol
+#Version: 1.0.4
+#Description: This function controls the growth chamber fan
+#Function: fanon(t), turns the fan on for time "t"
+#          fanoff(), turns the fan off
+#Input: fanon(...) requires time to turn fan on inputted in numerical form; fanoff() do not requires input
+#Output: NONE
+#Error Handling: returns 0 on failure, 1 on success
 #
 ########################################
 # MODULE IMPORTS

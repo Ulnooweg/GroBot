@@ -1,15 +1,19 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-#LCD Module control code
-#V1.0.3
+#GroBot
+#Code: lcddispfunc
+#Version: 1.0.4
+#Description: LCD Module control code
+#Function: Controls the workings of the LCD display and human interaction. Consult Info.md for more information
+#Input: consult Info.md
+#Output: consult Info.md
+#Error Handling: consult Info.md
 #
 ########################################
 
