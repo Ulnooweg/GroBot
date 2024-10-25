@@ -13,7 +13,15 @@
 #Function: No callable function by itself but handles all the calling of other function and the main loop of GroBot. Consult Info.md for more information
 #Input: NONE
 #Output: NONE
-#Error Handling: Built-in, output to log/terminal.
+#Error Handling: Built-in, output to log/terminal. The logs text out to terminal is:
+#                RuntimeError: SENSOR FAIL
+#                RuntimeError: UKNOWN FAILURE
+#                RuntimeError: LIGHT FAIL
+#                RuntimeError
+#                RuntimeError: WATER FAIL
+#                RuntimeError: DATAOUT FAIL
+#                RuntimeError: PICAMERA FAIL
+#                RuntimeError: TIME EXCEPTION
 #
 ########################################
 #MODULE IMPORTS

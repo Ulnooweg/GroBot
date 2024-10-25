@@ -13,7 +13,8 @@
 #Function: feedread(), read sensor values and return it as a tuple of values
 #Input: NONE
 #Output: Returns value of temperature, relative humidity, and soil humidity in order as a tuple of numbers
-#Error Handling: returns 0 on failure
+#Error Handling: returns 0 on failure and output to log/terminal. The logs text out to terminal is:
+#                RuntimeError: Failed to initialize pins and sensors
 #
 ########################################
 # MODULE IMPORTS

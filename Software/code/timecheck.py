@@ -13,7 +13,8 @@
 #Function: checktimebetween(starttime, endtime), check if current time falls between starttime and endtime and returns True/False
 #Input: Start time and end time in proper time format by converting the tuple (hh,mm) using time(hh,mm) from datetime library
 #Output: True or False
-#Error Handling: NONE
+#Error Handling: Output to log/terminal. The logs text out to terminal is:
+#                RuntimeError: TIME COMPARE FAILURE
 #
 ########################################
 

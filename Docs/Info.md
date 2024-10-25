@@ -140,3 +140,11 @@ The LCD interface is managed by several functions in the lcddispfunc.py module:
 * settings_menu(): Allows users to modify system settings.
 * manual_control_menu(): Provides options for manual system control.
 * update_display(): Refreshes the LCD with current information.
+
+### Error Logging
+The GroBot have error logging capabilities. Error are logged in the process log before the GroBot process will attempt to be restarted. The following lists the error codes/message that will be output to the process log file.
+
+1. RuntimeError: SENSOR FAIL
+   - Sensor failure, could not communicate with sensors.
+2. RuntimeError: UKNOWN FAILURE
+   - Unknown failure. Please contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca) 

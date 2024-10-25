@@ -59,5 +59,3 @@ def grobotboot(): #Define a callable function by main
         s.value = False
     
     return
-
-grobotboot() #Also call the function to be used on boot when this file is ran directly
