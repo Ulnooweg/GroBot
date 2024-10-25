@@ -1,18 +1,27 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-#This function is the main function
-#V1.0.3
-#
-#This functions should call other submodules/functions and execute them as needed/scheduled
-#This functions always run under grobot service
+#GroBot
+#Code: main
+#Version: 1.0.4
+#Description: This is the main function that's ran by systemd grobot service.
+#Function: No callable function by itself but handles all the calling of other function and the main loop of GroBot. Consult Info.md for more information
+#Input: NONE
+#Output: NONE
+#Error Handling: Built-in, output to log/terminal. The logs text out to terminal is:
+#                RuntimeError: SENSOR FAIL
+#                RuntimeError: UKNOWN FAILURE
+#                RuntimeError: LIGHT FAIL
+#                RuntimeError
+#                RuntimeError: WATER FAIL
+#                RuntimeError: DATAOUT FAIL
+#                RuntimeError: PICAMERA FAIL
+#                RuntimeError: TIME EXCEPTION
 #
 ########################################
 #MODULE IMPORTS

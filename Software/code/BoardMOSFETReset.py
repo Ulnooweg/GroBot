@@ -1,17 +1,19 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-#MOSTFET close python code
-#V1.0.3
-#
-#This code always run first by main. Force close all mosfets gates from unknown floats.
+#GroBot
+#Code: BoardMOSFETReset
+#Version: 1.0.4
+#Description: Code to set all MOSFET gate to False (open circuit). Used on startup with grobotboot.
+#Function: grobotboot(), force all MOSFET gate to False (open circuit) when called
+#Input: NONE
+#Output: NONE
+#Error Handling: NONE
 #
 ########################################
 
@@ -21,7 +23,7 @@ import board
 import busio
 import digitalio
 
-def grobotboot():
+def grobotboot(): #Define a callable function by main
     #Setup pinouts for hardware used
     #Current: Raspberry Pi 3 A+ with BCRobotics Irrigation Hat V2
     #For Blinka, the pins are defined as DXX

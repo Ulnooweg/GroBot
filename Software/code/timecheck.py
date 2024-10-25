@@ -1,19 +1,20 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-#This function check if current time is between set time
-#V1.0.3
-#
-#This functions execute with inputs start and end time. It can also handle time that crosses midnight
-#returns True on current time in range, False on out of range
-#Note: The time start and end input must be converted from tuple using time(hh,mm) outside the function first
+#GroBot
+#Code: timecheck
+#Version: 1.0.4
+#Description: This function check if current time is between set time. It can handle time that crosses midnight
+#Function: checktimebetween(starttime, endtime), check if current time falls between starttime and endtime and returns True/False
+#Input: Start time and end time in proper time format by converting the tuple (hh,mm) using time(hh,mm) from datetime library
+#Output: True or False
+#Error Handling: Output to log/terminal. The logs text out to terminal is:
+#                RuntimeError: TIME COMPARE FAILURE
 #
 ########################################
 

@@ -1,18 +1,22 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
+#GroBot
+#Code: watercontrol
+#Version: 1.0.4
+#Description: This function controls watering
+#Function: autorain(mmrain), turns on the pump for a time such that the water delivered is "mmrain" mm of rain
+#          stopwater(), turns of the pump upon being called
+#Input: autorain(...) requires mmrain as a numerical input, stopwater() requires no input
+#Output: NONE
+#Error Handling: returns 0 on failure, 1 on success, 2 on low water
 #
-# This function controls watering
-#V1.0.3
-#
-# This functions execute with desired volume if using autowater or desired mm of rain if using autorain
-# returns 0 on failure, 1 on success, 2 on low water
+#POST-SCRIPT: Water level check in autorain is currently turned off pending further investigation to make it more consistent.
 #
 ########################################
 # MODULE IMPORTS

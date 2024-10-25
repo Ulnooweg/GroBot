@@ -1,18 +1,20 @@
 #Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
-#Source: https://github.com/TNarakol-UEC/GroBot
+#Source: https://github.com/Ulnooweg/GroBot
+#Contact: engineering@ulnooweg.ca
 #
 ########################################
 #
-#Contact: engineering@ulnooweg.ca
-#Growth Enclosure 
-#
-#These functions controls the light
-#V1.0.3
-#
-#These functions take no arguments
-#returns 0 on failure, 1 on success
+#GroBot
+#Code: lightcontrol
+#Version: 1.0.4
+#Description: These functions controls the growlight
+#Function: growlighton(), turns growlight on
+#          growlightoff(), turns growlight off
+#Input: NONE
+#Output: NONE
+#Error Handling: returns 0 on failure, 1 on success
 #
 ########################################
 #MODULE IMPORTS
