@@ -1,8 +1,8 @@
 # Troubleshooting
 
 ## Table of Contents
-[Accessing the system log](#accessing-the-system-log)
-[USB Drive corruption](#usb-drive-corruption)
+[Accessing the system log](#accessing-the-system-log)<br/>
+[USB Drive corruption](#usb-drive-corruption)<br/>
 [Growth Enclosure Not Working](#growth-enclosure-not-working)
 
 

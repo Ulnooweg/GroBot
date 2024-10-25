@@ -1,8 +1,8 @@
 # Frequently Asked Questions
 
 ## Table of Contents
-[Usage Instructions](#usage-instructions)
-[Terminal/SSH Login Password](#terminalssh-login-password)
+[Usage Instructions](#usage-instructions)<br/>
+[Terminal/SSH Login Password](#terminalssh-login-password)<br/>
 [Accessing Terminal (non-SSH)](#accessing-terminal-non-ssh)
 
 ## Usage Instructions
