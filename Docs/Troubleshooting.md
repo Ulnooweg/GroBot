@@ -22,3 +22,10 @@ If the USB drive is become corrupted, please:
 3. Follow the steps to reinstall the GroBot software with factory settings in [setup](Setup.md#installingupdating---reset-grobot-to-factory-settings)
 
 ## Growth Enclosure Not Working
+
+## Bug Report-Support
+If you still encountered an unresolved problem after following the troubleshooting instructions for the GroBot, please either:
+
+1. Submit a bug report in this GitHub repository, including all relevant information especially the logs.
+
+2. Contact the development team at [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca).
