@@ -7,7 +7,7 @@ This collection of works is licensed under multiple license with the following s
 * The companion user manuals are licensed under CC BY-NC-SA 4.0
   - These are contained in the folder:
     + User_Manual
-* Any other works are presumed to be unlicensed and all rights are retained by Ulnooweg Education Centre or releveant parties unless stated otherwise.
+* Any other works are presumed to be unlicensed and all rights are retained by Ulnooweg Education Centre or releveant rightholders unless stated otherwise.
   - These are contained in the folder:
     + Docs
 
