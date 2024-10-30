@@ -2,7 +2,7 @@
 This file list the technical information and specifications of the GroBot.
 
 ## Hardware
-Please refer to [SETTING UP YOUR GROBOT](/User_Manual/SETTING%20UP%20YOUR%20GROBOT.pdf) or [USING YOUR GROBOT.pdf](/User_Manual/USING%20YOUR%20GROBOT.pdf) for some hardware specifications, especially the parts list in section 5 of `USING YOUR GROBOT.pdf`. 
+Please refer to [SETTING UP YOUR GROBOT](/User_Manual/SETTING%20UP%20YOUR%20GROBOT.pdf) or [USING YOUR GROBOT](/User_Manual/USING%20YOUR%20GROBOT.pdf) for some hardware specifications, especially the parts list in section 5 of `USING YOUR GROBOT.pdf`. 
 
 For any additional inquiries, please contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca) for more details on hardware specifications.
 
@@ -146,4 +146,4 @@ The LCD interface is managed by several functions in the lcddispfunc.py module:
 ### Error Logging
 The GroBot have error logging capabilities. Error are logged in the process log before the GroBot process will attempt to be restarted. The following lists the error codes/message that will be output to the process log file:
 
-> Please contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca) for more information.
+- Please contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca) for more information.

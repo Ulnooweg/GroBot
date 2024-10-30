@@ -8,10 +8,10 @@
 [Accessing Terminal (non-SSH)](#accessing-terminal-non-ssh)
 
 ## Usage Instructions
-Please refer to [USING YOUR GROBOT.pdf](/User_Manual/USING%20YOUR%20GROBOT.pdf) for instructions on using the GroBot.
+Please refer to [USING YOUR GROBOT](/User_Manual/USING%20YOUR%20GROBOT.pdf) for instructions on using the GroBot.
 
 ## Terminal/SSH Login Password
-For login credentials, please consult [USING YOUR GROBOT.pdf](/User_Manual/USING%20YOUR%20GROBOT.pdf), section 4.3
+For login credentials, please consult [USING YOUR GROBOT](/User_Manual/USING%20YOUR%20GROBOT.pdf), section 4.3
 
 ## Accessing Terminal (non-SSH)
 There are 2 methods of accessing the terminal on the GroBot. One is via SSH which requires wifi access. Another which will be shown here is through the UART serial connection inteface. (Note: This has to be enabled on the Raspberry Pi OS. It should be enabled on the GroBot supplied by Ulnooweg Education Centre.)

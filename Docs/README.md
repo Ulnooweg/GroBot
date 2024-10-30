@@ -17,6 +17,7 @@ For information on hardware and software specifications and descriptions for the
 Software setup and hardware setup/building instructions can be found in the [setup file](Setup.md) document.
 
 ### Usage Instructions
+- Instruction on how to dowload PDF file can be found in [User_Manual_readme](/User_Manual/User_Manual_readme.md#pdf-download-instructions).
 - Please consult the [FAQ](FAQ.md) for commonly asked questions and usage instructions.
 - Please consult [Troubleshooting](Troubleshooting.md) for troubleshooting instructions.
 - For any additional inquiries, please contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca).
