@@ -25,7 +25,7 @@ Licensed under CC BY-NC-SA 4.0
 The EUPL is officially available in both [English](#english-eupl-12) and [French](#french-eupl-12) which has been included here.
 Other languages are available [from the EU](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12).
 
-CC BY-NC-SA 4.0 is available in [English](#english-cc-by-nc-sa-40) which has been included here. Other languages are avilable [fram Creative Commons](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en)
+CC BY-NC-SA 4.0 is available in [English](#english-cc-by-nc-sa-40) which has been included here. Other languages are available [from Creative Commons](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en)
 
 ## EUPL-1.2
 ### English EUPL-1.2 
