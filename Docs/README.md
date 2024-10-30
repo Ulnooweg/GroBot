@@ -17,10 +17,15 @@ For information on hardware and software specifications and descriptions for the
 Software setup and hardware setup/building instructions can be found in the [setup file](Setup.md) document.
 
 ### Usage Instructions
-Please consult the [FAQ](FAQ.md) and [Troubleshooting](Troubleshooting.md) for commonly asked questions on usage and troubleshooting. Or contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca).
+- Please consult the [FAQ](FAQ.md) for commonly asked questions and usage instructions.
+- Please consult [Troubleshooting](Troubleshooting.md) for troubleshooting instructions.
+- For any additional inquiries, please contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca).
+
+### Support
+Any support inquiries please refer to the [Bug Report-Support](/Docs/Troubleshooting.md#bug-report-support) sections in [Troubleshooting document](/Docs/Troubleshooting.md).
 
 ### Latest release
-Latest software release can be found [here](https://github.com/Ulnooweg/GroBot/releases/latest)
+Latest software release can be found [in the release section](https://github.com/Ulnooweg/GroBot/releases/latest)
 
 ## Contributing
 For more information on contributing to the project, please consult [contributing instructions](CONTRIBUTING.md)
