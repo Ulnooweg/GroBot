@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: main
-#Version: 1.0.4
+#Version: 1.1
 #Description: This is the main function that's ran by systemd grobot service.
 #Function: No callable function by itself but handles all the calling of other function and the main loop of GroBot. Consult Info.md for more information
 #Input: NONE

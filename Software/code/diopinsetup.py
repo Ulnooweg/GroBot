@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: diopinsetup
-#Version: 1.0.4
+#Version: 1.1
 #Description: This function setup digital IO pins, their directions and sensor objects
 #Function: diopinset(), setup digitalIO pins and sensors and return them as object when called
 #Input: NONE

@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: fancontrol
-#Version: 1.0.4
+#Version: 1.1
 #Description: This function controls the growth chamber fan
 #Function: fanon(t), turns the fan on for time "t"
 #          fanoff(), turns the fan off

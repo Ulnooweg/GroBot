@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: watercontrol
-#Version: 1.0.4
+#Version: 1.1
 #Description: This function controls watering
 #Function: autorain(mmrain), turns on the pump for a time such that the water delivered is "mmrain" mm of rain
 #          stopwater(), turns of the pump upon being called

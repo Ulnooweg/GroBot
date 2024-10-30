@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: dataout
-#Version: 1.0.4
+#Version: 1.1
 #Description: Code to write data to output excel file
 #Function: excelout(T,RH,SRH), write timestamp, "T" temperature, "RH" relative humidity, "SRH" soil humidity to excel file once called
 #Input: excelout(...) requires Temperature, Relative Humidity, Soil humidity as a numerical input

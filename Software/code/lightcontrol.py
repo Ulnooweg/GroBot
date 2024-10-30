@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: lightcontrol
-#Version: 1.0.4
+#Version: 1.1
 #Description: These functions controls the growlight
 #Function: growlighton(), turns growlight on
 #          growlightoff(), turns growlight off

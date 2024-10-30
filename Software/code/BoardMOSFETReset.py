@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: BoardMOSFETReset
-#Version: 1.0.4
+#Version: 1.1
 #Description: Code to set all MOSFET gate to False (open circuit). Used on startup with grobotboot.
 #Function: grobotboot(), force all MOSFET gate to False (open circuit) when called
 #Input: NONE

@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: config
-#Version: 1.0.4
+#Version: 1.1
 #Description: Code to read and manipulate configuration file grobot_cfg.ini
 #Function: get_plant _settings(), read config and return plant settings as a tuple of data
 #          read_config(), read config.ini and return a dictionary value of all data

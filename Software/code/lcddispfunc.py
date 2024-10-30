@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: lcddispfunc
-#Version: 1.0.4
+#Version: 1.1
 #Description: LCD Module control code
 #Function: Controls the workings of the LCD display and human interaction. Consult Info.md for more information
 #Input: consult Info.md
