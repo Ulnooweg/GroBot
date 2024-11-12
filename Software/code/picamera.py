@@ -13,7 +13,7 @@
 #Function: picam_capture(), capture image using rpi-still the using imagemagic convert to add annotations (timestamps)
 #Input: NONE
 #Output: Timestamped image from Pi Camera to fixed location or fallback directory.
-#Error Handling: returns 0 on failure, 1 on success, 2 on usage of fallback directory
+#Error Handling: returns 0 on failure, 1 on success, Output to log/terminal "RuntimeError: FILE IO FAIL" if the output location is not found
 #
 ########################################
 #MODULE IMPORTS
@@ -46,9 +46,8 @@ def picam_capture():
         if os.path.isdir(directory) == True: #check if exist
             returnvar = 1 #set variable to return = 1
             pass #if it is pass
-        else: #if not set directory to alternative directory
-            returnvar = 2 #set variable to return = 2
-            directory = "/home/grobot/code/pictures"  # specify your directory here
+        else: #if not return error to force a code restart
+            raise RuntimeError('FILE IO FAIL')
 
         filename = f"{directory}/camera-image-{timestamp}.jpeg" #construct filename structure using f-string
         subprocess.run(['rpicam-still', '-o', filename]) #capture to filename which already have directory specified using libcamera command line tool

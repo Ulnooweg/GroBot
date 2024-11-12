@@ -13,7 +13,7 @@
 #Function: excelout(T,RH,SRH), write timestamp, "T" temperature, "RH" relative humidity, "SRH" soil humidity to excel file once called
 #Input: excelout(...) requires Temperature, Relative Humidity, Soil humidity as a numerical input
 #Output: data output to excel file in fixed directory or fallback location for excelout(...)
-#Error Handling: returns 0 on failure, 1 on success, 2 on secondary fallback storage used
+#Error Handling: returns 0 on failure, 1 on success, Output to log/terminal "RuntimeError: FILE IO FAIL" if the output location is not found
 #
 ########################################
 #MODULE IMPORTS
@@ -30,9 +30,8 @@ def excelout(T,RH,SRH):
         if os.path.isdir(directory) == True: #check if exist
             returnvar = 1 #set variable to return = 1
             pass #if it is pass
-        else: #if not set directory to alternative directory
-            returnvar = 2 #set variable to return = 2
-            directory = "/home/grobot/code/data"  # specify your directory here
+        else: #if not return error to force a code restart
+            raise RuntimeError('FILE IO FAIL')
 
         #Now check if the output excel file exist, if it does not create it.
         filename = f"{directory}/datalog.xlsx"
