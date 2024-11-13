@@ -29,7 +29,7 @@ config = configparser.ConfigParser()
 def picam_capture():
     try:
         #First check if the camera is configured to be on:
-        config.read("grobot_cfg.ini") #Read the grobot config file
+        config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini") #Read the grobot config file
         match config['PICAMERA']['CameraSet']: #Configparser always parse as strings
             case '0': #0 is no camera attached
                 return 1 #Ends function and returns now, sending 1 as it successfelly do not execute per config

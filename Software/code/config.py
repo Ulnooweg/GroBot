@@ -26,11 +26,11 @@ config = configparser.ConfigParser()
 config.optionxform = str #Force keep case-sensititvity in config file
 
 def read_config():
-    config.read("grobot_cfg.ini")
+    config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
     return config
 
 def get_plant_settings(): #Define get_plant_settings which read config file and put them in a dictionaried variable
-    config.read("grobot_cfg.ini")
+    config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
     settings = {
         'sunrise': [int(x) for x in config['PLANTCFG']['sunrise'].split(",")],
         'sunset': [int(x) for x in config['PLANTCFG']['sunset'].split(",")],
@@ -44,7 +44,7 @@ def get_plant_settings(): #Define get_plant_settings which read config file and 
     return settings #return variable as a dictionary 
 
 def update_config(section, parameter, value): #Define function to write variable back to config file
-    config.read("grobot_cfg.ini")
+    config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
     config[section][parameter] = str(value)
-    with open('grobot_cfg.ini', 'w') as configfile:
+    with open('/mnt/grobotextdat/userdata/grobot_cfg.ini', 'w') as configfile:
         config.write(configfile)
