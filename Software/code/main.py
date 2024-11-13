@@ -40,12 +40,14 @@ from dataout import excelout
 from timecheck import checktimebetween
 from config import get_plant_settings
 from lcddispfunc import lcd_menu_thread, set_lcd_color
+from logoutput import logtofile
 
 ##############################################
 ################# ON BOOTUP ##################
 ##############################################
 
 #Runs BoardMostfetReset
+logtofile() #Write log to file immediately after boot in case needed for debugging
 grobotboot() #This force all pin reset
 
 # This only initialize once on bootup
@@ -325,6 +327,7 @@ while 1:
         case 25:
             run_threaded(EveryXX25)
         case 35:
+            run_threaded(logtofile) #Write log immediately every loop
             run_threaded(EveryXX35)
         case _:
             pass
