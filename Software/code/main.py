@@ -24,6 +24,10 @@
 #                RuntimeError: TIME EXCEPTION
 #
 ########################################
+#Logging, immediately import the logging function and push it to file
+from logoutput import logtofile
+logtofile() #Write log to file immediately after boot in case needed for debugging
+
 #MODULE IMPORTS
 from datetime import time, datetime
 import time as time2 #We already import time from datetime so time library is imported as time2
@@ -40,14 +44,12 @@ from dataout import excelout
 from timecheck import checktimebetween
 from config import get_plant_settings
 from lcddispfunc import lcd_menu_thread, set_lcd_color
-from logoutput import logtofile
 
 ##############################################
 ################# ON BOOTUP ##################
 ##############################################
 
 #Runs BoardMostfetReset
-logtofile() #Write log to file immediately after boot in case needed for debugging
 grobotboot() #This force all pin reset
 
 # This only initialize once on bootup
