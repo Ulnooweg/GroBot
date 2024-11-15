@@ -24,7 +24,7 @@ import threading
 from lightcontrol import growlighton, growlightoff
 from fancontrol import fanon, fanoff
 from watercontrol import autorain, stopwater
-from picamera import picam_capture
+from grobotpicam import picam_capture
 import config
 from timecheck import checktimebetween
 from datetime import datetime, time as datetime_time

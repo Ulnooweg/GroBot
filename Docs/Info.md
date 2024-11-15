@@ -67,7 +67,7 @@ The GroBot software itself is separated off into multiple files, henceforth call
 8. lighcontrol.py
    - Provide functions to turn growlight on or off.
    - Contains callable function growlighton() and growlightoff() which turns growlight on or off.
-9. picamera.py
+9. grobotpicam.py
    - Provide functions that take image of the grow area using Pi camera and annotate it with a timestamp.
    - Requires imagemagick to be installed to the system as an external non-python software.
    - Contains callable function picam_capture() which takes picture using pi camera and use imagemagick to annotate the picture with timestamp.

@@ -39,7 +39,7 @@ from sensorfeed import feedread
 from watercontrol import autorain
 from fancontrol import fanon
 from lightcontrol import growlighton, growlightoff
-from picamera import picam_capture
+from grobotpicam import picam_capture
 from dataout import excelout
 from timecheck import checktimebetween
 from config import get_plant_settings
