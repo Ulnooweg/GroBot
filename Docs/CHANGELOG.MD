@@ -11,7 +11,10 @@ This file lists all the historical changelogs of the project as published public
 
 ## Changelogs
 ### V1.1
-TBD
+Major change, moved stuff to userdata
+Recommend change logfile size back to default (4GB)
+Implement standardized error logging
+Implement grobot-firmware update script
 
 ### V1.0.4
 Updated header notes and specifications in some code.
