@@ -265,8 +265,7 @@ def adjust_soil_moisture_threshold():
     value = int(cfg['PLANTCFG']['dryValue'])
     percentage = int((value / 1000) * 100)  # Convert to percentage
     lcd.clear()
-    message = f"Soil Moisture %:\n{percentage}%"
-    lcd.message = message
+    lcd.message = f"Soil Moisture:\n{percentage}%"
     last_update = time.monotonic()
     hold_start = None
     while True:
@@ -278,8 +277,8 @@ def adjust_soil_moisture_threshold():
             elif current_time - hold_start > 0.5:  # Hold for 0.5 seconds
                 percentage = min(percentage + 10, 100)
             if current_time - last_update > 0.1:  # Update display every 0.1 seconds
-                message = f"Soil Moisture %:\n{percentage}%"
-                lcd.message = message
+                lcd.clear()
+                lcd.message = f"Soil Moisture:\n{percentage}%"
                 last_update = current_time
         elif lcd.down_button:
             if hold_start is None:
@@ -288,8 +287,8 @@ def adjust_soil_moisture_threshold():
             elif current_time - hold_start > 0.5:  # Hold for 0.5 seconds
                 percentage = max(percentage - 10, 0)
             if current_time - last_update > 0.1:  # Update display every 0.1 seconds
-                message = f"Soil Moisture %:\n{percentage}%"
-                lcd.message = message
+                lcd.clear()
+                lcd.message = f"Soil Moisture:\n{percentage}%"
                 last_update = current_time
         else:
             hold_start = None
@@ -299,8 +298,7 @@ def adjust_soil_moisture_threshold():
             config.update_config('PLANTCFG', 'dryValue', str(value))
             apply_settings()  # Apply the parameter change
             lcd.clear()
-            message = f"Set to:\n{percentage}%"
-            lcd.message = message
+            lcd.message = f"Set to:\n{percentage}%"
             time.sleep(1)  # Show the set message
             clear_and_return_to_menu()
             break
