@@ -10,22 +10,9 @@ The GroBot has the following capability:
 2. Easy to use with fully replacable user code with no terminal access required. Automatic data and picture recording for later processing.
 
 ## Getting started
-### Specifications and Information
-For information on hardware and software specifications and descriptions for the GroBot. Please consult the [information file](Info.md).
+Please see the [Grobot Wiki](https://github.com/Ulnooweg/GroBot/wiki).
 
-### Installation
-Software setup and hardware setup/building instructions can be found in the [setup file](Setup.md) document.
-
-### Usage Instructions
-- Instruction on how to dowload PDF file can be found in [User_Manual_readme](/User_Manual/User_Manual_readme.md#pdf-download-instructions).
-- Please consult the [FAQ](FAQ.md) for commonly asked questions and usage instructions.
-- Please consult [Troubleshooting](Troubleshooting.md) for troubleshooting instructions.
-- For any additional inquiries, please contact [Ulnooweg Education Centre - Engineering Department](mailto:engineering@ulnooweg.ca).
-
-### Support
-Any support inquiries please refer to the [Bug Report-Support](/Docs/Troubleshooting.md#bug-report-support) sections in [Troubleshooting document](/Docs/Troubleshooting.md).
-
-### Latest release
+## Latest release
 Latest software release can be found [in the release section](https://github.com/Ulnooweg/GroBot/releases/latest)
 
 ## Contributing
