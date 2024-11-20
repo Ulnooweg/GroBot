@@ -11,6 +11,7 @@ This collection of works is licensed under multiple license with the following s
   - These are contained in the folder:
     + 00_repo_resource
     + Docs
+  - They also includes all work in the wiki at [GroBot Wiki](https://github.com/Ulnooweg/GroBot/wiki)
 
 # Copyright statement
 Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.<br/>
