@@ -13,7 +13,7 @@
 #Function: diopinset(), setup digitalIO pins and sensors and return them as object when called
 #Input: NONE
 #Output: returns a tuple of pins s1 thru s6, temp/humidity sensor, and soil moisture sensor objects
-#Error Handling: returns 0 on failure
+#Error Handling: Standard UEC Error Handling V1
 #
 ########################################
 #MODULE IMPORTS
@@ -69,5 +69,5 @@ def diopinset(): #define diopinset function that takes no arguments
         sms = Seesaw(qwiic, addr=0x36) # Soil Moisture Sensor
 
         return s1, s2, s3, s4, s5, s6, b1, ths, sms #return the pins and sensors as tuple of objects
-    except:
-        return 0
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

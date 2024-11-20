@@ -14,7 +14,7 @@
 #          stopwater(), turns of the pump upon being called
 #Input: autorain(...) requires mmrain as a numerical input, stopwater() requires no input
 #Output: NONE
-#Error Handling: returns 0 on failure, 1 on success, 2 on low water
+#Error Handling: Standard UEC Error Handling V1
 #
 #POST-SCRIPT: Water level check in autorain is currently turned off pending further investigation to make it more consistent.
 #
@@ -56,13 +56,13 @@ def autorain(mmrain):  # define autorain func with mm of water input as mm
         s1.value = False  # turns off pump
         return 1
     
-    except:
-        return 0
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 
 def stopwater():  # define function to stop watering
     try:
         s1.value = False  # turns off pump
         return 1
-    except:
-        return 0
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

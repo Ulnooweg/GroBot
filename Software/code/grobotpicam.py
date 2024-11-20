@@ -13,7 +13,7 @@
 #Function: picam_capture(), capture image using rpi-still the using imagemagic convert to add annotations (timestamps)
 #Input: NONE
 #Output: Timestamped image from Pi Camera to fixed location or fallback directory.
-#Error Handling: returns 0 on failure, 1 on success, Output to log/terminal "RuntimeError: FILE IO FAIL" if the output location is not found
+#Error Handling: Standard UEC Error Handling V1
 #
 ########################################
 #MODULE IMPORTS
@@ -32,11 +32,11 @@ def picam_capture():
         config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini") #Read the grobot config file
         match config['PICAMERA']['CameraSet']: #Configparser always parse as strings
             case '0': #0 is no camera attached
-                return 1 #Ends function and returns now, sending 1 as it successfelly do not execute per config
+                return 1 #Ends function and returns now, sending 1 as it successfully do not execute per config
             case '1':
                 pass
             case _:
-                return 0 #If there is no proper match, return an error 
+                raise RuntimeError('PICAM CONFIG ERROR') #If there is no proper match, raise an error
         #This part takes an image    
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") #get current date and time
         humantimestamp = datetime.datetime.now().strftime("%H:%M %d/%B/%Y") #Timestamp for image
@@ -44,7 +44,6 @@ def picam_capture():
         #Now this part will determine what directory to use
         directory = "/mnt/grobotextdat/pictures" #This is the main external directory associated with USB
         if os.path.isdir(directory) == True: #check if exist
-            returnvar = 1 #set variable to return = 1
             pass #if it is pass
         else: #if not return error to force a code restart
             raise RuntimeError('FILE IO FAIL')
@@ -60,6 +59,6 @@ def picam_capture():
         #Note The command is 'convert filename -pointsize 150 -fill "#DEC035" -annotate +100+2500 'TIMESTAMP' filename'
         subprocess.run(['convert', filename, '-pointsize', fontsize, '-fill', fontcolour, '-annotate', XYpos, humantimestamp, filename])
 
-        return returnvar #return success or failure variables
-    except:
-        return 0
+        return 1
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

@@ -16,7 +16,7 @@
 #          readcsv(), read data from ulnoowegdat and return it as a list
 #Input: update_config requires section and parameter in strings and value in any form convertible to strings. 
 #Output: returns dictionary variable in string for read_config() and in integer for get_plant_settings(); output data to file for update_config(...); output list of data for readcsv
-#Error Handling: NONE
+#Error Handling: Standard UEC Error Handling V1
 #
 ########################################
 
@@ -28,34 +28,47 @@ config = configparser.ConfigParser()
 config.optionxform = str #Force keep case-sensititvity in config file
 
 def read_config():
-    config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
-    return config
+    try:
+        config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
+        return config
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def get_plant_settings(): #Define get_plant_settings which read config file and put them in a dictionaried variable
-    config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
-    settings = {
-        'sunrise': [int(x) for x in config['PLANTCFG']['sunrise'].split(",")],
-        'sunset': [int(x) for x in config['PLANTCFG']['sunset'].split(",")],
-        'checkTime': [int(x) for x in config['PLANTCFG']['checkTime'].split(",")],
-        'dryValue': int(config['PLANTCFG']['dryValue']),
-        'maxTemp': int(config['PLANTCFG']['maxTemp']),
-        'maxHumid': int(config['PLANTCFG']['maxHumid']),
-        'waterVol': int(config['PLANTCFG']['waterVol']),
-        'fanTime': int(config['PLANTCFG']['fanTime'])
-    }
-    return settings #return variable as a dictionary 
+    try:
+        config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
+        settings = {
+            'sunrise': [int(x) for x in config['PLANTCFG']['sunrise'].split(",")],
+            'sunset': [int(x) for x in config['PLANTCFG']['sunset'].split(",")],
+            'checkTime': [int(x) for x in config['PLANTCFG']['checkTime'].split(",")],
+            'dryValue': int(config['PLANTCFG']['dryValue']),
+            'maxTemp': int(config['PLANTCFG']['maxTemp']),
+            'maxHumid': int(config['PLANTCFG']['maxHumid']),
+            'waterVol': int(config['PLANTCFG']['waterVol']),
+            'fanTime': int(config['PLANTCFG']['fanTime'])
+        }
+        return settings #return variable as a dictionary
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def update_config(section, parameter, value): #Define function to write variable back to config file
-    config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
-    config[section][parameter] = str(value)
-    with open('/mnt/grobotextdat/userdata/grobot_cfg.ini', 'w') as configfile:
-        config.write(configfile)
+    try:
+        config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
+        config[section][parameter] = str(value)
+        with open('/mnt/grobotextdat/userdata/grobot_cfg.ini', 'w') as configfile:
+            config.write(configfile)
+        return 1
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def readcsv(): #define a function to read csv file
-    csvdata = [] #define an empty list
-    with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'r') as csvfile: #open the csv file as csvfile object
-        csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
-        for row in csvraw: #iterate through each row in cswraw
-            csvdata.append(row) #for each row, append the data to the list
+    try:
+        csvdata = [] #define an empty list
+        with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'r') as csvfile: #open the csv file as csvfile object
+            csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+            for row in csvraw: #iterate through each row in cswraw
+                csvdata.append(row) #for each row, append the data to the list
 
-    return csvdata #return the csv data in list form
+        return csvdata #return the csv data in list form
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

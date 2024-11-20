@@ -11,7 +11,7 @@
 
 ## Accessing the system log
 To access the system logs for the GroBot, please first access the terminal either via SSH or otherwise (see [Accessing Terminal (non-SSH)](FAQ.md#accessing-terminal-non-ssh) and [Terminal/SSH Login Password](FAQ.md#terminalssh-login-password)). Then enter the command:
-> journalctl -u grobot.service -n 1000 -r --no-pager
+> journalctl -u grobot.service -n 1000 --no-pager
 * Scroll using the scroll wheel.
 * Press Ctrl+C to exit the log.
 

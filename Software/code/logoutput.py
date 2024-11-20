@@ -13,7 +13,7 @@
 #Function: logtofile(), output the grobot log from journalctl output to a logfile in /mnt/grobotextdat/userdata
 #Input: NONE
 #Output: NONE
-#Error Handling: Output to log/terminal "RuntimeError: LOG IO FAIL" if any uncatched failure occurs and "RuntimeError('FILE IO FAIL')" if output dir don't exist
+#Error Handling: Standard UEC Error Handling V1
 #
 ########################################
 #MODULE IMPORTS
@@ -33,8 +33,10 @@ def logtofile():
         #Now run the log output using subprocess
         #This runs journalctl and force overwrite the output to the specified logfile.log using >|
         #We use shell=True to specify using system shell so the wildcard >| can be used
+        #Here the -r flag is used so most recent is on top as in terminal recent on bottom is more convenient but a file open top down
+        #while terminal stops at bottom so when writing to file makes the top the most recent entry
         subprocess.run('journalctl -u grobot.service -n 1000 -r --no-pager >| /mnt/grobotextdat/userdata/logfile.log', shell=True)
         
-        return
-    except:
-        raise RuntimeError('LOG IO FAIL')
+        return 1
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
