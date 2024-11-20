@@ -141,7 +141,7 @@ def adjust_parameter(parameter_name, step, min_val, max_val, display_name):
             lcd.clear()
             lcd.message = f"Set to:\n{value}"
             time.sleep(1)  # Show the set message
-            return
+            return  # Simply return to previous menu
         time.sleep(0.2)  # Reduce refresh rate to minimize jitter
 
 
@@ -300,8 +300,7 @@ def adjust_soil_moisture_threshold():
             lcd.clear()
             lcd.message = f"Set to:\n{percentage}%"
             time.sleep(1)  # Show the set message
-            clear_and_return_to_menu()
-            break
+            return  # Simply return to previous menu instead of clear_and_return_to_menu()
         time.sleep(0.05)  # Reduce CPU usage
 
 def manual_control_menu():
