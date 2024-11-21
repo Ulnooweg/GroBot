@@ -68,7 +68,23 @@ def debounce(button):
 def display_menu(options, index):
     """Helper function to display menu options with the current selection on the bottom line."""
     lcd.clear()
-    lcd.message = f"Select Option:\n{options[index][:16]}"
+    option_text = options[index]
+    if len(option_text) > 16:  # If text is longer than LCD width
+        # Show first 13 chars + "..." to indicate more
+        lcd.message = f"Select Option:\n{option_text[:13]}..."
+        time.sleep(1)  # Wait a second
+        # Then scroll the full text
+        start_pos = 0
+        while start_pos + 16 <= len(option_text):
+            lcd.clear()
+            lcd.message = f"Select Option:\n{option_text[start_pos:start_pos+16]}"
+            start_pos += 1
+            time.sleep(0.3)  # Adjust speed as needed
+        # Return to beginning
+        lcd.clear()
+        lcd.message = f"Select Option:\n{option_text[:16]}"
+    else:
+        lcd.message = f"Select Option:\n{option_text[:16]}"
 
 def clear_and_return_to_menu():
     """Clear the LCD and return to the main menu."""

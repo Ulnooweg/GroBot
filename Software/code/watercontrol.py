@@ -22,6 +22,7 @@
 # MODULE IMPORTS
 import time  # need time for sleep function
 from diopinsetup import diopinset
+from lcddispfunc import set_lcd_color  # Add this import
 
 ##############################################
 # Handle the pins definition and sensor definition
@@ -51,18 +52,24 @@ def autorain(mmrain):  # define autorain func with mm of water input as mm
 
         mmrate = 2.11  # rate of watering in seconds/mm_Water
         t = mmrain*mmrate  # time required to water in seconds
+        set_lcd_color("in_progress")  # Set blue color when starting watering
         s1.value = True  # turns on pump
         time.sleep(t)  # sleep for t seconds while pump is on
         s1.value = False  # turns off pump
+        set_lcd_color("normal")  # Reset to green color when done
         return 1
     
     except Exception as errvar:
+        set_lcd_color("error")  # Set red color on error
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 
 def stopwater():  # define function to stop watering
     try:
+        set_lcd_color("in_progress")  # Set blue color when stopping water
         s1.value = False  # turns off pump
+        set_lcd_color("normal")  # Reset to green color when done
         return 1
     except Exception as errvar:
+        set_lcd_color("error")  # Set red color on error
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
