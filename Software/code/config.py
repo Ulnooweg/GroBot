@@ -17,7 +17,8 @@
 #          writecsv(csventryname,csventryvalue), take strings entry name and entry value and write it to the appropriate entry columns in ulnoowegdat csv
 #          writecsvnote(csventryname,csventryvalue,csventrynote) same as writecsv except also takes entry note and write that string also to the note column of the appropriate entry in ulnoowegdat csv
 #          readcsv_softver(csventryname), same as readcsv except it reads the file/code/softver instead of /userdata/ulnoowegdat
-#Input: update_config requires section and parameter in strings and value in any form convertible to strings. readcsv, writecsv, writecsvnote, and readcsv_softver requires string inputs
+#          writecsvnewrow(col1,col2,col3), append a new row to the end with column col1, col2, col3 inputted as string
+#Input: update_config requires section and parameter in strings and value in any form convertible to strings. readcsv, writecsv, writecsvnote, readcsv_softver, and writecsvnewrow requires string inputs
 #Output: returns dictionary variable in string for read_config() and in integer for get_plant_settings(); output data to file for update_config(...); output string for readcsv and readcsv_softver
 #Error Handling: Standard UEC Error Handling V1
 #
@@ -138,5 +139,18 @@ def readcsv_softver(csventryname): #define a function to read csv file and retur
                 else:
                     pass
         raise RuntimeError('CSV ENTRY NOT FOUND') #If entry not found raise an error
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
+def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv file with 3 column
+    try:
+        #All input must be string
+        csvdata = [col1,col2,col3] #define the row list
+        #Now write the data back to file in line append mode
+        with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'a', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            writer.writerow(csvdata) #Use writerow not writerows as we only want to write a single row
+
+        return 1 #return the csv data in list form
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
