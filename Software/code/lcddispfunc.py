@@ -144,6 +144,7 @@ def edit_settings_menu():
 
 def adjust_parameter(parameter_name, step, min_val, max_val, display_name):
     """General function to adjust a numerical parameter."""
+<<<<<<< HEAD
     try:
         set_lcd_color("in_progress")  # Blue while adjusting
         cfg = config.read_config()
@@ -177,6 +178,32 @@ def adjust_parameter(parameter_name, step, min_val, max_val, display_name):
         lcd.message = f"Error: {e}"
         time.sleep(2)
         set_lcd_color("normal")
+=======
+    cfg = config.read_config()
+    value = int(cfg['PLANTCFG'][parameter_name])
+    lcd.clear()
+    lcd.message = f"{display_name}:\n{value}"
+    while True:
+        if lcd.up_button:
+            debounce(lambda: lcd.up_button)
+            value = min(value + step, max_val)
+            lcd.clear()
+            lcd.message = f"{display_name}:\n{value}"
+        elif lcd.down_button:
+            debounce(lambda: lcd.down_button)
+            value = max(value - step, min_val)
+            lcd.clear()
+            lcd.message = f"{display_name}:\n{value}"
+        elif lcd.select_button:
+            debounce(lambda: lcd.select_button)
+            config.update_config('PLANTCFG', parameter_name, str(value))
+            apply_settings()  # Apply the parameter change
+            lcd.clear()
+            lcd.message = f"Set to:\n{value}"
+            time.sleep(1)  # Show the set message
+            return  # Simply return to previous menu
+        time.sleep(0.2)  # Reduce refresh rate to minimize jitter
+>>>>>>> 72f19c97824f906301a24dc5cb17600370eee367
 
 
 def adjust_time_parameter(parameter_name, display_name):
@@ -334,8 +361,7 @@ def adjust_soil_moisture_threshold():
             lcd.clear()
             lcd.message = f"Set to:\n{percentage}%"
             time.sleep(1)  # Show the set message
-            clear_and_return_to_menu()
-            break
+            return  # Simply return to previous menu instead of clear_and_return_to_menu()
         time.sleep(0.05)  # Reduce CPU usage
 
 def manual_control_menu():
