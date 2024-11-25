@@ -47,10 +47,19 @@ def set_lcd_color(status):
     """Set LCD color based on status."""
     if status == "normal":
         lcd.color = [0, 100, 0]  # Green
+        lcd.rgb = [0, 100, 0]    # Ensure RGB values are set properly
     elif status == "in_progress":
         lcd.color = [0, 0, 100]  # Blue
+        lcd.rgb = [0, 0, 100]    # Set RGB explicitly
+        # Adjust contrast for better visibility on blue background
+        lcd.contrast = 60        # Adjust this value (0-255) for best visibility
     elif status == "error":
         lcd.color = [100, 0, 0]  # Red
+        lcd.rgb = [100, 0, 0]    # Set RGB explicitly
+    
+    # Reset contrast when not blue
+    if status != "in_progress":
+        lcd.contrast = 40        # Default contrast value
 
 def debounce(button):
     """ Debounce a button property """
@@ -135,30 +144,39 @@ def edit_settings_menu():
 
 def adjust_parameter(parameter_name, step, min_val, max_val, display_name):
     """General function to adjust a numerical parameter."""
-    cfg = config.read_config()
-    value = int(cfg['PLANTCFG'][parameter_name])
-    lcd.clear()
-    lcd.message = f"{display_name}:\n{value}"
-    while True:
-        if lcd.up_button:
-            debounce(lambda: lcd.up_button)
-            value = min(value + step, max_val)
-            lcd.clear()
-            lcd.message = f"{display_name}:\n{value}"
-        elif lcd.down_button:
-            debounce(lambda: lcd.down_button)
-            value = max(value - step, min_val)
-            lcd.clear()
-            lcd.message = f"{display_name}:\n{value}"
-        elif lcd.select_button:
-            debounce(lambda: lcd.select_button)
-            config.update_config('PLANTCFG', parameter_name, str(value))
-            apply_settings()  # Apply the parameter change
-            lcd.clear()
-            lcd.message = f"Set to:\n{value}"
-            time.sleep(1)  # Show the set message
-            return
-        time.sleep(0.2)  # Reduce refresh rate to minimize jitter
+    try:
+        set_lcd_color("in_progress")  # Blue while adjusting
+        cfg = config.read_config()
+        value = int(cfg['PLANTCFG'][parameter_name])
+        lcd.clear()
+        lcd.message = f"{display_name}:\n{value}"
+        while True:
+            if lcd.up_button:
+                debounce(lambda: lcd.up_button)
+                value = min(value + step, max_val)
+                lcd.clear()
+                lcd.message = f"{display_name}:\n{value}"
+            elif lcd.down_button:
+                debounce(lambda: lcd.down_button)
+                value = max(value - step, min_val)
+                lcd.clear()
+                lcd.message = f"{display_name}:\n{value}"
+            elif lcd.select_button:
+                debounce(lambda: lcd.select_button)
+                config.update_config('PLANTCFG', parameter_name, str(value))
+                apply_settings()
+                lcd.clear()
+                lcd.message = f"Set to:\n{value}"
+                time.sleep(1)
+                set_lcd_color("normal")  # Back to normal when done
+                return
+            time.sleep(0.2)
+    except Exception as e:
+        set_lcd_color("error")
+        lcd.clear()
+        lcd.message = f"Error: {e}"
+        time.sleep(2)
+        set_lcd_color("normal")
 
 
 def adjust_time_parameter(parameter_name, display_name):
@@ -322,10 +340,18 @@ def adjust_soil_moisture_threshold():
 
 def manual_control_menu():
     """Function to handle manual controls."""
-    options = ['Take Picture Now', 'Water Now', 'Stop Watering Now', 'Light On Now', 'Light Off Now', 'Fan On Now', 'Fan Off Now', 'Back']
+    options = ['Take Picture Now', 'Water Now', 'Stop Watering', 'Light On Now', 'Light Off Now', 'Fan On Now', 'Fan Off Now', 'Back']
     index = 0
     display_menu(options, index)
     while True:
+        if watering_active:
+            # If watering is active, ignore all button presses except Stop Watering
+            if lcd.select_button and options[index] == 'Stop Watering':
+                debounce(lambda: lcd.select_button)
+                control_watering(False)
+            time.sleep(0.1)
+            continue
+            
         update = False
         if lcd.up_button:
             debounce(lambda: lcd.up_button)
@@ -338,14 +364,12 @@ def manual_control_menu():
         if update:
             display_menu(options, index)
         elif lcd.select_button:
-            # Wait for button release to avoid multiple triggers
-            while lcd.select_button:
-                time.sleep(0.01)
+            debounce(lambda: lcd.select_button)
             if options[index] == 'Take Picture Now':
                 start_picture_thread()
             elif options[index] == 'Water Now':
                 start_watering_thread()
-            elif options[index] == 'Stop Watering Now':
+            elif options[index] == 'Stop Watering':
                 control_watering(False)
             elif options[index] == 'Light On Now':
                 control_light(True)
@@ -356,10 +380,10 @@ def manual_control_menu():
             elif options[index] == 'Fan Off Now':
                 control_fan(False)
             elif options[index] == 'Back':
-                return
+                if not watering_active:  # Only allow back if not watering
+                    return
             display_menu(options, index)
-            time.sleep(0.5)  # Pause before returning to menu
-        time.sleep(0.05)  # Small delay to reduce CPU usage
+            time.sleep(0.5)
 
 def start_fan_thread():
     """Start the fan in a separate thread."""
@@ -379,66 +403,82 @@ def control_light(turn_on):
     """Control the grow light."""
     global manual_override
     try:
+        set_lcd_color("in_progress")  # Blue while changing light state
         if turn_on:
-            print("Turning on the light...")  # Debugging line
             result = growlighton()
             manual_override["light"] = True
-            lcd.clear()
-            lcd.message = "Light On" if result else "Light On Failed"
         else:
-            print("Turning off the light...")  # Debugging line
             result = growlightoff()
             manual_override["light"] = False
-            lcd.clear()
-            lcd.message = "Light Off" if result else "Light Off Failed"
-        print(f"Light control result: {result}")  # Debugging line
-        time.sleep(2)  # Keep the message for 2 seconds
+        set_lcd_color("normal")  # Back to normal when done
+        lcd.clear()
+        lcd.message = ("Light On" if turn_on else "Light Off") if result else "Light Change Failed"
+        time.sleep(2)
     except Exception as e:
-        print(f"Error in control_light: {e}")  # Debugging line
+        set_lcd_color("error")
         lcd.clear()
         lcd.message = f"Error: {e}"
         time.sleep(2)
+        set_lcd_color("normal")
 
 def control_picture():
     """Control the picture-taking process."""
     try:
+        set_lcd_color("in_progress")
+        lcd.clear()
+        lcd.message = "Taking Picture..."
+        # Don't check buttons during picture capture
         result = picam_capture()
+        set_lcd_color("normal")
         lcd.clear()
         lcd.message = "Picture Taken" if result else "Picture Failed"
-        time.sleep(2)  # Keep the message for 2 seconds
+        time.sleep(2)
     except Exception as e:
+        set_lcd_color("error")
         lcd.clear()
         lcd.message = f"Error: {e}"
         time.sleep(2)
+        set_lcd_color("normal")
 
 def control_watering(start):
     """Control the watering system."""
     global manual_override, watering_active
     try:
-        settings = config.get_plant_settings()  # Get the latest settings
+        settings = config.get_plant_settings()
         if start:
-            print("Starting watering...")  # Debugging line
+            # Clear and set message before starting watering
+            lcd.clear()
+            set_lcd_color("in_progress")
+            lcd.message = "Watering..."
+            
+            # Start watering
             result = autorain(settings['waterVol'])
             manual_override["watering"] = True
+            
+            # Only update display after watering is complete
             lcd.clear()
-            lcd.message = "Watering" if result == 1 else "Watering Failed"
-            if result == 2:
-                lcd.message = "Low Water"
-            print(f"Watering control result: {result}")  # Debugging line
+            set_lcd_color("normal")
+            lcd.message = "Watering Done" if result == 1 else "Watering Failed"
+            watering_active = False
+            time.sleep(2)
         else:
-            print("Stopping watering...")  # Debugging line
+            # For manual stop
+            lcd.clear()
+            set_lcd_color("in_progress")
             result = stopwater()
             manual_override["watering"] = False
             watering_active = False
+            
             lcd.clear()
-            lcd.message = "Water Stopped" if result else "Stop Failed"
-            print(f"Water stopping result: {result}")  # Debugging line
-        time.sleep(2)  # Keep the message for 2 seconds
+            set_lcd_color("normal")
+            lcd.message = "Water Stopped"
+            time.sleep(2)
     except Exception as e:
-        print(f"Error in control_watering: {e}")  # Debugging line
         lcd.clear()
+        set_lcd_color("error")
         lcd.message = f"Error: {e}"
         time.sleep(2)
+        set_lcd_color("normal")
 
 def return_to_initial_screen():
     """Function to display the initial LCD screen with time and prompt."""
@@ -455,45 +495,61 @@ def control_fan(turn_on):
     """Control the fan."""
     global manual_override
     try:
-        settings = config.get_plant_settings()  # Get the latest settings
+        settings = config.get_plant_settings()
         if turn_on:
-            print("Turning on the fan...")  # Debugging line
+            set_lcd_color("in_progress")
+            lcd.clear()
+            lcd.message = "Starting Fan..."
             result = fanon(settings['fanTime'])
             manual_override["fan"] = True
+            # Don't check buttons during fan operation
             lcd.clear()
-            lcd.message = "Fan On" if result else "Fan On Failed"
-            print(f"Fan control result: {result}")  # Debugging line
+            lcd.message = "Fan Running..."
+            time.sleep(settings['fanTime'])  # Wait for fan cycle
+            set_lcd_color("normal")
+            lcd.clear()
+            lcd.message = "Fan Done" if result else "Fan Failed"
         else:
-            print("Turning off the fan...")  # Debugging line
+            set_lcd_color("in_progress")
             result = fanoff()
             manual_override["fan"] = False
+            set_lcd_color("normal")
             lcd.clear()
             lcd.message = "Fan Off" if result else "Fan Off Failed"
-            print(f"Fan stopping result: {result}")  # Debugging line
-        time.sleep(2)  # Keep the message for 2 seconds
+        time.sleep(2)
     except Exception as e:
-        print(f"Error in control_fan: {e}")  # Debugging line
+        set_lcd_color("error")
         lcd.clear()
         lcd.message = f"Error: {e}"
         time.sleep(2)
+        set_lcd_color("normal")
 
-def apply_settings(): # Important note, not required to check every settings let main loop run
-    
-    # global settings
-    # settings = get_plant_settings()  # Re-read the latest settings from the config file
-
-    # Immediately apply the settings that require real-time updates
-    # if checktimebetween(datetime_time(settings['sunrise'][0], settings['sunrise'][1]), datetime_time(settings['sunset'][0], settings['sunset'][1])):
-    #     growlighton()
-    # else:
-    #     growlightoff()
-
-    # if ReadVal[0] > settings['maxTemp'] or ReadVal[1] > settings['maxHumid']:
-    #     fanon(settings['fanTime'])
-    # else:
-    #     fanoff()
-
-    return
+def apply_settings():
+    try:
+        settings = get_plant_settings()
+        
+        # For fan control based on temperature/humidity
+        if ReadVal[0] > settings['maxTemp'] or ReadVal[1] > settings['maxHumid']:
+            set_lcd_color("in_progress")  # Blue while starting fan
+            fanon(settings['fanTime'])
+            set_lcd_color("normal")  # Back to normal after fan starts
+        else:
+            set_lcd_color("in_progress")  # Blue while stopping fan
+            fanoff()
+            set_lcd_color("normal")  # Back to normal after fan stops
+            
+        # Other settings checks can remain commented out as before
+        # if checktimebetween(...):
+        #     growlighton()
+        # else:
+        #     growlightoff()
+        
+        return
+    except Exception as e:
+        set_lcd_color("error")
+        time.sleep(1)
+        set_lcd_color("normal")
+        return
 
 
 
@@ -538,3 +594,16 @@ def lcd_menu_thread():
             main_menu()
             lcd.clear()
         time.sleep(1)  # Refresh the time every second
+
+def clear_action_status():
+    """Clear the blue action status light"""
+    lcd.color = [0, 100, 0]  # Return to green (normal state)
+    lcd.rgb = [0, 100, 0]    # Ensure RGB values are set
+    lcd.contrast = 40        # Reset contrast to default
+
+def display_status(message, action=False):
+    if action:
+        lcd.set_color(0.0, 0.0, 1.0)  # Blue for action
+    else:
+        clear_action_status()
+    # ... rest of the function
