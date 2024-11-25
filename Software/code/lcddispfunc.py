@@ -29,7 +29,7 @@ import config
 from timecheck import checktimebetween
 from datetime import datetime, time as datetime_time
 import subprocess  # Import for setting the system time
-from config import get_plant_settings
+from config import get_plant_settings, get_version_info
 
 # Global variables for manual override and watering state
 manual_override = {
@@ -103,7 +103,17 @@ def clear_and_return_to_menu():
 
 def edit_settings_menu():
     """Function to navigate and edit settings."""
-    options = ['System Time', 'Sunrise Time', 'Sunset Time', 'Irrigation', 'Temp Setpoint', 'Humidity Setpoint', 'Camera Yes/No', 'Back']
+    options = [
+        'System Date/Time',  # New combined option
+        'Sunrise Time',
+        'Sunset Time',
+        'Irrigation',
+        'Temp Setpoint',
+        'Humidity Setpoint',
+        'Camera On',
+        'Camera Off',
+        'Back'
+    ]
     index = 0
     display_menu(options, index)
     while True:
@@ -120,8 +130,8 @@ def edit_settings_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'System Time':
-                adjust_system_time('System Time')
+            if options[index] == 'System Date/Time':
+                adjust_system_time('System Date/Time')
             elif options[index] == 'Sunrise Time':
                 adjust_time_parameter('sunrise', 'Sunrise Time')
             elif options[index] == 'Sunset Time':
@@ -132,11 +142,12 @@ def edit_settings_menu():
                 adjust_parameter('maxTemp', 1, 0, 50, 'Temperature Setpoint')
             elif options[index] == 'Humidity Setpoint':
                 adjust_parameter('maxHumid', 5, 0, 100, 'Humidity Setpoint')
-            elif options[index] == 'Camera Yes/No':
-                cfg = config.read_config()
-                cam_set = cfg['PICAMERA']['CameraSet']
-                config.update_config('PICAMERA', 'CameraSet', '0' if cam_set == '1' else '1')
-                apply_settings()  # Apply the camera setting change
+            elif options[index] == 'Camera On':
+                config.update_config('PICAMERA', 'CameraSet', '1')
+                apply_settings()
+            elif options[index] == 'Camera Off':
+                config.update_config('PICAMERA', 'CameraSet', '0')
+                apply_settings()
             elif options[index] == 'Back':
                 return
             display_menu(options, index)
@@ -144,41 +155,6 @@ def edit_settings_menu():
 
 def adjust_parameter(parameter_name, step, min_val, max_val, display_name):
     """General function to adjust a numerical parameter."""
-<<<<<<< HEAD
-    try:
-        set_lcd_color("in_progress")  # Blue while adjusting
-        cfg = config.read_config()
-        value = int(cfg['PLANTCFG'][parameter_name])
-        lcd.clear()
-        lcd.message = f"{display_name}:\n{value}"
-        while True:
-            if lcd.up_button:
-                debounce(lambda: lcd.up_button)
-                value = min(value + step, max_val)
-                lcd.clear()
-                lcd.message = f"{display_name}:\n{value}"
-            elif lcd.down_button:
-                debounce(lambda: lcd.down_button)
-                value = max(value - step, min_val)
-                lcd.clear()
-                lcd.message = f"{display_name}:\n{value}"
-            elif lcd.select_button:
-                debounce(lambda: lcd.select_button)
-                config.update_config('PLANTCFG', parameter_name, str(value))
-                apply_settings()
-                lcd.clear()
-                lcd.message = f"Set to:\n{value}"
-                time.sleep(1)
-                set_lcd_color("normal")  # Back to normal when done
-                return
-            time.sleep(0.2)
-    except Exception as e:
-        set_lcd_color("error")
-        lcd.clear()
-        lcd.message = f"Error: {e}"
-        time.sleep(2)
-        set_lcd_color("normal")
-=======
     cfg = config.read_config()
     value = int(cfg['PLANTCFG'][parameter_name])
     lcd.clear()
@@ -203,8 +179,6 @@ def adjust_parameter(parameter_name, step, min_val, max_val, display_name):
             time.sleep(1)  # Show the set message
             return  # Simply return to previous menu
         time.sleep(0.2)  # Reduce refresh rate to minimize jitter
->>>>>>> 72f19c97824f906301a24dc5cb17600370eee367
-
 
 def adjust_time_parameter(parameter_name, display_name):
     """Function to adjust time parameters (HH:MM)."""
@@ -245,55 +219,188 @@ def adjust_time_parameter(parameter_name, display_name):
         time.sleep(0.2)  # Reduce refresh rate to minimize jitter
 
 def adjust_system_time(display_name):
-    """Function to adjust the system time (HH:MM) and update the RTC."""
+    """Function to adjust the system date and time."""
     now = datetime.now()
-    hours, minutes = now.hour, now.minute
+    current = {
+        'year': now.year,
+        'month': now.month,
+        'day': now.day,
+        'hours': now.hour,
+        'minutes': now.minute
+    }
+    
+    # Define field positions and lengths
+    fields = {
+        'year': (0, 0, 4),    # (col, row, length)
+        'month': (5, 0, 2),
+        'day': (8, 0, 2),
+        'hours': (0, 1, 2),
+        'minutes': (3, 1, 2)
+    }
+    
+    current_field = 'year'
+    blink_state = True
+    last_blink = time.monotonic()
+    BLINK_INTERVAL = 0.5  # Blink every half second
+    
+    # Initial display of full date/time
     lcd.clear()
-    lcd.message = f"{display_name}:\n{hours:02d}:{minutes:02d}"
+    date_str = f"{current['year']}/{current['month']:02d}/{current['day']:02d}"
+    time_str = f"{current['hours']:02d}:{current['minutes']:02d}"
+    lcd.message = f"{date_str}\n{time_str}"
+    
     while True:
+        current_time = time.monotonic()
+        col, row, length = fields[current_field]
+        
+        # Handle blinking of current field
+        if current_time - last_blink >= BLINK_INTERVAL:
+            blink_state = not blink_state
+            last_blink = current_time
+            
+            # Update display based on blink state
+            if current_field in ['year', 'month', 'day']:
+                if current_field == 'year':
+                    field_str = f"{current['year']}" if blink_state else "    "
+                else:
+                    field_str = f"{current[current_field]:02d}" if blink_state else "  "
+            else:  # hours or minutes
+                field_str = f"{current[current_field]:02d}" if blink_state else "  "
+            
+            lcd.cursor_position(col, row)
+            lcd.message = field_str
+            
+            # Restore separators if needed
+            if not blink_state:
+                if current_field in ['year', 'month']:
+                    lcd.cursor_position(4 if current_field == 'year' else 7, 0)
+                    lcd.message = "/"
+                elif current_field == 'hours':
+                    lcd.cursor_position(2, 1)
+                    lcd.message = ":"
+        
         if lcd.up_button:
             debounce(lambda: lcd.up_button)
-            hours = (hours + 1) % 24
-            lcd.clear()
-            lcd.message = f"{display_name}:\n{hours:02d}:{minutes:02d}"
+            if current_field == 'year':
+                current['year'] = min(current['year'] + 1, 2099)
+            elif current_field == 'month':
+                current['month'] = min(current['month'] + 1, 12)
+            elif current_field == 'day':
+                current['day'] = min(current['day'] + 1, 31)
+            elif current_field == 'hours':
+                current['hours'] = (current['hours'] + 1) % 24
+            else:  # minutes
+                current['minutes'] = (current['minutes'] + 1) % 60
+            
+            # Show the new value immediately
+            lcd.cursor_position(col, row)
+            if current_field == 'year':
+                lcd.message = f"{current['year']}"
+            else:
+                lcd.message = f"{current[current_field]:02d}"
+            blink_state = True
+            last_blink = current_time
+                
         elif lcd.down_button:
             debounce(lambda: lcd.down_button)
-            hours = (hours - 1) % 24
-            lcd.clear()
-            lcd.message = f"{display_name}:\n{hours:02d}:{minutes:02d}"
+            if current_field == 'year':
+                current['year'] = max(current['year'] - 1, 2000)
+            elif current_field == 'month':
+                current['month'] = max(current['month'] - 1, 1)
+            elif current_field == 'day':
+                current['day'] = max(current['day'] - 1, 1)
+            elif current_field == 'hours':
+                current['hours'] = (current['hours'] - 1) % 24
+            else:  # minutes
+                current['minutes'] = (current['minutes'] - 1) % 60
+            
+            # Show the new value immediately
+            lcd.cursor_position(col, row)
+            if current_field == 'year':
+                lcd.message = f"{current['year']}"
+            else:
+                lcd.message = f"{current[current_field]:02d}"
+            blink_state = True
+            last_blink = current_time
+                
         elif lcd.right_button:
             debounce(lambda: lcd.right_button)
-            minutes = (minutes + 1) % 60
-            lcd.clear()
-            lcd.message = f"{display_name}:\n{hours:02d}:{minutes:02d}"
+            # Restore current field before moving
+            lcd.cursor_position(col, row)
+            if current_field == 'year':
+                lcd.message = f"{current['year']}"
+            else:
+                lcd.message = f"{current[current_field]:02d}"
+            
+            if current_field == 'year':
+                current_field = 'month'
+            elif current_field == 'month':
+                current_field = 'day'
+            elif current_field == 'day':
+                current_field = 'hours'
+            elif current_field == 'hours':
+                current_field = 'minutes'
+            elif current_field == 'minutes':
+                current_field = 'year'
+            
+            blink_state = True
+            last_blink = current_time
+                
         elif lcd.left_button:
             debounce(lambda: lcd.left_button)
-            minutes = (minutes - 1) % 60
-            lcd.clear()
-            lcd.message = f"{display_name}:\n{hours:02d}:{minutes:02d}"
+            # Restore current field before moving
+            lcd.cursor_position(col, row)
+            if current_field == 'year':
+                lcd.message = f"{current['year']}"
+            else:
+                lcd.message = f"{current[current_field]:02d}"
+            
+            if current_field == 'year':
+                current_field = 'minutes'
+            elif current_field == 'month':
+                current_field = 'year'
+            elif current_field == 'day':
+                current_field = 'month'
+            elif current_field == 'hours':
+                current_field = 'day'
+            elif current_field == 'minutes':
+                current_field = 'hours'
+            
+            blink_state = True
+            last_blink = current_time
+            
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            new_time = f"{hours:02d}:{minutes:02d}:00"
             try:
-                # Set the system time
-                subprocess.run(["sudo", "date", f"--set={new_time}"], check=True)
+                date_str = f"{current['year']}-{current['month']:02d}-{current['day']:02d}"
+                time_str = f"{current['hours']:02d}:{current['minutes']:02d}:00"
                 
-                # Update the RTC with the new system time
+                subprocess.run(["sudo", "date", "-s", f"{date_str} {time_str}"], check=True)
                 subprocess.run(["sudo", "hwclock", "-w"], check=True)
                 
-                apply_settings()  # Apply the system time change
                 lcd.clear()
-                lcd.message = f"Time Set to:\n{new_time}"
+                lcd.message = f"{date_str}\n{time_str}"
+                time.sleep(2)
+                return
+                
             except Exception as e:
                 lcd.clear()
-                lcd.message = f"Error:\n{str(e)}"
-            time.sleep(1)  # Show the set message
-            return
-        time.sleep(0.2)  # Reduce refresh rate to minimize jitter
+                lcd.message = "Error Setting\nTime"
+                time.sleep(1)
+                return
         
+        time.sleep(0.05)  # Shorter delay for smoother blinking
+
 def irrigation_menu():
     """Function to navigate and edit irrigation settings."""
-    options = ['Soil Moist Thresh', 'Water Vol', 'Watering Time', 'Back']
+    options = [
+        'Soil Moist Thresh',
+        'View Moisture',     # New option
+        'Monitor Live',      # New option
+        'Water Vol',
+        'Watering Time',
+        'Back'
+    ]
     index = 0
     display_menu(options, index)
     while True:
@@ -312,6 +419,10 @@ def irrigation_menu():
             debounce(lambda: lcd.select_button)
             if options[index] == 'Soil Moist Thresh':
                 adjust_soil_moisture_threshold()
+            elif options[index] == 'View Moisture':
+                show_current_moisture()
+            elif options[index] == 'Monitor Live':
+                monitor_moisture()
             elif options[index] == 'Water Vol':
                 adjust_parameter('waterVol', 1, 0, 50, 'Water mm of Rain')
             elif options[index] == 'Watering Time':
@@ -319,7 +430,8 @@ def irrigation_menu():
             elif options[index] == 'Back':
                 return
             display_menu(options, index)
-            time.sleep(0.5)  # Pause before returning to menu
+            time.sleep(0.5)
+
 def adjust_soil_moisture_threshold():
     """Function to adjust soil moisture threshold as a percentage."""
     cfg = config.read_config()
@@ -366,7 +478,16 @@ def adjust_soil_moisture_threshold():
 
 def manual_control_menu():
     """Function to handle manual controls."""
-    options = ['Take Picture Now', 'Water Now', 'Stop Watering', 'Light On Now', 'Light Off Now', 'Fan On Now', 'Fan Off Now', 'Back']
+    options = [
+        'Water Now', 
+        'Stop Watering', 
+        'Light On Now', 
+        'Light Off Now', 
+        'Fan On Now', 
+        'Fan Off Now',
+        'Take Picture Now',  # Moved to bottom
+        'Back'
+    ]
     index = 0
     display_menu(options, index)
     while True:
@@ -584,7 +705,13 @@ def apply_settings():
 
 def main_menu():
     """Function to navigate between different settings."""
-    options = ['Edit Settings', 'Manual Control', 'Back']
+    options = [
+        'System Info', 
+        'Edit Settings', 
+        'Manual Control',
+        'Soil Moisture',  # New option
+        'Back'
+    ]
     index = 0
     display_menu(options, index)
     while True:
@@ -601,14 +728,156 @@ def main_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'Edit Settings':
+            if options[index] == 'System Info':
+                show_system_info()
+            elif options[index] == 'Edit Settings':
                 edit_settings_menu()
             elif options[index] == 'Manual Control':
                 manual_control_menu()
+            elif options[index] == 'Soil Moisture':  # Handle new option
+                show_soil_moisture()
             elif options[index] == 'Back':
-                return  # Return to the previous level
+                return
             display_menu(options, index)
-            time.sleep(0.5)  # Pause before returning to menu
+            time.sleep(0.5)
+
+def show_system_info():
+    """Display system version information"""
+    try:
+        version_info = get_version_info()
+        lcd.clear()
+        lcd.message = version_info  # Will show SW and FW versions on separate lines
+        
+        # Wait for select button press
+        while True:
+            if lcd.select_button:
+                debounce(lambda: lcd.select_button)
+                break
+            time.sleep(0.1)
+            
+    except Exception as e:
+        lcd.clear()
+        lcd.message = "Error reading\nversion info"
+        time.sleep(2)
+
+def show_soil_moisture():
+    """Display soil moisture menu and readings"""
+    options = [
+        'Current Reading',
+        'Monitor Values',
+        'Show Threshold',
+        'Back'
+    ]
+    index = 0
+    display_menu(options, index)
+    
+    while True:
+        update = False
+        if lcd.up_button:
+            debounce(lambda: lcd.up_button)
+            index = (index - 1) % len(options)
+            update = True
+        elif lcd.down_button:
+            debounce(lambda: lcd.down_button)
+            index = (index + 1) % len(options)
+            update = True
+        if update:
+            display_menu(options, index)
+        elif lcd.select_button:
+            debounce(lambda: lcd.select_button)
+            if options[index] == 'Current Reading':
+                show_current_moisture()
+            elif options[index] == 'Monitor Values':
+                monitor_moisture()
+            elif options[index] == 'Show Threshold':
+                show_moisture_threshold()
+            elif options[index] == 'Back':
+                return
+            display_menu(options, index)
+            time.sleep(0.5)
+
+def show_current_moisture():
+    """Display single moisture reading"""
+    try:
+        from sensorfeed import feedread
+        
+        lcd.clear()
+        lcd.message = "Reading sensor..."
+        # Get current reading
+        _, _, soil_moisture = feedread()
+        
+        # Convert to percentage
+        moisture_percent = int((soil_moisture / 1000) * 100)
+        
+        lcd.clear()
+        lcd.message = f"Soil Moisture:\n{moisture_percent}% ({soil_moisture})"
+        
+        # Wait for select button
+        while True:
+            if lcd.select_button:
+                debounce(lambda: lcd.select_button)
+                break
+            time.sleep(0.1)
+            
+    except Exception as e:
+        lcd.clear()
+        lcd.message = "Error reading\nsensor"
+        time.sleep(2)
+
+def monitor_moisture():
+    """Continuously monitor moisture values"""
+    try:
+        from sensorfeed import feedread
+        
+        lcd.clear()
+        lcd.message = "Monitoring...\nSelect to exit"
+        time.sleep(1)
+        
+        while True:
+            # Get current reading
+            _, _, soil_moisture = feedread()
+            moisture_percent = int((soil_moisture / 1000) * 100)
+            
+            # Update display
+            lcd.clear()
+            lcd.message = f"Live Reading:\n{moisture_percent}% ({soil_moisture})"
+            
+            # Check for exit
+            if lcd.select_button:
+                debounce(lambda: lcd.select_button)
+                break
+                
+            # Wait before next reading
+            time.sleep(2)
+            
+    except Exception as e:
+        lcd.clear()
+        lcd.message = "Error monitoring\nsensor"
+        time.sleep(2)
+
+def show_moisture_threshold():
+    """Show current moisture threshold setting"""
+    try:
+        from config import get_plant_settings
+        settings = get_plant_settings()
+        
+        dry_value = settings['dryValue']
+        threshold_percent = int((dry_value / 1000) * 100)
+        
+        lcd.clear()
+        lcd.message = f"Dry Threshold:\n{threshold_percent}% ({dry_value})"
+        
+        # Wait for select button
+        while True:
+            if lcd.select_button:
+                debounce(lambda: lcd.select_button)
+                break
+            time.sleep(0.1)
+            
+    except Exception as e:
+        lcd.clear()
+        lcd.message = "Error reading\nthreshold"
+        time.sleep(2)
 
 def lcd_menu_thread():
     lcd.clear()
