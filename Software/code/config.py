@@ -154,33 +154,3 @@ def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv
         return 1 #return the csv data in list form
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-
-def readcsv_softver(csventryname):
-    """Read software version information from softver file"""
-    try:
-        with open('/mnt/grobotextdat/code/softver', 'r') as csvfile:
-            csvraw = csv.reader(csvfile)
-            for row in csvraw:
-                if row[0] == csventryname:
-                    return row[1]
-        return "Unknown"  # Return Unknown if entry not found
-    except Exception as errvar:
-        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-
-def get_version_info():
-    """Get both software and firmware versions"""
-    try:
-        # Get software version from softver file
-        sw_version = readcsv_softver("version")
-        
-        # Get firmware version from ulnoowegdat (if needed)
-        csvdata = readcsv()
-        fw_version = "Unknown"
-        for row in csvdata:
-            if row[0] == "version":
-                fw_version = row[1]
-                break
-                
-        return f"SW:{sw_version}\nFW:{fw_version}"
-    except Exception as errvar:
-        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
