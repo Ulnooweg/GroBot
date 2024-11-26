@@ -1,3 +1,6 @@
 name,data,note
-version,1.1,#Version: 1.1
-serial,000-000,placeholder
+fw_version,1.0,#Firmware Version: 1.0
+RTC_name,Ada5189,Name of in use Real Time Clock
+TempHumid_name,Ada4566,Name of in use Temperature Humidity Sensor
+Soil_Moist_name,Ada3026,Name of in use Soil Moisture Sensor
+Floatswitch_name,LitFuse59630-1-T-02-F,Name of in use floatswitch
