@@ -65,29 +65,22 @@ def update_config(section, parameter, value): #Define function to write variable
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
-def readcsv(csventryname=None):
-    """Read value from CSV file for given entry name"""
+def readcsv(csventryname): #define a function to read csv file and return the value corresponding to entry
+    #csv entry name must be a string
     try:
-        if csventryname is None:
-            # If no entry name provided, return all data
-            csvdata = []
-            with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'r') as csvfile:
-                csvraw = csv.reader(csvfile)
-                for row in csvraw:
-                    csvdata.append(row)
-            return csvdata
-            
-        # If entry name provided, find specific entry
-        with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'r') as csvfile:
-            csvraw = csv.reader(csvfile)
-            for row in csvraw:
-                if row[0] == csventryname:
-                    return row[1]
-        return None  # Return None if entry not found
-        
+        csvdata = [] #define an empty list
+        with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'r') as csvfile: #open the csv file as csvfile object
+            csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+            for row in csvraw: #iterate through each row in cswraw
+                if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                    csventryvalue = row[1]  #read the value for row that matched the desired entry
+                    return csventryvalue
+                else:
+                    pass
+        raise RuntimeError('CSV ENTRY NOT FOUND')
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-
+    
 def writecsv(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
     try:
         #csventryname and csventryvalue must be a string
@@ -159,35 +152,5 @@ def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv
             writer.writerow(csvdata) #Use writerow not writerows as we only want to write a single row
 
         return 1 #return the csv data in list form
-    except Exception as errvar:
-        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-
-def readcsv_softver(csventryname):
-    """Read software version information from softver file"""
-    try:
-        with open('/mnt/grobotextdat/code/softver', 'r') as csvfile:
-            csvraw = csv.reader(csvfile)
-            for row in csvraw:
-                if row[0] == csventryname:
-                    return row[1]
-        return "Unknown"  # Return Unknown if entry not found
-    except Exception as errvar:
-        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-
-def get_version_info():
-    """Get both software and firmware versions"""
-    try:
-        # Get software version from softver file
-        sw_version = readcsv_softver("version")
-        
-        # Get firmware version from ulnoowegdat (if needed)
-        csvdata = readcsv()
-        fw_version = "Unknown"
-        for row in csvdata:
-            if row[0] == "version":
-                fw_version = row[1]
-                break
-                
-        return f"SW:{sw_version}\nFW:{fw_version}"
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
