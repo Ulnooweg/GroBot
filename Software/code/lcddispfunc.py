@@ -794,15 +794,17 @@ def system_info_menu():
             display_menu(menu_items, index)
             time.sleep(0.5)
 
+
 def show_system_info():
     """Display system version information"""
     try:
-        # Get version info using the get_version_info function
+        # Read versions using the centralized function
         version_info = get_version_info()
-        lcd.clear()
-        lcd.message = version_info  # Will show SW and FW versions on separate lines
         
-        # Wait for select button press to return
+        lcd.clear()
+        lcd.message = version_info
+        
+        # Wait for select button press
         while True:
             if lcd.select_button:
                 debounce(lambda: lcd.select_button)
@@ -813,6 +815,16 @@ def show_system_info():
         lcd.clear()
         lcd.message = "Error reading\nversion info"
         time.sleep(2)
+
+def get_version_info():
+    """Get formatted version information string"""
+    try:
+        # Read from correct paths
+        sw_version = readcsv_softver('software_version')  # From Software/code/softver
+        fw_version = readcsv('fw_version')  # From Software/userdata/ulnoowegdat
+        return f"SW Ver: {sw_version}\nFW Ver: {fw_version}"
+    except Exception as e:
+        return "Error reading\nversion info"
 
 def show_soil_moisture():
     """Display soil moisture menu and readings"""
@@ -1075,64 +1087,4 @@ def record_data_to_excel():
         set_lcd_color("normal")
 
 
-
-def get_version_info():
-    """Get formatted version information string"""
-    try:
-        from config import readcsv, readcsv_softver
-        
-        # Get software version from softver file
-        sw_version = readcsv_softver('software_version')
-        
-        # Get firmware version from ulnoowegdat
-        fw_version = readcsv('fw_version')
-        
-        # Format version info for LCD display (16x2)
-        version_info = f"SW Ver: {sw_version}\nFW Ver: {fw_version}"
-        
-        return version_info
-    except Exception as e:
-        return "Error reading\nversion info"
-
-def show_software_version():
-    """Display software version information"""
-    try:
-        from config import readcsv_softver
-        sw_version = readcsv_softver('software_version')
-        
-        lcd.clear()
-        lcd.message = f"Software Version:\n{sw_version}"
-        
-        # Wait for select button press
-        while True:
-            if lcd.select_button:
-                debounce(lambda: lcd.select_button)
-                break
-            time.sleep(0.1)
-            
-    except Exception as e:
-        lcd.clear()
-        lcd.message = "Error reading\nsoftware version"
-        time.sleep(2)
-
-def show_firmware_version():
-    """Display firmware version information"""
-    try:
-        from config import readcsv
-        fw_version = readcsv('fw_version')
-        
-        lcd.clear()
-        lcd.message = f"Firmware Version:\n{fw_version}"
-        
-        # Wait for select button press
-        while True:
-            if lcd.select_button:
-                debounce(lambda: lcd.select_button)
-                break
-            time.sleep(0.1)
-            
-    except Exception as e:
-        lcd.clear()
-        lcd.message = "Error reading\nfirmware version"
-        time.sleep(2)
 
