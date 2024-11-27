@@ -13,9 +13,13 @@
 #Function: get_plant _settings(), read config and return plant settings as a tuple of data
 #          read_config(), read config.ini and return a dictionary value of all data
 #          update_config(section, parameter, value), write "value" to config file under "parameter" parameter in "section" section
-#          readcsv(), read data from ulnoowegdat and return it as a list
-#Input: update_config requires section and parameter in strings and value in any form convertible to strings. 
-#Output: returns dictionary variable in string for read_config() and in integer for get_plant_settings(); output data to file for update_config(...); output list of data for readcsv
+#          readcsv(csventryname), read data from ulnoowegdat and return value for entry csventryname
+#          writecsv(csventryname,csventryvalue), take strings entry name and entry value and write it to the appropriate entry columns in ulnoowegdat csv
+#          writecsvnote(csventryname,csventryvalue,csventrynote) same as writecsv except also takes entry note and write that string also to the note column of the appropriate entry in ulnoowegdat csv
+#          readcsv_softver(csventryname), same as readcsv except it reads the file/code/softver instead of /userdata/ulnoowegdat
+#          writecsvnewrow(col1,col2,col3), append a new row to the end with column col1, col2, col3 inputted as string
+#Input: update_config requires section and parameter in strings and value in any form convertible to strings. readcsv, writecsv, writecsvnote, readcsv_softver, and writecsvnewrow requires string inputs
+#Output: returns dictionary variable in string for read_config() and in integer for get_plant_settings(); output data to file for update_config(...); output string for readcsv and readcsv_softver
 #Error Handling: Standard UEC Error Handling V1
 #
 ########################################
@@ -61,15 +65,100 @@ def update_config(section, parameter, value): #Define function to write variable
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
-def readcsv(): #define a function to read csv file
+def readcsv(csventryname=None):
+    """Read value from CSV file for given entry name"""
     try:
+        if csventryname is None:
+            # If no entry name provided, return all data
+            csvdata = []
+            with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'r') as csvfile:
+                csvraw = csv.reader(csvfile)
+                for row in csvraw:
+                    csvdata.append(row)
+            return csvdata
+            
+        # If entry name provided, find specific entry
+        with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'r') as csvfile:
+            csvraw = csv.reader(csvfile)
+            for row in csvraw:
+                if row[0] == csventryname:
+                    return row[1]
+        return None  # Return None if entry not found
+        
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+def writecsv(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
+    try:
+        #csventryname and csventryvalue must be a string
+        #First, read csv file (same as)
         csvdata = [] #define an empty list
         with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'r') as csvfile: #open the csv file as csvfile object
             csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
             for row in csvraw: #iterate through each row in cswraw
+                if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                    row[1] = csventryvalue #Change the value to desired value
+                else:
+                    pass
                 csvdata.append(row) #for each row, append the data to the list
+        #Now write the data back to file
+        with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            writer.writerows(csvdata)
 
-        return csvdata #return the csv data in list form
+        return 1 #return the csv data in list form
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+def writecsvnote(csventryname,csventryvalue,csventrynote): #define a function to write to csv file taking in name of entry, value of the entry, and value of note to update to
+    try:
+        #csventryname, csventryvalue, and csventrynote must be a string
+        #First, read csv file (same as)
+        csvdata = [] #define an empty list
+        with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'r') as csvfile: #open the csv file as csvfile object
+            csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+            for row in csvraw: #iterate through each row in cswraw
+                if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                    row[1] = csventryvalue #Change the value to desired value
+                    row[2] = csventrynote #Change the note to desired note
+                else:
+                    pass
+                csvdata.append(row) #for each row, append the data to the list
+        #Now write the data back to file
+        with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            writer.writerows(csvdata)
+
+        return 1 #return the csv data in list form
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
+def readcsv_softver(csventryname): #define a function to read csv file and return the value corresponding to entry
+    #csv entry name must be a string
+    try:
+        csvdata = [] #define an empty list
+        with open('/mnt/grobotextdat/code/softver', 'r') as csvfile: #open the csv file as csvfile object
+            csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+            for row in csvraw: #iterate through each row in cswraw
+                if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                    csventryvalue = row[1]  #read the value for row that matched the desired entry
+                    return csventryvalue
+                else:
+                    pass
+        raise RuntimeError('CSV ENTRY NOT FOUND') #If entry not found raise an error
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
+def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv file with 3 column
+    try:
+        #All input must be string
+        csvdata = [col1,col2,col3] #define the row list
+        #Now write the data back to file in line append mode
+        with open('/mnt/grobotextdat/userdata/ulnoowegdat', 'a', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            writer.writerow(csvdata) #Use writerow not writerows as we only want to write a single row
+
+        return 1 #return the csv data in list form
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
