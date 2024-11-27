@@ -16,6 +16,9 @@
 #Error Handling: consult Info.md
 #
 ########################################
+### Git check  
+
+
 
 import board
 import time
@@ -30,6 +33,12 @@ from timecheck import checktimebetween
 from datetime import datetime, time as datetime_time
 import subprocess  # Import for setting the system time
 from config import get_plant_settings, get_version_info
+import updatefw
+from logoutput import logtofile
+from diopinsetup import diopinset
+
+diop = diopinset()
+s1, s2, s3, s4, s5, s6, b1, ths, sms = diop[0], diop[1], diop[2], diop[3], diop[4], diop[5], diop[6], diop[7], diop[8]
 
 # Global variables for manual override and watering state
 manual_override = {
@@ -485,7 +494,8 @@ def manual_control_menu():
         'Light Off Now', 
         'Fan On Now', 
         'Fan Off Now',
-        'Take Picture Now',  # Moved to bottom
+        'Take Picture Now',
+        'Record Data Now',  # New option
         'Back'
     ]
     index = 0
@@ -526,6 +536,8 @@ def manual_control_menu():
                 start_fan_thread()
             elif options[index] == 'Fan Off Now':
                 control_fan(False)
+            elif options[index] == 'Record Data Now':  # Handle new option
+                record_data_to_excel()
             elif options[index] == 'Back':
                 if not watering_active:  # Only allow back if not watering
                     return
@@ -706,10 +718,10 @@ def apply_settings():
 def main_menu():
     """Function to navigate between different settings."""
     options = [
-        'System Info', 
+        'System Info',  # Keep this as first option
         'Edit Settings', 
         'Manual Control',
-        'Soil Moisture',  # New option
+        'Soil Moisture',
         'Back'
     ]
     index = 0
@@ -729,26 +741,64 @@ def main_menu():
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
             if options[index] == 'System Info':
-                show_system_info()
+                system_info_menu()  # Call the system info menu instead of show_system_info
             elif options[index] == 'Edit Settings':
                 edit_settings_menu()
             elif options[index] == 'Manual Control':
                 manual_control_menu()
-            elif options[index] == 'Soil Moisture':  # Handle new option
+            elif options[index] == 'Soil Moisture':
                 show_soil_moisture()
             elif options[index] == 'Back':
                 return
             display_menu(options, index)
             time.sleep(0.5)
 
+def system_info_menu():
+    """Display system information menu"""
+    menu_items = [
+        "System Version",
+        "Update Firmware",
+        "Log Export",
+        "Back"
+    ]
+    index = 0
+    display_menu(menu_items, index)
+    
+    while True:
+        update = False
+        if lcd.up_button:
+            debounce(lambda: lcd.up_button)
+            index = (index - 1) % len(menu_items)
+            update = True
+        elif lcd.down_button:
+            debounce(lambda: lcd.down_button)
+            index = (index + 1) % len(menu_items)
+            update = True
+            
+        if update:
+            display_menu(menu_items, index)
+        elif lcd.select_button:
+            debounce(lambda: lcd.select_button)
+            if menu_items[index] == "System Version":
+                show_system_info()
+            elif menu_items[index] == "Update Firmware":
+                update_firmware_screen()
+            elif menu_items[index] == "Log Export":
+                export_log_screen()
+            elif menu_items[index] == "Back":
+                return
+            display_menu(menu_items, index)
+            time.sleep(0.5)
+
 def show_system_info():
     """Display system version information"""
     try:
+        # Get version info using the get_version_info function
         version_info = get_version_info()
         lcd.clear()
         lcd.message = version_info  # Will show SW and FW versions on separate lines
         
-        # Wait for select button press
+        # Wait for select button press to return
         while True:
             if lcd.select_button:
                 debounce(lambda: lcd.select_button)
@@ -901,4 +951,121 @@ def display_status(message, action=False):
         lcd.set_color(0.0, 0.0, 1.0)  # Blue for action
     else:
         clear_action_status()
-    # ... rest of the function
+
+def export_log_screen():
+    """Handle log export process"""
+    try:
+        lcd.clear()
+        set_lcd_color("in_progress")  # Blue while exporting
+        lcd.message = "Exporting log...\nPlease wait"
+        
+        # Call logtofile function
+        from logoutput import logtofile
+        result = logtofile()
+        
+        # Show result
+        lcd.clear()
+        if result == 1:
+            set_lcd_color("normal")  # Green for success
+            lcd.message = "Log exported\nsuccessfully!"
+        else:
+            set_lcd_color("error")  # Red for error
+            lcd.message = "Export failed!\nTry again"
+            
+        time.sleep(2)  # Show result message
+        set_lcd_color("normal")  # Return to normal color
+        
+    except Exception as e:
+        lcd.clear()
+        set_lcd_color("error")
+        lcd.message = "Error exporting\nlog file"
+        time.sleep(2)
+        set_lcd_color("normal")
+
+# Add new function to handle firmware update screen
+def update_firmware_screen():
+    """Handle firmware update process"""
+    try:
+        lcd.clear()
+        set_lcd_color("in_progress")  # Blue while updating
+        lcd.message = "Updating Firmware\nPlease wait..."
+        
+        # Call the firmware update function
+        result = updatefw.grobotfwupdate()
+        
+        # Show result
+        lcd.clear()
+        if result == 1:
+            set_lcd_color("normal")  # Green for success
+            lcd.message = "Update success!\nRestart needed"
+            time.sleep(2)
+            lcd.clear()
+            lcd.message = "Press SELECT to\nrestart GroBot"
+            
+            # Wait for select button
+            while True:
+                if lcd.select_button:
+                    debounce(lambda: lcd.select_button)
+                    subprocess.run(['sudo', 'reboot'])
+                time.sleep(0.1)
+        else:
+            set_lcd_color("error")  # Red for error
+            lcd.message = "Update failed!\nPress SELECT"
+            while True:
+                if lcd.select_button:
+                    debounce(lambda: lcd.select_button)
+                    break
+                time.sleep(0.1)
+                
+    except Exception as e:
+        lcd.clear()
+        set_lcd_color("error")
+        lcd.message = "Error updating\nfirmware"
+        time.sleep(2)
+        set_lcd_color("normal")
+
+# Add new function to handle data recording
+def record_data_to_excel():
+    """Record current sensor data to Excel file."""
+    try:
+        from sensorfeed import feedread
+        from dataout import excelout
+        
+        # Store current light state
+        current_light_state = s2.value  # s2 is the light control pin
+        
+        lcd.clear()
+        set_lcd_color("in_progress")
+        lcd.message = "Recording data...\nPlease wait"
+        
+        # Get current readings
+        temp, humidity, soil_moisture = feedread()
+        
+        # Write to Excel
+        result = excelout(temp, humidity, soil_moisture)
+        
+        # Restore light state if it changed
+        if s2.value != current_light_state:
+            if current_light_state:
+                growlighton()
+            else:
+                growlightoff()
+        
+        # Show result
+        lcd.clear()
+        if result == 1:
+            set_lcd_color("normal")
+            lcd.message = "Data recorded\nsuccessfully!"
+        else:
+            set_lcd_color("error")
+            lcd.message = "Recording failed!\nTry again"
+            
+        time.sleep(2)
+        set_lcd_color("normal")
+        
+    except Exception as e:
+        lcd.clear()
+        set_lcd_color("error")
+        lcd.message = "Error recording\ndata"
+        time.sleep(2)
+        set_lcd_color("normal")
