@@ -15,13 +15,14 @@ This file lists all the historical changelogs of the project as published public
 
 ## Programs Changelogs
 ### V1.1
-Major change, moved infomation not repalced with code update to userdata
-Implement standardized error logging output to userdata folder
-Include additional functions to read and write from ulnoowegdata and softver csv file
-Implement grobot-firmware update script
+Major change, moved information that should not be replaced with code update to userdata<br/>
+Implement standardized error logging output to userdata folder<br/>
+Include additional functions to read and write from ulnoowegdata and softver csv file<br/>
+Implement grobot-firmware update script<br/>
+Bugfixes and additional features
 
 ### V1.0.4
-Updated header notes and specifications in some code.
+Updated header notes and specifications in some code.<br/>
 Documentation update.
 
 ### V1.0.3
@@ -29,8 +30,8 @@ First release version
 
 ## Firmware Update
 ### V1.1-FW
-Comment out SystemMaxUse so it is back to default of 4GB log to increasing logging limit and ensure smoother troubleshooting.
-Turn off wifi
-Turn off Bluetooth
-Update grobot systemd unit file to implement restart rate limit
-Removed unused grobotboot systemd process
+Comment out SystemMaxUse so it is back to default of 4GB log to increasing logging limit and ensure smoother troubleshooting.<br/>
+Turn off wifi<br/>
+Turn off Bluetooth<br/>
+Update grobot systemd unit file to implement restart rate limit<br/>
+Removed unused grobotboot systemd process<br/>
