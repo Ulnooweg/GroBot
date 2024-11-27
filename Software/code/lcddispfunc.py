@@ -1069,3 +1069,66 @@ def record_data_to_excel():
         lcd.message = "Error recording\ndata"
         time.sleep(2)
         set_lcd_color("normal")
+
+
+
+def get_version_info():
+    """Get formatted version information string"""
+    try:
+        from config import readcsv, readcsv_softver
+        
+        # Get software version from softver file
+        sw_version = readcsv_softver('software_version')
+        
+        # Get firmware version from ulnoowegdat
+        fw_version = readcsv('fw_version')
+        
+        # Format version info for LCD display (16x2)
+        version_info = f"SW Ver: {sw_version}\nFW Ver: {fw_version}"
+        
+        return version_info
+    except Exception as e:
+        return "Error reading\nversion info"
+
+def show_software_version():
+    """Display software version information"""
+    try:
+        from config import readcsv_softver
+        sw_version = readcsv_softver('software_version')
+        
+        lcd.clear()
+        lcd.message = f"Software Version:\n{sw_version}"
+        
+        # Wait for select button press
+        while True:
+            if lcd.select_button:
+                debounce(lambda: lcd.select_button)
+                break
+            time.sleep(0.1)
+            
+    except Exception as e:
+        lcd.clear()
+        lcd.message = "Error reading\nsoftware version"
+        time.sleep(2)
+
+def show_firmware_version():
+    """Display firmware version information"""
+    try:
+        from config import readcsv
+        fw_version = readcsv('fw_version')
+        
+        lcd.clear()
+        lcd.message = f"Firmware Version:\n{fw_version}"
+        
+        # Wait for select button press
+        while True:
+            if lcd.select_button:
+                debounce(lambda: lcd.select_button)
+                break
+            time.sleep(0.1)
+            
+    except Exception as e:
+        lcd.clear()
+        lcd.message = "Error reading\nfirmware version"
+        time.sleep(2)
+
