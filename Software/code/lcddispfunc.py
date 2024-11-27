@@ -32,8 +32,12 @@ import config
 from timecheck import checktimebetween
 from datetime import datetime, time as datetime_time
 import subprocess  # Import for setting the system time
-from config import get_plant_settings, get_version_info
-import updatefw
+from config import (
+    get_plant_settings, 
+    get_version_info,
+    readcsv,
+    readcsv_softver
+)import updatefw
 from logoutput import logtofile
 from diopinsetup import diopinset
 
