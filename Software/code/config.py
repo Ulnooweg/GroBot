@@ -154,5 +154,3 @@ def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv
         return 1 #return the csv data in list form
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-
-
