@@ -28,19 +28,20 @@ def grobotfwupdate():
 
         ###############################################################################
         #Version 1.1 update#
+        #Copy this entire block until Version update end to reuse it for later version
+        #Remember to change:
+        #                   The header and footer block
+        #                   fw_update_version ... #Define what version this is
+        #                   Anything inside #### FW UPDATE CODE ####
+        ###############################################################################
         
-        try:
-            #Read current firmware version as string as defined by readcsv
-            fw_version = readcsv('fw_version')
-            if not fw_version:  # If readcsv returns None or empty
-                fw_version = "1.0"  # Default to 1.0 if not found
-        except:
-            fw_version = "1.0"  # Default to 1.0 if there's any error
+        #Read current firmware version as string as defined by readcsv
+        fw_version = readcsv('fw_version')
 
         fw_update_version = 1.1 #Define what version this is
 
         if float(fw_version) >= fw_update_version: #Checks, if current fw version already up to date or newer do nothing
-            return 1  # Return success if already up to date
+            pass
         elif float(fw_version) < fw_update_version: #If version is less do the update
             #If needs to run as sudo, we need to echo the password as standrd input and use -S flag to have sudo use password from standard input
             #If command contains #, wrap it all in "COMMAND_HERE" to ensure it is not processed as comment
@@ -68,14 +69,18 @@ def grobotfwupdate():
             #### FW UPDATE CODE END ####
 
             #Write the updated firmware version
-            try:
-                writecsvnote('fw_version', str(fw_update_version), f"#Firmware Version: {fw_update_version}")
-            except Exception as e:
-                print(f"Warning: Could not write new firmware version: {e}")
-                
-            return 1  # Return success after update
+            writecsvnote('fw_version',str(fw_update_version),f"#Firmware Version: {fw_update_version}")            
         else: #Else raise an error
             raise RuntimeError('FW UPDATE VERSION CHECK FAILURE')
         
+        #Read current firmware version as string as defined by readcsv (Done after every update block)
+        fw_version = readcsv('fw_version')
+
+        ###############################################################################
+        #Version 1.1 update end#
+        ###############################################################################
+
+        #End of updates, return a success
+        return 1
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
