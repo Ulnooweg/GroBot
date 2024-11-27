@@ -67,14 +67,3 @@ def stopwater():  # define function to stop watering
         return 1
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-
-def test_status_light():
-    """Simple test function for status light"""
-    print("Testing status light...")
-    lcddispfunc.display_status("Test action...", action=True)
-    time.sleep(3)  # Wait 3 seconds
-    lcddispfunc.clear_action_status()
-    print("Test complete - light should be white now")
-
-# Run test with:
-# python3 -c "import watercontrol; watercontrol.test_status_light()"
