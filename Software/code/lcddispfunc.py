@@ -36,7 +36,8 @@ from config import (
     get_plant_settings, 
     readcsv,
     readcsv_softver
-)import updatefw
+)
+import updatefw
 from logoutput import logtofile
 from diopinsetup import diopinset
 
