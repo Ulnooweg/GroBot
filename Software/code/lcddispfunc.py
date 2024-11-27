@@ -34,7 +34,6 @@ from datetime import datetime, time as datetime_time
 import subprocess  # Import for setting the system time
 from config import (
     get_plant_settings, 
-    get_version_info,
     readcsv,
     readcsv_softver
 )import updatefw
