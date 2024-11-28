@@ -54,9 +54,10 @@ def diopinset(): #define diopinset function that takes no arguments
         b1 = digitalio.DigitalInOut(pins['B1'])
 
         for s in [s1, s2, s3, s4, s5, s6]:
+            original_val = s.value #Reads current value the pin is defined as
             s.direction = digitalio.Direction.OUTPUT
             s.drive_mode = digitalio.DriveMode.PUSH_PULL
-            s.value = False #Apparently keeping this false do not force light off everytime other function calls this
+            s.value = original_val #Write current value into the output as defining s.direction reset it to false
 
         #B1 by default of digitalIO is set up as an input to the code (read from pin)
         #so we do not need to set it up further
