@@ -8,12 +8,12 @@
 #
 #GroBot
 #Code: dataout
-#Version: 1.0.4
+#Version: 1.1
 #Description: Code to write data to output excel file
 #Function: excelout(T,RH,SRH), write timestamp, "T" temperature, "RH" relative humidity, "SRH" soil humidity to excel file once called
 #Input: excelout(...) requires Temperature, Relative Humidity, Soil humidity as a numerical input
 #Output: data output to excel file in fixed directory or fallback location for excelout(...)
-#Error Handling: returns 0 on failure, 1 on success, 2 on secondary fallback storage used
+#Error Handling: Standard UEC Error Handling V1
 #
 ########################################
 #MODULE IMPORTS
@@ -23,16 +23,13 @@ import pandas as pd #import panda module as pd for easier call
 
 ##############################################
 
-#Check if the external directory exists, if not use internal one
 def excelout(T,RH,SRH):
     try:
         directory = "/mnt/grobotextdat/data" #This is the main external directory associated with USB
         if os.path.isdir(directory) == True: #check if exist
-            returnvar = 1 #set variable to return = 1
             pass #if it is pass
-        else: #if not set directory to alternative directory
-            returnvar = 2 #set variable to return = 2
-            directory = "/home/grobot/code/data"  # specify your directory here
+        else: #if not return error to force a code restart
+            raise RuntimeError('FILE IO FAIL')
 
         #Now check if the output excel file exist, if it does not create it.
         filename = f"{directory}/datalog.xlsx"
@@ -60,6 +57,6 @@ def excelout(T,RH,SRH):
 
         with pd.ExcelWriter(filename) as writer:
             combined_df.to_excel(writer, sheet_name = xlsx_sheet_name, index = False)
-        return returnvar
-    except:
-        return 0
+        return 1
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

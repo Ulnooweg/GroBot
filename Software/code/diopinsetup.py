@@ -8,12 +8,12 @@
 #
 #GroBot
 #Code: diopinsetup
-#Version: 1.0.4
+#Version: 1.1
 #Description: This function setup digital IO pins, their directions and sensor objects
 #Function: diopinset(), setup digitalIO pins and sensors and return them as object when called
 #Input: NONE
 #Output: returns a tuple of pins s1 thru s6, temp/humidity sensor, and soil moisture sensor objects
-#Error Handling: returns 0 on failure
+#Error Handling: Standard UEC Error Handling V1
 #
 ########################################
 #MODULE IMPORTS
@@ -54,9 +54,10 @@ def diopinset(): #define diopinset function that takes no arguments
         b1 = digitalio.DigitalInOut(pins['B1'])
 
         for s in [s1, s2, s3, s4, s5, s6]:
+            original_val = s.value #Reads current value the pin is defined as
             s.direction = digitalio.Direction.OUTPUT
             s.drive_mode = digitalio.DriveMode.PUSH_PULL
-            s.value = False #Apparently keeping this false do not force light off everytime other function calls this
+            s.value = original_val #Write current value into the output as defining s.direction reset it to false
 
         #B1 by default of digitalIO is set up as an input to the code (read from pin)
         #so we do not need to set it up further
@@ -69,5 +70,5 @@ def diopinset(): #define diopinset function that takes no arguments
         sms = Seesaw(qwiic, addr=0x36) # Soil Moisture Sensor
 
         return s1, s2, s3, s4, s5, s6, b1, ths, sms #return the pins and sensors as tuple of objects
-    except:
-        return 0
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

@@ -8,13 +8,13 @@
 #
 #GroBot
 #Code: lightcontrol
-#Version: 1.0.4
+#Version: 1.1
 #Description: These functions controls the growlight
 #Function: growlighton(), turns growlight on
 #          growlightoff(), turns growlight off
 #Input: NONE
 #Output: NONE
-#Error Handling: returns 0 on failure, 1 on success
+#Error Handling: Standard UEC Error Handling V1
 #
 ########################################
 #MODULE IMPORTS
@@ -32,13 +32,13 @@ def growlighton(): #define function to turn on growlight
         s2.value = True #turns on fan
         return 1
     
-    except:
-        return 0    
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def growlightoff(): #define function to turn off growlight
     try:
         s2.value = False #turns on fan
         return 1
     
-    except:
-        return 0    
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
