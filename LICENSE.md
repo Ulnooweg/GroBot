@@ -15,7 +15,7 @@ This collection of works is licensed under multiple license with the following s
   - They also includes all work in the wiki at [GroBot Wiki](https://github.com/Ulnooweg/GroBot/wiki)
 
 # Copyright statement
-Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.<br/>
+Copyright 2023-2025 Ulnooweg Education Centre. All rights reserved.<br/>
 
 For EUPL:
 Licensed under the EUPL-1.2 or later

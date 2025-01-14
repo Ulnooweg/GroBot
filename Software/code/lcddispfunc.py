@@ -1,4 +1,4 @@
-#Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
+#Copyright 2023-2025 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
 #Source: https://github.com/Ulnooweg/GroBot
@@ -122,7 +122,7 @@ def edit_settings_menu():
         'Sunset Time',
         'Irrigation',
         'Temp Setpoint',
-        'Humidity Setpoint',
+        'Humid Set',  # Shortened from 'Humidity Setpoint'
         'Camera On',
         'Camera Off',
         'Back'
@@ -153,8 +153,8 @@ def edit_settings_menu():
                 irrigation_menu()
             elif options[index] == 'Temp Setpoint':
                 adjust_parameter('maxTemp', 1, 0, 50, 'Temperature Setpoint')
-            elif options[index] == 'Humidity Setpoint':
-                adjust_parameter('maxHumid', 5, 0, 100, 'Humidity Setpoint')
+            elif options[index] == 'Humid Set':  # Changed to match new menu text
+                adjust_parameter('maxHumid', 5, 0, 100, 'Humidity Set')
             elif options[index] == 'Camera On':
                 config.update_config('PICAMERA', 'CameraSet', '1')
                 apply_settings()
@@ -407,9 +407,7 @@ def adjust_system_time(display_name):
 def irrigation_menu():
     """Function to navigate and edit irrigation settings."""
     options = [
-        'Soil Moist Thresh',
-        'View Moisture',     # New option
-        'Monitor Live',      # New option
+        'Moist Thresh',  # Shortened text
         'Water Vol',
         'Watering Time',
         'Back'
@@ -430,12 +428,8 @@ def irrigation_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'Soil Moist Thresh':
+            if options[index] == 'Moist Thresh':
                 adjust_soil_moisture_threshold()
-            elif options[index] == 'View Moisture':
-                show_current_moisture()
-            elif options[index] == 'Monitor Live':
-                monitor_moisture()
             elif options[index] == 'Water Vol':
                 adjust_parameter('waterVol', 1, 0, 50, 'Water mm of Rain')
             elif options[index] == 'Watering Time':
@@ -722,10 +716,10 @@ def apply_settings():
 def main_menu():
     """Function to navigate between different settings."""
     options = [
-        'System Info',  # Keep this as first option
+        'System Info',
         'Edit Settings', 
         'Manual Control',
-        'Soil Moisture',
+        'Monitor Data',  # New menu item replacing 'Soil Moisture'
         'Back'
     ]
     index = 0
@@ -745,13 +739,13 @@ def main_menu():
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
             if options[index] == 'System Info':
-                system_info_menu()  # Call the system info menu instead of show_system_info
+                system_info_menu()
             elif options[index] == 'Edit Settings':
                 edit_settings_menu()
             elif options[index] == 'Manual Control':
                 manual_control_menu()
-            elif options[index] == 'Soil Moisture':
-                show_soil_moisture()
+            elif options[index] == 'Monitor Data':
+                monitor_data_menu()  # New menu function
             elif options[index] == 'Back':
                 return
             display_menu(options, index)
@@ -826,17 +820,16 @@ def get_version_info():
     except Exception as e:
         return "Error reading\nversion info"
 
-def show_soil_moisture():
-    """Display soil moisture menu and readings"""
+def monitor_data_menu():
+    """Function to display monitoring options."""
     options = [
-        'Current Reading',
-        'Monitor Values',
+        'View Moisture',
+        'Monitor Live',
         'Show Threshold',
         'Back'
     ]
     index = 0
     display_menu(options, index)
-    
     while True:
         update = False
         if lcd.up_button:
@@ -851,9 +844,9 @@ def show_soil_moisture():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'Current Reading':
+            if options[index] == 'View Moisture':
                 show_current_moisture()
-            elif options[index] == 'Monitor Values':
+            elif options[index] == 'Monitor Live':
                 monitor_moisture()
             elif options[index] == 'Show Threshold':
                 show_moisture_threshold()
@@ -908,13 +901,12 @@ def monitor_moisture():
             lcd.clear()
             lcd.message = f"Live Reading:\n{moisture_percent}% ({soil_moisture})"
             
-            # Check for exit
-            if lcd.select_button:
-                debounce(lambda: lcd.select_button)
-                break
-                
-            # Wait before next reading
-            time.sleep(2)
+            # Check for exit - use shorter sleep and check more frequently
+            for _ in range(20):  # Check every 100ms for 2 seconds total
+                if lcd.select_button:
+                    debounce(lambda: lcd.select_button)
+                    return  # Use return instead of break to exit completely
+                time.sleep(0.1)
             
     except Exception as e:
         lcd.clear()
