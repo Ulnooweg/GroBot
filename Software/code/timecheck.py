@@ -1,4 +1,4 @@
-#Copyright 2023-2024 Ulnooweg Education Centre. All rights reserved.
+#Copyright 2023-2025 Ulnooweg Education Centre. All rights reserved.
 #Licensed under the EUPL-1.2 or later
 #
 #Source: https://github.com/Ulnooweg/GroBot
