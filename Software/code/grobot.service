@@ -1,14 +1,14 @@
 [Unit]
 Description=Grobot main system file
 After=multi-user.target
+StartLimitIntervalSec=60
+StartLimitBurst=7
 
 [Service]
 WorkingDirectory=/mnt/grobotextdat/code
 ExecStart=/home/grobot/adapi/bin/python /mnt/grobotextdat/code/main.py
 Restart=always
 RestartSec=10s
-StartLimitIntervalSec=60
-StartLimitBurst=7
 Nice=-20
 
 [Install]
