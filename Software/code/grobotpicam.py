@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: grobotpicam
-#Version: 1.1
+#Version: 1.2
 #Description: This function takes picture using pi camera
 #Function: picam_capture(), capture image using rpi-still the using imagemagic convert to add annotations (timestamps)
 #Input: NONE

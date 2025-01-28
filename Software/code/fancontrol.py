@@ -8,9 +8,10 @@
 #
 #GroBot
 #Code: fancontrol
-#Version: 1.1
+#Version: 1.2
 #Description: This function controls the growth chamber fan
 #Function: fanon(t), turns the fan on for time "t"
+#          fanmanon(), turns on the fan indefinitely
 #          fanoff(), turns the fan off
 #Input: fanon(...) requires time to turn fan on inputted in numerical form; fanoff() do not requires input
 #Output: NONE
@@ -33,6 +34,13 @@ def fanon(t):  # define function to turn on fan for t seconds as input
         s3.value = True  # turns on fan
         time.sleep(t)  # sleep for t seconds while fan is on
         s3.value = False  # turns off fan
+        return 1
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
+def fanmanon():  # define function to turn on fan indefinitely for manual control. MUST BE USED WITH fanoff at the end always
+    try:
+        s3.value = True  # turns on fan
         return 1
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

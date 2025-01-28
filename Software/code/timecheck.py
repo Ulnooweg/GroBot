@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: timecheck
-#Version: 1.1
+#Version: 1.2
 #Description: This function check if current time is between set time. It can handle time that crosses midnight
 #Function: checktimebetween(starttime, endtime), check if current time falls between starttime and endtime and returns True/False
 #Input: Start time and end time in proper time format by converting the tuple (hh,mm) using time(hh,mm) from datetime library

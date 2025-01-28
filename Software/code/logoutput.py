@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: logoutput
-#Version: 1.1
+#Version: 1.2
 #Description: These functions write the log result of grobot process from journalctl to file
 #Function: logtofile(), output the grobot log from journalctl output to a logfile in /mnt/grobotextdat/userdata
 #Input: NONE

@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: sensorfeed
-#Version: 1.1
+#Version: 1.2
 #Description: This function read sensor feeds and return its value
 #Function: feedread(), read sensor values and return it as a tuple of values
 #Input: NONE

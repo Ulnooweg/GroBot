@@ -8,10 +8,11 @@
 #
 #GroBot
 #Code: watercontrol
-#Version: 1.1
+#Version: 1.2
 #Description: This function controls watering
 #Function: autorain(mmrain), turns on the pump for a time such that the water delivered is "mmrain" mm of rain
-#          stopwater(), turns of the pump upon being called
+#          startwater(), turns on pump indefinitely after being called
+#          stopwater(), turns off the pump upon being called
 #Input: autorain(...) requires mmrain as a numerical input, stopwater() requires no input
 #Output: NONE
 #Error Handling: Standard UEC Error Handling V1
@@ -60,6 +61,12 @@ def autorain(mmrain):  # define autorain func with mm of water input as mm
         s1.value = False  # Make sure pump is off on error
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
+def startwater(): #define function to start watering indefinitely for manual control. MUST BE USED WITH stopwater at the end ALWAYS
+    try:
+        s1.value = True  # turns on pump
+        return 1
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None    
 
 def stopwater():  # define function to stop watering
     try:
