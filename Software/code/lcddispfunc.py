@@ -493,20 +493,42 @@ def manual_control_menu():
         'Fan On Now', 
         'Fan Off Now',
         'Take Picture Now',
-        'Record Data Now',  # New option
+        'Record Data Now',
         'Back'
     ]
     index = 0
     display_menu(options, index)
+    
+    # Add state tracking
+    fan_running = False
+    water_running = False
+    
     while True:
-        if watering_active:
-            # If watering is active, ignore all button presses except Stop Watering
-            if lcd.select_button and options[index] == 'Stop Watering':
+        if water_running:
+            # Show "Press SELECT to stop" message while watering
+            lcd.clear()
+            lcd.message = "Watering...\nPress SELECT stop"
+            if lcd.select_button:
                 debounce(lambda: lcd.select_button)
                 control_watering(False)
+                water_running = False
+                display_menu(options, index)
             time.sleep(0.1)
             continue
             
+        if fan_running:
+            # Show "Press SELECT to stop" message while fan running
+            lcd.clear() 
+            lcd.message = "Fan Running...\nPress SELECT stop"
+            if lcd.select_button:
+                debounce(lambda: lcd.select_button)
+                control_fan(False)
+                fan_running = False
+                display_menu(options, index)
+            time.sleep(0.1)
+            continue
+
+        # Regular menu navigation
         update = False
         if lcd.up_button:
             debounce(lambda: lcd.up_button)
@@ -520,24 +542,22 @@ def manual_control_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'Take Picture Now':
-                start_picture_thread()
-            elif options[index] == 'Water Now':
-                start_watering_thread()
+            if options[index] == 'Water Now':
+                water_running = True
+                start_indefinite_watering()
             elif options[index] == 'Stop Watering':
                 control_watering(False)
-            elif options[index] == 'Light On Now':
-                control_light(True)
-            elif options[index] == 'Light Off Now':
-                control_light(False)
             elif options[index] == 'Fan On Now':
-                start_fan_thread()
+                fan_running = True
+                start_indefinite_fan()
             elif options[index] == 'Fan Off Now':
                 control_fan(False)
-            elif options[index] == 'Record Data Now':  # Handle new option
+            elif options[index] == 'Take Picture Now':
+                start_picture_thread()
+            elif options[index] == 'Record Data Now':
                 record_data_to_excel()
             elif options[index] == 'Back':
-                if not watering_active:  # Only allow back if not watering
+                if not (water_running or fan_running):  # Only allow back if nothing running
                     return
             display_menu(options, index)
             time.sleep(0.5)
@@ -1075,6 +1095,42 @@ def record_data_to_excel():
         lcd.clear()
         set_lcd_color("error")
         lcd.message = "Error recording\ndata"
+        time.sleep(2)
+        set_lcd_color("normal")
+
+# Add new helper functions
+
+def start_indefinite_watering():
+    """Start watering indefinitely."""
+    try:
+        set_lcd_color("in_progress")
+        lcd.clear()
+        lcd.message = "Starting water..."
+        from watercontrol import startwater
+        result = startwater()
+        if not result:
+            raise RuntimeError("Failed to start water")
+    except Exception as e:
+        set_lcd_color("error")
+        lcd.clear()
+        lcd.message = f"Error: {e}"
+        time.sleep(2)
+        set_lcd_color("normal")
+
+def start_indefinite_fan():
+    """Start fan indefinitely."""
+    try:
+        set_lcd_color("in_progress")
+        lcd.clear()
+        lcd.message = "Starting fan..."
+        from fancontrol import fanmanon
+        result = fanmanon()
+        if not result:
+            raise RuntimeError("Failed to start fan")
+    except Exception as e:
+        set_lcd_color("error")
+        lcd.clear()
+        lcd.message = f"Error: {e}"
         time.sleep(2)
         set_lcd_color("normal")
 
