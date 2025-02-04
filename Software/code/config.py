@@ -81,6 +81,22 @@ def readcsv(csventryname): #define a function to read csv file and return the va
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
+def readlocal(csventryname): #define a function to read csv file and return the value corresponding to entry
+    #csv entry name must be a string
+    try:
+        csvdata = [] #define an empty list
+        with open('/mnt/grobotextdat/code/dictionary', 'r') as csvfile: #open the csv file as csvfile object
+            csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+            for row in csvraw: #iterate through each row in cswraw
+                if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                    csventryvalue = row[1]  #read the value for row that matched the desired entry
+                    return csventryvalue
+                else:
+                    pass
+        raise RuntimeError('CSV ENTRY NOT FOUND')
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
 def writecsv(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
     try:
         #csventryname and csventryvalue must be a string
