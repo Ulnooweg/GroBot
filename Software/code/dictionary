@@ -1,46 +1,46 @@
 responseid, text
 100,Select Option:
-101,
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141
+101,System Date/Time
+102,Sunrise Time
+103,Sunset Time
+104,Irrigation
+105,Temp Setpoint
+106,Humid Set
+107,Camera On
+108,Camera Off
+109,Back
+110,Set to:
+111,sunrise
+112,sunset
+113,maxTemp
+114,Temperature Setpoint
+115,maxHumid
+116,Humidity Set
+117,Humid Set
+118,year
+119,month
+120,day
+121,hour
+122,minute
+123,Set to:
+124,Error Setting\nTime
+125,Moist Thresh
+126,Water Vol
+127,Watering Time
+128,Soil Moisture:
+129,Water Now
+130,Stop Watering
+131,Light On Now
+132,Light Off Now
+133,Fan On Now
+134,Fan Off Now
+135,Take Picture
+136,Record Data Now
+137,Light On
+138,Light Off
+139,Light Change Failed
+140,Error:
+141,Taking Picture...
 142
 143
 144

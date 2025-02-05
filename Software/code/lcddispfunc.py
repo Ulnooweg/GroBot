@@ -118,15 +118,15 @@ def clear_and_return_to_menu():
 def edit_settings_menu():
     """Function to navigate and edit settings."""
     options = [
-        'System Date/Time',  # New combined option
-        'Sunrise Time',
-        'Sunset Time',
-        'Irrigation',
-        'Temp Setpoint',
-        'Humid Set',  # Shortened from 'Humidity Setpoint'
-        'Camera On',
-        'Camera Off',
-        'Back'
+        f"{readlocal('101')}",  # System Date/Time New combined option
+        f"{readlocal('102')}",  # Sunrise Time
+        f"{readlocal('103')}",  # Sunset Time
+        f"{readlocal('104')}",  # Irrigation
+        f"{readlocal('105')}",  # Temp Setpoint
+        f"{readlocal('106')}",  # Humid Set,Shortened from 'Humidity Setpoint'
+        f"{readlocal('107')}",  # Camera On
+        f"{readlocal('108')}",  # Camera Off
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(options, index)
@@ -227,7 +227,7 @@ def adjust_time_parameter(parameter_name, display_name):
             config.update_config('PLANTCFG', parameter_name, f"{hours},{minutes}")
             apply_settings()  # Apply the time parameter change
             lcd.clear()
-            lcd.message = f"Set to:\n{hours:02d}:{minutes:02d}"
+            lcd.message = f"{readlocal('123')}\n{hours:02d}:{minutes:02d}"
             time.sleep(1)  # Show the set message
             return
         time.sleep(0.2)  # Reduce refresh rate to minimize jitter
@@ -399,7 +399,7 @@ def adjust_system_time(display_name):
                 
             except Exception as e:
                 lcd.clear()
-                lcd.message = "Error Setting\nTime"
+                lcd.message = f"{readlocal('124')}"
                 time.sleep(1)
                 return
         
@@ -408,10 +408,10 @@ def adjust_system_time(display_name):
 def irrigation_menu():
     """Function to navigate and edit irrigation settings."""
     options = [
-        'Moist Thresh',  # Shortened text
-        'Water Vol',
-        'Watering Time',
-        'Back'
+        f"{readlocal('125')}",  # Moist Thresh, Shortened text
+        f"{readlocal('126')}",  # Water Vol
+        f"{readlocal('127')}",  # Watering Time
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(options, index)
@@ -446,7 +446,7 @@ def adjust_soil_moisture_threshold():
     value = int(cfg['PLANTCFG']['dryValue'])
     percentage = int((value / 1000) * 100)  # Convert to percentage
     lcd.clear()
-    lcd.message = f"Soil Moisture:\n{percentage}%"
+    lcd.message = f"{readlocal('128')}\n{percentage}%"
     last_update = time.monotonic()
     hold_start = None
     while True:
@@ -459,7 +459,7 @@ def adjust_soil_moisture_threshold():
                 percentage = min(percentage + 10, 100)
             if current_time - last_update > 0.1:  # Update display every 0.1 seconds
                 lcd.clear()
-                lcd.message = f"Soil Moisture:\n{percentage}%"
+                lcd.message = f"{readlocal('128')}\n{percentage}%"
                 last_update = current_time
         elif lcd.down_button:
             if hold_start is None:
@@ -469,7 +469,7 @@ def adjust_soil_moisture_threshold():
                 percentage = max(percentage - 10, 0)
             if current_time - last_update > 0.1:  # Update display every 0.1 seconds
                 lcd.clear()
-                lcd.message = f"Soil Moisture:\n{percentage}%"
+                lcd.message = f"{readlocal('128')}\n{percentage}%"
                 last_update = current_time
         else:
             hold_start = None
@@ -479,7 +479,7 @@ def adjust_soil_moisture_threshold():
             config.update_config('PLANTCFG', 'dryValue', str(value))
             apply_settings()  # Apply the parameter change
             lcd.clear()
-            lcd.message = f"Set to:\n{percentage}%"
+            lcd.message = f"{readlocal('123')}\n{percentage}%"
             time.sleep(1)  # Show the set message
             return  # Simply return to previous menu instead of clear_and_return_to_menu()
         time.sleep(0.05)  # Reduce CPU usage
@@ -487,15 +487,15 @@ def adjust_soil_moisture_threshold():
 def manual_control_menu():
     """Function to handle manual controls."""
     options = [
-        'Water Now', 
-        'Stop Watering', 
-        'Light On Now', 
-        'Light Off Now', 
-        'Fan On Now', 
-        'Fan Off Now',
-        'Take Picture Now',
-        'Record Data Now',  # New option
-        'Back'
+        f"{readlocal('129')}",  # Water Now
+        f"{readlocal('130')}",  # Stop Watering
+        f"{readlocal('131')}",  # Light On Now
+        f"{readlocal('132')}",  # Light Off Now
+        f"{readlocal('133')}",  # Fan On Now
+        f"{readlocal('134')}",  # Fan Off Now
+        f"{readlocal('135')}",  # Take Picture
+        f"{readlocal('136')}",  # Record Data Now, New option
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(options, index)
@@ -570,12 +570,12 @@ def control_light(turn_on):
             manual_override["light"] = False
         set_lcd_color("normal")  # Back to normal when done
         lcd.clear()
-        lcd.message = ("Light On" if turn_on else "Light Off") if result else "Light Change Failed"
+        lcd.message = (f"{readlocal('137')}" if turn_on else f"{readlocal('138')}") if result else f"{readlocal('139')}"
         time.sleep(2)
     except Exception as e:
         set_lcd_color("error")
         lcd.clear()
-        lcd.message = f"Error: {e}"
+        lcd.message = f"{readlocal('140')}: {e}"
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -584,7 +584,7 @@ def control_picture():
     try:
         set_lcd_color("in_progress")
         lcd.clear()
-        lcd.message = "Taking Picture..."
+        lcd.message = f"{readlocal('141')}"
         # Don't check buttons during picture capture
         result = picam_capture()
         set_lcd_color("normal")
