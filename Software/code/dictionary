@@ -41,13 +41,13 @@ responseid, text
 139,Light Change Failed
 140,Error:
 141,Taking Picture...
-142
-143
-144
-145
-146
-147
-148
+142,Picture Taken
+143,Picture Failed
+144,Watering...
+145,Watering Done
+146,Watering Failed
+147,Water Stopped
+148,Starting Fan...
 149
 150
 151

@@ -575,7 +575,7 @@ def control_light(turn_on):
     except Exception as e:
         set_lcd_color("error")
         lcd.clear()
-        lcd.message = f"{readlocal('140')}: {e}"
+        lcd.message = f"{readlocal('140')}: {e}"    # Error:
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -584,17 +584,17 @@ def control_picture():
     try:
         set_lcd_color("in_progress")
         lcd.clear()
-        lcd.message = f"{readlocal('141')}"
+        lcd.message = f"{readlocal('141')}"     # Taking Picture...
         # Don't check buttons during picture capture
         result = picam_capture()
         set_lcd_color("normal")
         lcd.clear()
-        lcd.message = "Picture Taken" if result else "Picture Failed"
+        lcd.message = f"{readlocal('142')}" if result else f"{readlocal('143')}"
         time.sleep(2)
     except Exception as e:
         set_lcd_color("error")
         lcd.clear()
-        lcd.message = f"Error: {e}"
+        lcd.message = f"{readlocal('140')} {e}"
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -607,7 +607,7 @@ def control_watering(start):
             # Clear and set message before starting watering
             lcd.clear()
             set_lcd_color("in_progress")
-            lcd.message = "Watering..."
+            lcd.message = f"{readlocal('144')}"
             
             # Start watering
             result = autorain(settings['waterVol'])
@@ -616,7 +616,7 @@ def control_watering(start):
             # Only update display after watering is complete
             lcd.clear()
             set_lcd_color("normal")
-            lcd.message = "Watering Done" if result == 1 else "Watering Failed"
+            lcd.message = f"{readlocal('145')}" if result == 1 else f"{readlocal('146')}"
             watering_active = False
             time.sleep(2)
         else:
@@ -629,12 +629,12 @@ def control_watering(start):
             
             lcd.clear()
             set_lcd_color("normal")
-            lcd.message = "Water Stopped"
+            lcd.message = f"{readlocal('147')}"
             time.sleep(2)
     except Exception as e:
         lcd.clear()
         set_lcd_color("error")
-        lcd.message = f"Error: {e}"
+        lcd.message = f"{readlocal('140')} {e}"
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -657,7 +657,7 @@ def control_fan(turn_on):
         if turn_on:
             set_lcd_color("in_progress")
             lcd.clear()
-            lcd.message = "Starting Fan..."
+            lcd.message = f"{readlocal('148')}"
             result = fanon(settings['fanTime'])
             manual_override["fan"] = True
             # Don't check buttons during fan operation
