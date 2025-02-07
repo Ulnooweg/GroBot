@@ -10,20 +10,7 @@ responseid, text
 108,Camera Off
 109,Back
 110,Set to:
-111,sunrise
-112,sunset
-113,maxTemp
-114,Temperature Setpoint
-115,maxHumid
-116,Humidity Set
-117,Humid Set
-118,year
-119,month
-120,day
-121,hour
-122,minute
-123,Set to:
-124,Error Setting\nTime
+124,Error Setting
 125,Moist Thresh
 126,Water Vol
 127,Watering Time
@@ -41,65 +28,65 @@ responseid, text
 139,Light Change Failed
 140,Error:
 141,Taking Picture...
-142
-143
-144
-145
-146
-147
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-200
+142,System Info
+143,Edit Settings
+144,Manual Control
+145,Monitor Data
+146,System Version
+147,Update Firmware
+148,Log Export
+149,Error reading
+150,View Moisture
+151,Monitor Live
+152,Show Threshold
+153,Reading Sensor...
+154,Soil Moisture:
+155,Monitoring...
+156,Live Reading:
+157,Error monitoring
+158,Select to Exit
+159,Time
+160,version info
+161,sensor
+162,Dry Threshold:
+163,threshold
+164,Press Select
+165,Exporting Log...
+166,Please Wait
+167,Log exported
+168,successfully!
+169,Export failed!
+170,Try again
+171,Error exporting
+172,log file
+173,Updating Firmware
+174,Please wait...
+175,Update success!
+176,Restart needed
+177,Press SELECT to
+178,Restart GroBot
+179,Update failed!
+180,Press SELECT
+181,Error updating
+182,firmware
+183,Recording data...
+184,Data recorded
+185,Recording failed!
+186,Try again
+187,Error Recording
+188,data
+189,Picture Taken
+190,Picture Failed
+191,Watering...
+192,Watering Done
+193,Watering Failed
+194,Water Stopped
+195,Starting Fan...
+196,fan running
+197,Fan Done
+198,Fan Failed
+199,Fan Off
+200,Fan Off Failed
 201
 202
 203
