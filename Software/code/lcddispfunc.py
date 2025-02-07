@@ -144,25 +144,25 @@ def edit_settings_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'System Date/Time':
+            if options[index] == f"{readlocal('101')}":
                 adjust_system_time('System Date/Time')
-            elif options[index] == 'Sunrise Time':
+            elif options[index] == f"{readlocal('102')}":
                 adjust_time_parameter('sunrise', 'Sunrise Time')
-            elif options[index] == 'Sunset Time':
+            elif options[index] == f"{readlocal('103')}":
                 adjust_time_parameter('sunset', 'Sunset Time')
-            elif options[index] == 'Irrigation':
+            elif options[index] == f"{readlocal('104')}":
                 irrigation_menu()
-            elif options[index] == 'Temp Setpoint':
+            elif options[index] == f"{readlocal('105')}":
                 adjust_parameter('maxTemp', 1, 0, 50, 'Temperature Setpoint')
-            elif options[index] == 'Humid Set':  # Changed to match new menu text
+            elif options[index] == f"{readlocal('106')}":  # Changed to match new menu text
                 adjust_parameter('maxHumid', 5, 0, 100, 'Humidity Set')
-            elif options[index] == 'Camera On':
+            elif options[index] == f"{readlocal('107')}":
                 config.update_config('PICAMERA', 'CameraSet', '1')
                 apply_settings()
-            elif options[index] == 'Camera Off':
+            elif options[index] == f"{readlocal('108')}":
                 config.update_config('PICAMERA', 'CameraSet', '0')
                 apply_settings()
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":
                 return
             display_menu(options, index)
             time.sleep(0.5)  # Pause before returning to menu
@@ -429,13 +429,13 @@ def irrigation_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'Moist Thresh':
+            if options[index] == f"{readlocal('125')}":
                 adjust_soil_moisture_threshold()
-            elif options[index] == 'Water Vol':
+            elif options[index] == f"{readlocal('126')}":
                 adjust_parameter('waterVol', 1, 0, 50, 'Water mm of Rain')
-            elif options[index] == 'Watering Time':
+            elif options[index] == f"{readlocal('127')}":
                 adjust_time_parameter('checkTime', 'Watering Time')
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":
                 return
             display_menu(options, index)
             time.sleep(0.5)
@@ -493,7 +493,7 @@ def manual_control_menu():
         f"{readlocal('132')}",  # Light Off Now
         f"{readlocal('133')}",  # Fan On Now
         f"{readlocal('134')}",  # Fan Off Now
-        f"{readlocal('135')}",  # Take Picture
+        f"{readlocal('135')}",  # Take Picture Now
         f"{readlocal('136')}",  # Record Data Now, New option
         f"{readlocal('109')}"   # Back
     ]
@@ -502,7 +502,7 @@ def manual_control_menu():
     while True:
         if watering_active:
             # If watering is active, ignore all button presses except Stop Watering
-            if lcd.select_button and options[index] == 'Stop Watering':
+            if lcd.select_button and options[index] == f"{readlocal('130')}":
                 debounce(lambda: lcd.select_button)
                 control_watering(False)
             time.sleep(0.1)
@@ -521,23 +521,23 @@ def manual_control_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'Take Picture Now':
+            if options[index] == f"{readlocal('135')}":
                 start_picture_thread()
-            elif options[index] == 'Water Now':
+            elif options[index] == f"{readlocal('129')}":
                 start_watering_thread()
-            elif options[index] == 'Stop Watering':
+            elif options[index] == f"{readlocal('130')}":
                 control_watering(False)
-            elif options[index] == 'Light On Now':
+            elif options[index] == f"{readlocal('131')}":
                 control_light(True)
-            elif options[index] == 'Light Off Now':
+            elif options[index] == f"{readlocal('132')}":
                 control_light(False)
-            elif options[index] == 'Fan On Now':
+            elif options[index] == f"{readlocal('133')}":
                 start_fan_thread()
-            elif options[index] == 'Fan Off Now':
+            elif options[index] == f"{readlocal('134')}":
                 control_fan(False)
-            elif options[index] == 'Record Data Now':  # Handle new option
+            elif options[index] == f"{readlocal('136')}":  # Handle new option
                 record_data_to_excel()
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":
                 if not watering_active:  # Only allow back if not watering
                     return
             display_menu(options, index)
@@ -739,15 +739,15 @@ def main_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'System Info':
+            if options[index] == f"{readlocal('142')}":
                 system_info_menu()
-            elif options[index] == 'Edit Settings':
+            elif options[index] == f"{readlocal('143')}":
                 edit_settings_menu()
-            elif options[index] == 'Manual Control':
+            elif options[index] == f"{readlocal('144')}":
                 manual_control_menu()
-            elif options[index] == 'Monitor Data':
+            elif options[index] == f"{readlocal('145')}":
                 monitor_data_menu()  # New menu function
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":
                 return
             display_menu(options, index)
             time.sleep(0.5)
@@ -778,13 +778,13 @@ def system_info_menu():
             display_menu(menu_items, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if menu_items[index] == "System Version":
+            if menu_items[index] == f"{readlocal('146')}":
                 show_system_info()
-            elif menu_items[index] == "Update Firmware":
+            elif menu_items[index] == f"{readlocal('147')}":
                 update_firmware_screen()
-            elif menu_items[index] == "Log Export":
+            elif menu_items[index] == f"{readlocal('148')}":
                 export_log_screen()
-            elif menu_items[index] == "Back":
+            elif menu_items[index] == f"{readlocal('109')}":
                 return
             display_menu(menu_items, index)
             time.sleep(0.5)
@@ -845,13 +845,13 @@ def monitor_data_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'View Moisture':
+            if options[index] == f"{readlocal('150')}":
                 show_current_moisture()
-            elif options[index] == 'Monitor Live':
+            elif options[index] == f"{readlocal('151')}":
                 monitor_moisture()
-            elif options[index] == 'Show Threshold':
+            elif options[index] == f"{readlocal('152')}":
                 show_moisture_threshold()
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":
                 return
             display_menu(options, index)
             time.sleep(0.5)
