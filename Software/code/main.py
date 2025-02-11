@@ -57,7 +57,7 @@ try:
 
     # Start the LCD menu thread immediately
     lcd_thread = threading.Thread(target=lcd_menu_thread)
-    lcd_thread.daemon = True #Set the thread as a daemon so if it is the only thread that exist the program exits
+    lcd_thread.daemon = True #Set the thread as a daemon so main can exit without waiting for lcddisp to quit first, and lcddisp exits when main exits.
     lcd_thread.start()
 except Exception as errvar:
     raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
