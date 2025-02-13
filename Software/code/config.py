@@ -154,3 +154,41 @@ def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv
         return 1 #return the csv data in list form
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
+def readcsv_mainflags(csventryname): #define a function to read csv file and return the value corresponding to entry
+    #csv entry name must be a string
+    try:
+        csvdata = [] #define an empty list
+        with open('/mnt/grobotextdat/code/mainflags', 'r') as csvfile: #open the csv file as csvfile object
+            csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+            for row in csvraw: #iterate through each row in cswraw
+                if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                    csventryvalue = row[1]  #read the value for row that matched the desired entry
+                    return csventryvalue
+                else:
+                    pass
+        raise RuntimeError('CSV ENTRY NOT FOUND')
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
+def writecsv_mainflags(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
+    try:
+        #csventryname and csventryvalue must be a string
+        #First, read csv file (same as)
+        csvdata = [] #define an empty list
+        with open('/mnt/grobotextdat/code/mainflags', 'r') as csvfile: #open the csv file as csvfile object
+            csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+            for row in csvraw: #iterate through each row in cswraw
+                if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                    row[1] = csventryvalue #Change the value to desired value
+                else:
+                    pass
+                csvdata.append(row) #for each row, append the data to the list
+        #Now write the data back to file
+        with open('/mnt/grobotextdat/code/mainflags', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            writer.writerows(csvdata)
+
+        return 1 #return the csv data in list form
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

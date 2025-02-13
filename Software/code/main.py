@@ -38,7 +38,7 @@ from lightcontrol import growlighton, growlightoff
 from grobotpicam import picam_capture
 from dataout import excelout
 from timecheck import checktimebetween
-from config import get_plant_settings
+from config import get_plant_settings, readcsv_mainflags, writecsv_mainflags
 from lcddispfunc import lcd_menu_thread, set_lcd_color
 
 ##############################################
@@ -176,22 +176,42 @@ def EverySUNSET(): # This should run every sunset time to turn off light
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 # Multithreading
-def run_threaded(job_func):
+def run_threaded(job_func): #Function that runs a given function input in a new thread using threading module
     try:
-        job_thread = threading.Thread(target=job_func)
-        job_thread.start()
+        #First, define job_thread object as a threading class targeting job_func function passed in
+        #while also setting the thread name to be the same as job_func using __name__ attribute
+        #Also want daemon=True so it does not block main from quitting and will exits if main no longer runs
+        job_thread = threading.Thread(target=job_func,name=str(job_func.__name__),daemon=True)
+
+        runthread_flag = True #set the default value of flag use to signal if thread should be ran to True as default
+        #Now must check if a thread with the same name is already running using enumerate logic
+        for i in threading.enumerate(): #Use enumerate to list all currently running thread
+            if i.name == job_func.__name__:
+                runthread_flag = False #if the name of any running thread matched the name of job_func passed in, set the flag to false
+            else:
+                pass #Do nothing and keep running flag to true if name doesn't match
+        
+        #Now check the flag and start the thread if the flag is True
+        if runthread_flag == True:
+            job_thread.start() #If nothing match, start the thread as normal
+        elif runthread_flag == False:
+            pass #Do not start the thread if the flag is false.
+        else: #If there's an error
+            raise RuntimeError('THREAD FLAG NOT BOOLEAN')
     except Exception as errvar:
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 # This is now the main running thread, one while loop that spawns subthreads as needed.
 while 1:
     try: #Put the entire try block under while loop. VERY IMPORTANT while must be the top level or it won't loop properly all the time
-        settings = get_plant_settings()
+        settings = get_plant_settings() #Get plant settings so we have the proper set time to compare current time to
+
+        #Get current time and put its component in separate variables
         currhour = datetime.now().hour
         currminute = datetime.now().minute
         currsecond = datetime.now().second
 
-        currtime = [datetime.now().hour, datetime.now().minute, datetime.now().second]
+        #currtime = [datetime.now().hour, datetime.now().minute, datetime.now().second] #combine the variable together, not needed anymore
 
         # The first case only match function for minutes
         match currminute:
