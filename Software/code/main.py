@@ -38,7 +38,7 @@ from lightcontrol import growlighton, growlightoff
 from grobotpicam import picam_capture
 from dataout import excelout
 from timecheck import checktimebetween
-from config import get_plant_settings, readcsv_mainflags, writecsv_mainflags
+from config import get_plant_settings
 from lcddispfunc import lcd_menu_thread, set_lcd_color
 
 ##############################################
@@ -89,6 +89,51 @@ except Exception as errvar:
     raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 ##############################################
+######## CSV READING WITH THREAD LOCK ########
+##############################################
+
+csv_lock = threading.Lock() #Define a thread lock class as csv_lock
+
+def readcsv_mainflags(csventryname): #define a function to read csv file and return the value corresponding to entry
+    #csv entry name must be a string
+    try:
+        csvdata = [] #define an empty list
+        with open('/mnt/grobotextdat/code/mainflags', 'r') as csvfile: #open the csv file as csvfile object
+            csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+            for row in csvraw: #iterate through each row in cswraw
+                if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                    csventryvalue = row[1]  #read the value for row that matched the desired entry
+                    return csventryvalue
+                else:
+                    pass
+        raise RuntimeError('CSV ENTRY NOT FOUND')
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
+def writecsv_mainflags(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
+    try:
+        #csventryname and csventryvalue must be a string
+        #First, read csv file (same as)
+        csvdata = [] #define an empty list
+        with csv_lock: #Acquire thread lock before write operation using csv_lock. Any subsequent attempt to write will have to wait for with statement to release the lock
+            with open('/mnt/grobotextdat/code/mainflags', 'r') as csvfile: #open the csv file as csvfile object
+                csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+                for row in csvraw: #iterate through each row in cswraw
+                    if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                        row[1] = csventryvalue #Change the value to desired value
+                    else:
+                        pass
+                    csvdata.append(row) #for each row, append the data to the list
+            #Now write the data back to file
+            with open('/mnt/grobotextdat/code/mainflags', 'w', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=',')
+                writer.writerows(csvdata)
+
+        return 1 #return the csv data in list form
+    except Exception as errvar:
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+##############################################
 ##############   SCHEDULED CODE   ############
 ##############################################
 
@@ -108,7 +153,8 @@ def EveryXX15(): # This schedule grouping runs at every quarter of hour
             pass
         else:
             raise RuntimeError('UKNOWN FAILURE')
-
+        
+        writecsv_mainflags("EveryXX15","0") #Set the execution flag for the function back to 0
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
@@ -130,6 +176,8 @@ def EverySETTIME(): # This runs every settime read from grobot_cfg
             pass
         else:
             raise RuntimeError('UKNOWN FAILURE')
+        
+        writecsv_mainflags("EverySETTIME","0") #Set the execution flag for the function back to 0
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
@@ -143,6 +191,8 @@ def EveryXX25(): # This code runs at every 25 minute mark of the hour
         ReadVal = feedread() # T RH SRH in order
         # Write data out to excel file
         excelout(ReadVal[0], ReadVal[1], ReadVal[2])
+
+        writecsv_mainflags("EveryXX25","0") #Set the execution flag for the function back to 0
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
@@ -152,6 +202,8 @@ def EveryXX35(): # Runs every 35 minute mark of the hour
     try:
         set_lcd_color("in_progress")  # Set LCD color to blue when in progress
         picam_capture() # Take picture with pi camera
+
+        writecsv_mainflags("EveryXX35","0") #Set the execution flag for the function back to 0
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
@@ -161,6 +213,8 @@ def EverySUNRISE(): # This should run every sunrise time to turn on the light
     try:
         set_lcd_color("in_progress")  # Set LCD color to blue when in progress
         growlighton()
+
+        writecsv_mainflags("EverySUNRISE","0") #Set the execution flag for the function back to 0
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
@@ -170,6 +224,8 @@ def EverySUNSET(): # This should run every sunset time to turn off light
     try:
         set_lcd_color("in_progress")  # Set LCD color to blue when in progress
         growlightoff()
+
+        writecsv_mainflags("EverySUNSET","0") #Set the execution flag for the function back to 0
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
@@ -213,25 +269,39 @@ while 1:
 
         #currtime = [datetime.now().hour, datetime.now().minute, datetime.now().second] #combine the variable together, not needed anymore
 
+        # Now write the code to set execution flag for the appropriate function in mainflags file to 1 if the appropriate time is
+        # reached such that the fuction will later be executed when mainflags is read back.
         # The first case only match function for minutes
         match currminute:
             case 15:
-                run_threaded(EveryXX15)
+                writecsv_mainflags("EveryXX15","1")
             case 25:
-                run_threaded(EveryXX25)
+                writecsv_mainflags("EveryXX25","1")
             case 35:
-                run_threaded(logtofile) #Write log immediately every loop
-                run_threaded(EveryXX35)
+                run_threaded(logtofile) #Write log immediately every 35 minutes
+                writecsv_mainflags("EveryXX35","1")
             case _:
                 pass
         
         # This one requires matching both hour and minute
         if currhour == settings['sunset'][0] and currminute == settings['sunset'][1]:
-            run_threaded(EverySUNSET)
+            writecsv_mainflags("EverySUNSET","1")
         if currhour == settings['sunrise'][0] and currminute == settings['sunrise'][1]:
-            run_threaded(EverySUNRISE)
+            writecsv_mainflags("EverySUNRISE","1")
         if currhour == settings['checkTime'][0] and currminute == settings['checkTime'][1]:
-            run_threaded(EverySETTIME)
+            writecsv_mainflags("EverySETTIME","1")
+
+        # Now, read the mainflags file and execute any function that has its execution value = 1.
+        # Make a list of functions. Need to use the actual function object such that they can be called later
+        funcexecnamelist = [EveryXX15, EverySETTIME, EveryXX25, EveryXX35, EverySUNRISE, EverySUNSET]
+        for funcexecname in funcexecnamelist: #iterate through the list funcexecnamelist using variable funcexecname
+            tempflagvalue = readcsv_mainflags(str(funcexecname.__name__)) #Read flag value for current function from csv
+            if tempflagvalue == '1': #Check if flag value corresponding to function name provided by funcexecname variable match 1, if it does start the thread
+                run_threaded(funcexecname)
+            elif tempflagvalue == '0':
+                pass
+            else:
+                raise RuntimeError('FUNCTION EXEC FLAG COMPARISON ERROR')
 
         #Implement logic to sleep until next tick
         currtickminute = datetime.now().minute
