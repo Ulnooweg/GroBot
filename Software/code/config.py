@@ -90,7 +90,15 @@ def readlocal(csventryname): #define a function to read csv file and return the 
             for row in csvraw: #iterate through each row in cswraw
                 if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
                     csventryvalue = row[1]  #read the value for row that matched the desired entry
-                    return csventryvalue
+                    editedcsventryvalue = csventryvalue.replace('é','\x00')
+                    editedcsventryvalue = editedcsventryvalue.replace('à','\x01')
+                    editedcsventryvalue = editedcsventryvalue.replace('è','\x02')
+                    editedcsventryvalue = editedcsventryvalue.replace('ê','\x03')
+                    editedcsventryvalue = editedcsventryvalue.replace('ô','\x04')
+                    editedcsventryvalue = editedcsventryvalue.replace('û','\x05')
+                    editedcsventryvalue = editedcsventryvalue.replace('â','\x06')
+                    editedcsventryvalue = editedcsventryvalue.replace('ɨ','\x07')
+                    return editedcsventryvalue
                 else:
                     pass
         raise RuntimeError('CSV ENTRY NOT FOUND')

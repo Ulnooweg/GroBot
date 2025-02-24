@@ -57,6 +57,80 @@ watering_active = False
 i2c = board.I2C()  # uses board.SCL and board.SDA
 lcd = Character_LCD_RGB_I2C(i2c, 16, 2)
 
+# Initialize custom characters
+# Accented é
+lcd.create_char(0, [0b00010,
+                   0b00100,
+                   0b01110,
+                   0b10001,
+                   0b11111,
+                   0b10000,
+                   0b01110,
+                   0b00000])
+# Accented à
+lcd.create_char(1, [0b01000,
+                   0b00100,
+                   0b01110,
+                   0b00001,
+                   0b01111,
+                   0b10001,
+                   0b01111,
+                   0b00000])
+# Accented è
+lcd.create_char(2, [0b01000,
+                   0b00100,
+                   0b01110,
+                   0b10001,
+                   0b11111,
+                   0b10000,
+                   0b01110,
+                   0b00000])
+# Accented ê
+lcd.create_char(3, [0b00100,
+                   0b01010,
+                   0b01110,
+                   0b10001,
+                   0b11111,
+                   0b10000,
+                   0b01110,
+                   0b00000])
+# Accented ô
+lcd.create_char(4, [0b00100,
+                   0b01010,
+                   0b01110,
+                   0b10001,
+                   0b10001,
+                   0b10001,
+                   0b01110,
+                   0b00000])
+# Accented û
+lcd.create_char(5, [0b00100,
+                   0b01010,
+                   0b10001,
+                   0b10001,
+                   0b10001,
+                   0b10011,
+                   0b01101,
+                   0b00000])
+# Accented â
+lcd.create_char(6, [0b00100,
+                   0b01010,
+                   0b01110,
+                   0b00001,
+                   0b01111,
+                   0b10001,
+                   0b01111,
+                   0b00000])
+# Accented ɨ
+lcd.create_char(7, [0b00100,
+                   0b00000,
+                   0b01100,
+                   0b00100,
+                   0b01110,
+                   0b00100,
+                   0b01110,
+                   0b00000])
+
 def set_lcd_color(status):
     """Set LCD color based on status."""
     if status == "normal":
@@ -126,7 +200,7 @@ def edit_settings_menu():
         f"{readlocal('106')}",  # Humid Set,Shortened from 'Humidity Setpoint'
         f"{readlocal('107')}",  # Camera On
         f"{readlocal('108')}",  # Camera Off
-        f"{readlocal('109')}"   # Back
+        f"{readlocal('555')}"   # Back
     ]
     index = 0
     display_menu(options, index)
@@ -162,7 +236,7 @@ def edit_settings_menu():
             elif options[index] == f"{readlocal('108')}":   # Camera Off
                 config.update_config('PICAMERA', 'CameraSet', '0')
                 apply_settings()
-            elif options[index] == f"{readlocal('109')}":   # Back
+            elif options[index] == f"{readlocal('555')}":   # Back
                 return
             display_menu(options, index)
             time.sleep(0.5)  # Pause before returning to menu
