@@ -38,7 +38,7 @@ from lightcontrol import growlighton, growlightoff
 from grobotpicam import picam_capture
 from dataout import excelout
 from timecheck import checktimebetween
-from config import get_plant_settings
+from config import get_plant_settings, readcsv_mainflags, writecsv_mainflags
 from lcddispfunc import lcd_menu_thread, set_lcd_color
 
 ##############################################
