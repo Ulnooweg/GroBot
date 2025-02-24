@@ -200,7 +200,7 @@ def edit_settings_menu():
         f"{readlocal('106')}",  # Humid Set,Shortened from 'Humidity Setpoint'
         f"{readlocal('107')}",  # Camera On
         f"{readlocal('108')}",  # Camera Off
-        f"{readlocal('555')}"   # Back
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(options, index)
