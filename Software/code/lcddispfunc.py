@@ -236,7 +236,7 @@ def edit_settings_menu():
             elif options[index] == f"{readlocal('108')}":   # Camera Off
                 config.update_config('PICAMERA', 'CameraSet', '0')
                 apply_settings()
-            elif options[index] == f"{readlocal('555')}":   # Back
+            elif options[index] == f"{readlocal('109')}":   # Back
                 return
             display_menu(options, index)
             time.sleep(0.5)  # Pause before returning to menu
