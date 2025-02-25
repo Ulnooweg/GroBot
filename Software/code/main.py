@@ -21,6 +21,8 @@ from logoutput import logtofile
 try:
     logtofile() #Write log to file immediately after boot in case needed for debugging
 except Exception as errvar:
+    #Note: There is no force reboot yet here as logoutput should be the first thing imported and done
+    #It's also already handled in the logoutput file itself.
     raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 #MODULE IMPORTS
