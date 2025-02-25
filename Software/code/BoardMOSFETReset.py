@@ -20,7 +20,6 @@
 #import important library
 #All these are part of Blinka
 import board
-import busio
 import digitalio
 import subprocess
 from lcddispfunc import set_lcd_color
