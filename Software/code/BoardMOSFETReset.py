@@ -22,6 +22,8 @@
 import board
 import busio
 import digitalio
+import subprocess
+from lcddispfunc import set_lcd_color
 
 def grobotboot(): #Define a callable function by main
     try:
@@ -62,4 +64,6 @@ def grobotboot(): #Define a callable function by main
         return 1
     
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

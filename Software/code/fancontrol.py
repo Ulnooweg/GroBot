@@ -21,6 +21,8 @@
 # MODULE IMPORTS
 import time  # need time for sleep function
 from diopinsetup import diopinset
+import subprocess
+from lcddispfunc import set_lcd_color
 
 ##############################################
 # Handle the pins definition and sensor definition
@@ -36,6 +38,8 @@ def fanon(t):  # define function to turn on fan for t seconds as input
         s3.value = False  # turns off fan
         return 1
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def fanmanon():  # define function to turn on fan indefinitely for manual control. MUST BE USED WITH fanoff at the end always
@@ -43,6 +47,8 @@ def fanmanon():  # define function to turn on fan indefinitely for manual contro
         s3.value = True  # turns on fan
         return 1
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def fanoff():  # define function to turn off fan
@@ -50,4 +56,6 @@ def fanoff():  # define function to turn off fan
         s3.value = False  # turns off fan
         return 1
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

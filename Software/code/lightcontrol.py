@@ -19,6 +19,8 @@
 ########################################
 #MODULE IMPORTS
 from diopinsetup import diopinset
+import subprocess
+from lcddispfunc import set_lcd_color
 
 ##############################################
 #Handle the pins definition and sensor definition
@@ -33,6 +35,8 @@ def growlighton(): #define function to turn on growlight
         return 1
     
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def growlightoff(): #define function to turn off growlight
@@ -41,4 +45,6 @@ def growlightoff(): #define function to turn off growlight
         return 1
     
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

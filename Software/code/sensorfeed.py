@@ -18,6 +18,8 @@
 ########################################
 # MODULE IMPORTS
 from diopinsetup import diopinset
+import subprocess
+from lcddispfunc import set_lcd_color
 
 ##############################################
 def feedread():  # define feedread function
@@ -36,4 +38,6 @@ def feedread():  # define feedread function
 
         return T, RH, SRH  # return tuple of all values
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

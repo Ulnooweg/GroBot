@@ -28,6 +28,8 @@
 import configparser
 import csv
 import threading
+import subprocess
+from lcddispfunc import set_lcd_color
 
 config = configparser.ConfigParser()
 config.optionxform = str #Force keep case-sensititvity in config file
@@ -45,6 +47,8 @@ def read_config():
             config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini")
             return config
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def get_plant_settings(): #Define get_plant_settings which read config file and put them in a dictionaried variable
@@ -63,6 +67,8 @@ def get_plant_settings(): #Define get_plant_settings which read config file and 
             }
             return settings #return variable as a dictionary
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def update_config(section, parameter, value): #Define function to write variable back to config file
@@ -74,6 +80,8 @@ def update_config(section, parameter, value): #Define function to write variable
                 config.write(configfile)
             return 1
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def readcsv(csventryname): #define a function to read csv file and return the value corresponding to entry
@@ -91,6 +99,8 @@ def readcsv(csventryname): #define a function to read csv file and return the va
                         pass
             raise RuntimeError('CSV ENTRY NOT FOUND')
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def writecsv(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
@@ -114,6 +124,8 @@ def writecsv(csventryname,csventryvalue): #define a function to write to csv fil
 
             return 1 #return the csv data in list form
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def writecsvnote(csventryname,csventryvalue,csventrynote): #define a function to write to csv file taking in name of entry, value of the entry, and value of note to update to
@@ -138,6 +150,8 @@ def writecsvnote(csventryname,csventryvalue,csventrynote): #define a function to
 
             return 1 #return the csv data in list form
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def readcsv_softver(csventryname): #define a function to read csv file and return the value corresponding to entry
@@ -155,6 +169,8 @@ def readcsv_softver(csventryname): #define a function to read csv file and retur
                         pass
             raise RuntimeError('CSV ENTRY NOT FOUND') #If entry not found raise an error
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv file with 3 column
@@ -169,6 +185,8 @@ def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv
 
             return 1 #return the csv data in list form
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def readcsv_mainflags(csventryname): #define a function to read csv file and return the value corresponding to entry
@@ -186,6 +204,8 @@ def readcsv_mainflags(csventryname): #define a function to read csv file and ret
                         pass
             raise RuntimeError('CSV ENTRY NOT FOUND')
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def writecsv_mainflags(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
@@ -209,4 +229,6 @@ def writecsv_mainflags(csventryname,csventryvalue): #define a function to write 
 
             return 1 #return the csv data in list form
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

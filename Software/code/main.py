@@ -28,6 +28,7 @@ from datetime import time, datetime
 import time as time2 #We already import time from datetime so time library is imported as time2
 import threading
 import sys
+import subprocess
 
 #Submodules import, these require files to be present in local dir
 from BoardMOSFETReset import grobotboot
@@ -60,6 +61,8 @@ try:
     lcd_thread.daemon = True #Set the thread as a daemon so main can exit without waiting for lcddisp to quit first, and lcddisp exits when main exits.
     lcd_thread.start()
 except Exception as errvar:
+    subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+    set_lcd_color("error")
     raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 # Starts with reading values from sensor
@@ -86,6 +89,8 @@ try:
         raise RuntimeError('UNKNOWN FAILURE')
 
 except Exception as errvar:
+    subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+    set_lcd_color("error")
     raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 ##############################################
@@ -113,6 +118,8 @@ def EveryXX15(): # This schedule grouping runs at every quarter of hour
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EverySETTIME(): # This runs every settime read from grobot_cfg
@@ -136,6 +143,8 @@ def EverySETTIME(): # This runs every settime read from grobot_cfg
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EveryXX25(): # This code runs at every 25 minute mark of the hour
@@ -151,6 +160,8 @@ def EveryXX25(): # This code runs at every 25 minute mark of the hour
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EveryXX35(): # Runs every 35 minute mark of the hour
@@ -162,6 +173,8 @@ def EveryXX35(): # Runs every 35 minute mark of the hour
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EverySUNRISE(): # This should run every sunrise time to turn on the light
@@ -173,6 +186,8 @@ def EverySUNRISE(): # This should run every sunrise time to turn on the light
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EverySUNSET(): # This should run every sunset time to turn off light
@@ -184,6 +199,8 @@ def EverySUNSET(): # This should run every sunset time to turn off light
         set_lcd_color("normal")  # Set LCD color to green when done
 
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 # Multithreading
@@ -210,6 +227,8 @@ def run_threaded(job_func): #Function that runs a given function input in a new 
         else: #If there's an error
             raise RuntimeError('THREAD FLAG NOT BOOLEAN')
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 # This is now the main running thread, one while loop that spawns subthreads as needed.
@@ -271,4 +290,6 @@ while 1:
             raise RuntimeError('TIME EXCEPTION') #Time anomaly
 
     except Exception as errvar: #Catch any while loop exception
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

@@ -26,6 +26,9 @@ import digitalio
 import adafruit_ahtx0
 from adafruit_seesaw.seesaw import Seesaw
 
+import subprocess
+from lcddispfunc import set_lcd_color
+
 ##############################################
 
 def diopinset(): #define diopinset function that takes no arguments
@@ -71,4 +74,6 @@ def diopinset(): #define diopinset function that takes no arguments
 
         return s1, s2, s3, s4, s5, s6, b1, ths, sms #return the pins and sensors as tuple of objects
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

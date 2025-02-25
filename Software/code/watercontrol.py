@@ -23,6 +23,8 @@
 # MODULE IMPORTS
 import time  # need time for sleep function
 from diopinsetup import diopinset
+import subprocess
+from lcddispfunc import set_lcd_color
 
 ##############################################
 # Handle the pins definition and sensor definition
@@ -59,6 +61,8 @@ def autorain(mmrain):  # define autorain func with mm of water input as mm
     
     except Exception as errvar:
         s1.value = False  # Make sure pump is off on error
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def startwater(): #define function to start watering indefinitely for manual control. MUST BE USED WITH stopwater at the end ALWAYS
@@ -66,6 +70,9 @@ def startwater(): #define function to start watering indefinitely for manual con
         s1.value = True  # turns on pump
         return 1
     except Exception as errvar:
+        s1.value = False  # Make sure pump is off on error
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None    
 
 def stopwater():  # define function to stop watering
@@ -73,4 +80,7 @@ def stopwater():  # define function to stop watering
         s1.value = False  # turns off pump
         return 1
     except Exception as errvar:
+        s1.value = False  # Make sure pump is off on error
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

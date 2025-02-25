@@ -20,6 +20,8 @@
 import os
 import datetime
 import pandas as pd #import panda module as pd for easier call
+import subprocess
+from lcddispfunc import set_lcd_color
 
 ##############################################
 
@@ -59,4 +61,6 @@ def excelout(T,RH,SRH):
             combined_df.to_excel(writer, sheet_name = xlsx_sheet_name, index = False)
         return 1
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
