@@ -18,7 +18,6 @@
 ########################################
 #MODULE IMPORTS
 import subprocess
-import csv
 from config import readcsv, writecsvnote
 from lcddispfunc import set_lcd_color
 
