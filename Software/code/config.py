@@ -29,7 +29,7 @@ import configparser
 import csv
 import threading
 import subprocess
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 
 config = configparser.ConfigParser()
 config.optionxform = str #Force keep case-sensititvity in config file
