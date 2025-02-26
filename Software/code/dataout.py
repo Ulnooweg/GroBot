@@ -21,7 +21,7 @@ import os
 import datetime
 import threading
 import subprocess
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 import csv
 
 ##############################################

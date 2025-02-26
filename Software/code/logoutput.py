@@ -19,7 +19,7 @@
 #MODULE IMPORTS
 import subprocess
 import os
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 
 #Output log from journalctl to file
 def logtofile():

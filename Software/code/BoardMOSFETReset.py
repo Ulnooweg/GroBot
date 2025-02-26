@@ -22,7 +22,7 @@
 import board
 import digitalio
 import subprocess
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 
 def grobotboot(): #Define a callable function by main
     try:

@@ -27,7 +27,7 @@ import adafruit_ahtx0
 from adafruit_seesaw.seesaw import Seesaw
 
 import subprocess
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 
 ##############################################
 

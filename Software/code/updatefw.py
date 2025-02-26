@@ -19,7 +19,7 @@
 #MODULE IMPORTS
 import subprocess
 from config import readcsv, writecsvnote
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 
 #Define a function to update the firmware
 def grobotfwupdate():

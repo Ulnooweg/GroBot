@@ -24,7 +24,7 @@
 import time  # need time for sleep function
 from diopinsetup import diopinset
 import subprocess
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 
 ##############################################
 # Handle the pins definition and sensor definition

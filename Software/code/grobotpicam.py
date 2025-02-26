@@ -21,7 +21,7 @@ import subprocess
 import datetime
 import os
 import configparser
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 
 config = configparser.ConfigParser()
 

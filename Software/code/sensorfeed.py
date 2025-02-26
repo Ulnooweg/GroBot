@@ -19,7 +19,7 @@
 # MODULE IMPORTS
 from diopinsetup import diopinset
 import subprocess
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 
 ##############################################
 def feedread():  # define feedread function

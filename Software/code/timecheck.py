@@ -20,7 +20,7 @@
 #Module Imports
 from datetime import datetime, time
 import subprocess
-from lcddispfunc import set_lcd_color
+from lcdfuncdef import set_lcd_color
 
 ##############################################
 
