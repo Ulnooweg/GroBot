@@ -37,6 +37,7 @@ config.optionxform = str #Force keep case-sensititvity in config file
 #Define thread locks for use in multi-threading
 #A single file should have a single threadlock variable for both read and write operations called using "with"
 readconfigs_lock = threading.Lock() #Define a thread lock class
+grobotdict_lock = threading.Lock() #Define a thread lock class
 csv_ulnoodat_lock = threading.Lock() #Define a thread lock class
 csv_softver_lock = threading.Lock() #Define a thread lock class
 csv_mainflags_lock = threading.Lock() #Define a thread lock class as csv_mainflags_lock
@@ -107,24 +108,27 @@ def readlocal(csventryname): #define a function to read csv file and return the 
     #csv entry name must be a string
     try:
         csvdata = [] #define an empty list
-        with open('/mnt/grobotextdat/code/dictionary', 'r') as csvfile: #open the csv file as csvfile object
-            csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
-            for row in csvraw: #iterate through each row in cswraw
-                if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
-                    csventryvalue = row[1]  #read the value for row that matched the desired entry
-                    editedcsventryvalue = csventryvalue.replace('é','\x00')
-                    editedcsventryvalue = editedcsventryvalue.replace('à','\x01')
-                    editedcsventryvalue = editedcsventryvalue.replace('è','\x02')
-                    editedcsventryvalue = editedcsventryvalue.replace('ê','\x03')
-                    editedcsventryvalue = editedcsventryvalue.replace('ô','\x04')
-                    editedcsventryvalue = editedcsventryvalue.replace('û','\x05')
-                    editedcsventryvalue = editedcsventryvalue.replace('â','\x06')
-                    editedcsventryvalue = editedcsventryvalue.replace('ɨ','\x07')
-                    return editedcsventryvalue
-                else:
-                    pass
-        raise RuntimeError('CSV ENTRY NOT FOUND')
+        with grobotdict_lock: #Acquire thread lock before operation
+            with open('/mnt/grobotextdat/code/dictionary', 'r') as csvfile: #open the csv file as csvfile object
+                csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+                for row in csvraw: #iterate through each row in cswraw
+                    if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                        csventryvalue = row[1]  #read the value for row that matched the desired entry
+                        editedcsventryvalue = csventryvalue.replace('é','\x00')
+                        editedcsventryvalue = editedcsventryvalue.replace('à','\x01')
+                        editedcsventryvalue = editedcsventryvalue.replace('è','\x02')
+                        editedcsventryvalue = editedcsventryvalue.replace('ê','\x03')
+                        editedcsventryvalue = editedcsventryvalue.replace('ô','\x04')
+                        editedcsventryvalue = editedcsventryvalue.replace('û','\x05')
+                        editedcsventryvalue = editedcsventryvalue.replace('â','\x06')
+                        editedcsventryvalue = editedcsventryvalue.replace('ɨ','\x07')
+                        return editedcsventryvalue
+                    else:
+                        pass
+            raise RuntimeError('CSV ENTRY NOT FOUND')
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def writecsv(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
