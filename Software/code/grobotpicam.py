@@ -21,6 +21,7 @@ import subprocess
 import datetime
 import os
 import configparser
+from lcdfuncdef import set_lcd_color
 
 config = configparser.ConfigParser()
 
@@ -61,4 +62,6 @@ def picam_capture():
 
         return 1
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

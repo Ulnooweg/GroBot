@@ -19,12 +19,18 @@
 #MODULE IMPORTS
 import os
 import datetime
-import pandas as pd #import panda module as pd for easier call
+import threading
+import subprocess
+from lcdfuncdef import set_lcd_color
+import csv
 
 ##############################################
 
+dataoutcsv_lock = threading.Lock() #Define a thread lock class
+
 def excelout(T,RH,SRH):
     try:
+        #First, check if the required path exists
         directory = "/mnt/grobotextdat/data" #This is the main external directory associated with USB
         if os.path.isdir(directory) == True: #check if exist
             pass #if it is pass
@@ -32,31 +38,33 @@ def excelout(T,RH,SRH):
             raise RuntimeError('FILE IO FAIL')
 
         #Now check if the output excel file exist, if it does not create it.
-        filename = f"{directory}/datalog.xlsx"
+        filename = f"{directory}/datalog.csv"
 
         if os.path.isfile(filename) == True:
-            xlsx_sheet_name = 'datatable' #also define sheet name here
             pass
         else: #create the excel file
-            dfcolumns = ['Time', 'Temp', '%RH', 'Soil RH'] #Define columns name
-            xlsx_sheet_name = 'datatable' #Excel sheet name
-
-            df = pd.DataFrame(columns=dfcolumns) #create empty dataframe with only columns
-
-            #Write dataframe to file with specified parameters, output header info and set index to False so we do not output row number as first data column
-            df.to_excel(filename, sheet_name=xlsx_sheet_name, index=False, header=True)
+            #All info must be strings
+            csvinitdata = ['Time','Temp','%RH','Soil RH'] #define the row list
+            with dataoutcsv_lock: #Acquire thread lock before operation
+                with open('/mnt/grobotextdat/data/datalog.csv', 'a', newline='') as csvfile:
+                    writer = csv.writer(csvfile, delimiter=',')
+                    writer.writerow(csvinitdata) #Use writerow not writerows as we only want to write a single row
 
         #Now we will append the data
-        humantimestamp = datetime.datetime.now().strftime("%H:%M %d/%B/%Y") #Current timestamp 
+        humantimestamp = datetime.datetime.now().strftime("%H:%M:%S %Y-%m-%d") #Current timestamp Canadian standard (ISO 8081 ref)
+        #See: https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/enabling-interoperability/gc-enterprise-data-reference-standards/data-reference-standard-date-time-format.html
 
-        writedata = [humantimestamp, T, RH, SRH] #data to write to excel in tuple
+        csvdata = [str(humantimestamp), str(T), str(RH), str(SRH)] #data to write to csv, convert to string to make sure they are string
 
-        current_df = pd.read_excel(filename) #read the excel file into a dataframe
-        new_df = pd.DataFrame([writedata], columns= current_df.columns) #create a new dataframe with same columns as existing df
-        combined_df = pd.concat([current_df, new_df])
+        #Now write the data back to file in line append mode
+        with dataoutcsv_lock: #Acquire thread lock before operation
+            with open('/mnt/grobotextdat/data/datalog.csv', 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=',')
+                writer.writerow(csvdata) #Use writerow not writerows as we only want to write a single row
 
-        with pd.ExcelWriter(filename) as writer:
-            combined_df.to_excel(writer, sheet_name = xlsx_sheet_name, index = False)
-        return 1
+            return 1
+        
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

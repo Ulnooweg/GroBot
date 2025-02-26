@@ -19,6 +19,8 @@
 
 #Module Imports
 from datetime import datetime, time
+import subprocess
+from lcdfuncdef import set_lcd_color
 
 ##############################################
 
@@ -48,4 +50,6 @@ def checktimebetween(starttime, endtime): #Define a function checktimebetween
             raise RuntimeError('TIME COMPARE FAILURE') #Raise error on failure
 
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
