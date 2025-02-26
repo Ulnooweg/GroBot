@@ -17,9 +17,11 @@
 #
 ########################################
 #Imports
+import board
 from adafruit_character_lcd.character_lcd_rgb_i2c import Character_LCD_RGB_I2C
 
 #Define the LCD object
+i2c = board.I2C()  # uses board.SCL and board.SDA
 lcd = Character_LCD_RGB_I2C(i2c, 16, 2)
 
 def set_lcd_color(status):
