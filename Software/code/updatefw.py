@@ -80,6 +80,52 @@ def grobotfwupdate():
         #Version 1.1 update end#
         ###############################################################################
 
+        ###############################################################################
+        #Version 1.2 update#
+        #Copy this entire block until Version update end to reuse it for later version
+        #Remember to change:
+        #                   The header and footer block
+        #                   fw_update_version ... #Define what version this is
+        #                   Anything inside #### FW UPDATE CODE ####
+        ###############################################################################
+        
+        #Read current firmware version as string as defined by readcsv
+        fw_version = readcsv('fw_version')
+
+        fw_update_version = 1.2 #Define what version this is
+
+        if float(fw_version) >= fw_update_version: #Checks, if current fw version already up to date or newer do nothing
+            pass
+        elif float(fw_version) < fw_update_version: #If version is less do the update
+            #If needs to run as sudo, we need to echo the password as standrd input and use -S flag to have sudo use password from standard input
+            #If command contains #, wrap it all in "COMMAND_HERE" to ensure it is not processed as comment
+            #Source command is echo $PSSWD | sudo -S command 
+
+            #### FW UPDATE CODE ####
+
+            #Update 1, update grobot main service file to improve its restart settings
+            subprocess.run("echo grobot | sudo -S cp /mnt/grobotextdat/code/grobot.service /lib/systemd/system/grobot.service", shell=True)
+
+            #update 2, remove buggy unattended-upgrades and its related apt-listchanges
+            subprocess.run("echo grobot | sudo -S apt remove -y unattended-upgrades apt-listchanges", shell=True)
+
+            #update 3, remove unused dataout.xlsx (DOES NOT NEED ROOT)
+            subprocess.run("rm -f /mnt/grobotextdat/data/datalog.xlsx", shell=True)
+
+            #### FW UPDATE CODE END ####
+
+            #Write the updated firmware version
+            writecsvnote('fw_version',str(fw_update_version),f"#Firmware Version: {fw_update_version}")            
+        else: #Else raise an error
+            raise RuntimeError('FW UPDATE VERSION CHECK FAILURE')
+        
+        #Read current firmware version as string as defined by readcsv (Done after every update block)
+        fw_version = readcsv('fw_version')
+
+        ###############################################################################
+        #Version 1.2 update end#
+        ###############################################################################
+
         #End of updates, return a success
         return 1
     except Exception as errvar:

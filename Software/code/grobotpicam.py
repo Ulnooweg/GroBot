@@ -40,7 +40,7 @@ def picam_capture():
                 raise RuntimeError('PICAM CONFIG ERROR') #If there is no proper match, raise an error
         #This part takes an image    
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") #get current date and time
-        humantimestamp = datetime.datetime.now().strftime("%H:%M %d/%B/%Y") #Timestamp for image
+        humantimestamp = datetime.datetime.now().strftime("%H:%M:%S %Y-%m-%d") #Timestamp for image
 
         #Now this part will determine what directory to use
         directory = "/mnt/grobotextdat/pictures" #This is the main external directory associated with USB
