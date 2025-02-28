@@ -49,8 +49,9 @@ def picam_capture():
         else: #if not return error to force a code restart
             raise RuntimeError('FILE IO FAIL')
 
-        filename = f"{directory}/camera-image-{timestamp}.jpeg" #construct filename structure using f-string
-        subprocess.run(['rpicam-still', '-o', filename]) #capture to filename which already have directory specified using libcamera command line tool
+        filename = f"{directory}/grobot-camera-image-{timestamp}.jpeg" #construct filename structure using f-string
+        subprocess.run(['rpicam-still', '-o', filename, '-v', '0']) #capture to filename which already have directory specified using libcamera command line tool
+        #-o specify output filename, -v specify verbosity to be none to not make the log file clutter
 
         #Now this part adds the timestamp text
         fontsize = '150' #Set timestamp font size in points
