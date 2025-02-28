@@ -606,7 +606,7 @@ def manual_control_menu():
             elif options[index] == f"{readlocal('132')}":   # Light Off Now
                 control_light(False)
             elif options[index] == f"{readlocal('133')}":   # Fan On Now
-                start_fan_thread()
+                control_fan(True)
             elif options[index] == f"{readlocal('134')}":   # Fan Off Now
                 control_fan(False)
             elif options[index] == f"{readlocal('136')}":   # Record Data Now, Handle new option
@@ -616,20 +616,6 @@ def manual_control_menu():
                     return
             display_menu(options, index)
             time.sleep(0.5)
-
-def start_fan_thread():
-    """Start the fan in a separate thread."""
-    threading.Thread(target=control_fan, args=(True,)).start()
-
-def start_picture_thread():
-    """Start the picture-taking process in a separate thread."""
-    threading.Thread(target=control_picture).start()
-
-def start_watering_thread():
-    """Start a thread for the watering process."""
-    global watering_active
-    watering_active = True
-    threading.Thread(target=control_watering, args=(True,)).start()
 
 def control_light(turn_on):
     """Control the grow light."""
@@ -734,10 +720,6 @@ def control_fan(turn_on):
             lcd.message = f"{readlocal('195')}" # Starting Fan...
             result = fanon(settings['fanTime'])
             manual_override["fan"] = True
-            # Don't check buttons during fan operation
-            lcd.clear()
-            lcd.message = f"{readlocal('196')}" # fan running
-            time.sleep(settings['fanTime'])  # Wait for fan cycle
             set_lcd_color("normal")
             lcd.clear()
             lcd.message = f"{readlocal('197')}" if result else f"{readlocal('198')}" # Fan Done, Fan Failed
