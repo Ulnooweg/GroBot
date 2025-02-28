@@ -596,9 +596,9 @@ def manual_control_menu():
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
             if options[index] == f"{readlocal('135')}":     # Take Picture Now 
-                start_picture_thread()
+                control_picture()
             elif options[index] == f"{readlocal('129')}":   # Water Now
-                start_watering_thread()
+                control_watering(True)
             elif options[index] == f"{readlocal('130')}":   # Stop Watering
                 control_watering(False)
             elif options[index] == f"{readlocal('131')}":   # Light On Now
