@@ -463,8 +463,8 @@ def adjust_system_time(display_name):
                 date_str = f"{current['year']}-{current['month']:02d}-{current['day']:02d}"
                 time_str = f"{current['hours']:02d}:{current['minutes']:02d}:00"
                 
-                subprocess.run(["sudo", "date", "-s", f"{date_str} {time_str}"], check=True)
-                subprocess.run(["sudo", "hwclock", "-w"], check=True)
+                subprocess.run(f"echo grobot | sudo -S date -s \"{date_str} {time_str}\"", shell=True, check=True) #Needs \ to escape " as date and time string needs to be wrapped by "" for date -s
+                subprocess.run("echo grobot | sudo -S hwclock -w", shell=True, check=True) #Write system date to RTC
                 
                 lcd.clear()
                 lcd.message = f"{date_str}\n{time_str}"
@@ -1071,7 +1071,8 @@ def update_firmware_screen():
             while True:
                 if lcd.select_button:
                     debounce(lambda: lcd.select_button)
-                    subprocess.run(['sudo', 'reboot'])
+                    set_lcd_color("error")
+                    subprocess.run("echo grobot | sudo -S shutdown -r now", shell=True)
                 time.sleep(0.1)
         else:
             set_lcd_color("error")  # Red for error
