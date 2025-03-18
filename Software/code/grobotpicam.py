@@ -57,9 +57,10 @@ def picam_capture():
         fontsize = '150' #Set timestamp font size in points
         fontcolour = '#DEC305' #Set font colour
         XYpos = '+100+2500' #Set text XY position from top left corner
+        outputsize = 'jpeg:extent=512kb' #Set the maximum size of the output jpeg that will be set by define
         #Not put it all together in a convert command
         #Note The command is 'convert filename -pointsize 150 -fill "#DEC035" -annotate +100+2500 'TIMESTAMP' filename'
-        subprocess.run(['convert', filename, '-pointsize', fontsize, '-fill', fontcolour, '-annotate', XYpos, humantimestamp, filename])
+        subprocess.run(['convert', filename, '-pointsize', fontsize, '-define', outputsize, '-fill', fontcolour, '-annotate', XYpos, humantimestamp, filename])
 
         return 1
     except Exception as errvar:

@@ -112,6 +112,9 @@ def grobotfwupdate():
             #update 3, remove unused dataout.xlsx (DOES NOT NEED ROOT)
             subprocess.run("rm -f /mnt/grobotextdat/data/datalog.xlsx", shell=True)
 
+            #update 4, change timezone to UTC to prevent further automatic time change based on Atlantic region daylight saving
+            subprocess.run("echo grobot | sudo -S timedatectl set-timezone UTC", shell=True)
+
             #### FW UPDATE CODE END ####
 
             #Write the updated firmware version

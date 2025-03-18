@@ -718,7 +718,7 @@ def control_fan(turn_on):
             set_lcd_color("in_progress")
             lcd.clear()
             lcd.message = f"{readlocal('195')}" # Starting Fan...
-            result = fanon(settings['fanTime'])
+            result = fanon(10) #Set fan on to 10s as default 30 is very long for manual control.
             manual_override["fan"] = True
             set_lcd_color("normal")
             lcd.clear()
