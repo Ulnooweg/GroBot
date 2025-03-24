@@ -8,10 +8,11 @@
 #
 #GroBot
 #Code: watercontrol
-#Version: 1.1
+#Version: 1.2
 #Description: This function controls watering
 #Function: autorain(mmrain), turns on the pump for a time such that the water delivered is "mmrain" mm of rain
-#          stopwater(), turns of the pump upon being called
+#          startwater(), turns on pump indefinitely after being called
+#          stopwater(), turns off the pump upon being called
 #Input: autorain(...) requires mmrain as a numerical input, stopwater() requires no input
 #Output: NONE
 #Error Handling: Standard UEC Error Handling V1
@@ -22,6 +23,8 @@
 # MODULE IMPORTS
 import time  # need time for sleep function
 from diopinsetup import diopinset
+import subprocess
+from lcdfuncdef import set_lcd_color
 
 ##############################################
 # Handle the pins definition and sensor definition
@@ -58,12 +61,26 @@ def autorain(mmrain):  # define autorain func with mm of water input as mm
     
     except Exception as errvar:
         s1.value = False  # Make sure pump is off on error
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
+def startwater(): #define function to start watering indefinitely for manual control. MUST BE USED WITH stopwater at the end ALWAYS
+    try:
+        s1.value = True  # turns on pump
+        return 1
+    except Exception as errvar:
+        s1.value = False  # Make sure pump is off on error
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None    
 
 def stopwater():  # define function to stop watering
     try:
         s1.value = False  # turns off pump
         return 1
     except Exception as errvar:
+        s1.value = False  # Make sure pump is off on error
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

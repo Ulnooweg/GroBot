@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: timecheck
-#Version: 1.1
+#Version: 1.2
 #Description: This function check if current time is between set time. It can handle time that crosses midnight
 #Function: checktimebetween(starttime, endtime), check if current time falls between starttime and endtime and returns True/False
 #Input: Start time and end time in proper time format by converting the tuple (hh,mm) using time(hh,mm) from datetime library
@@ -19,6 +19,8 @@
 
 #Module Imports
 from datetime import datetime, time
+import subprocess
+from lcdfuncdef import set_lcd_color
 
 ##############################################
 
@@ -48,4 +50,6 @@ def checktimebetween(starttime, endtime): #Define a function checktimebetween
             raise RuntimeError('TIME COMPARE FAILURE') #Raise error on failure
 
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

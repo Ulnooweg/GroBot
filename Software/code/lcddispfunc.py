@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: lcddispfunc
-#Version: 1.1
+#Version: 1.2
 #Description: LCD Module control code
 #Function: Controls the workings of the LCD display and human interaction. Consult Info.md for more information
 #Input: consult Info.md
@@ -35,6 +35,7 @@ import subprocess  # Import for setting the system time
 from config import (
     get_plant_settings, 
     readcsv,
+    readlocal,
     readcsv_softver
 )
 import updatefw
@@ -55,6 +56,80 @@ watering_active = False
 
 i2c = board.I2C()  # uses board.SCL and board.SDA
 lcd = Character_LCD_RGB_I2C(i2c, 16, 2)
+
+# Initialize custom characters
+# Accented é
+lcd.create_char(0, [0b00010,
+                   0b00100,
+                   0b01110,
+                   0b10001,
+                   0b11111,
+                   0b10000,
+                   0b01110,
+                   0b00000])
+# Accented à
+lcd.create_char(1, [0b01000,
+                   0b00100,
+                   0b01110,
+                   0b00001,
+                   0b01111,
+                   0b10001,
+                   0b01111,
+                   0b00000])
+# Accented è
+lcd.create_char(2, [0b01000,
+                   0b00100,
+                   0b01110,
+                   0b10001,
+                   0b11111,
+                   0b10000,
+                   0b01110,
+                   0b00000])
+# Accented ê
+lcd.create_char(3, [0b00100,
+                   0b01010,
+                   0b01110,
+                   0b10001,
+                   0b11111,
+                   0b10000,
+                   0b01110,
+                   0b00000])
+# Accented ô
+lcd.create_char(4, [0b00100,
+                   0b01010,
+                   0b01110,
+                   0b10001,
+                   0b10001,
+                   0b10001,
+                   0b01110,
+                   0b00000])
+# Accented û
+lcd.create_char(5, [0b00100,
+                   0b01010,
+                   0b10001,
+                   0b10001,
+                   0b10001,
+                   0b10011,
+                   0b01101,
+                   0b00000])
+# Accented â
+lcd.create_char(6, [0b00100,
+                   0b01010,
+                   0b01110,
+                   0b00001,
+                   0b01111,
+                   0b10001,
+                   0b01111,
+                   0b00000])
+# Accented ɨ
+lcd.create_char(7, [0b00100,
+                   0b00000,
+                   0b01100,
+                   0b00100,
+                   0b01110,
+                   0b00100,
+                   0b01110,
+                   0b00000])
 
 def set_lcd_color(status):
     """Set LCD color based on status."""
@@ -93,20 +168,20 @@ def display_menu(options, index):
     option_text = options[index]
     if len(option_text) > 16:  # If text is longer than LCD width
         # Show first 13 chars + "..." to indicate more
-        lcd.message = f"Select Option:\n{option_text[:13]}..."
+        lcd.message = f"{readlocal('100')}\n{option_text[:13]}..." #Select Option:
         time.sleep(1)  # Wait a second
         # Then scroll the full text
         start_pos = 0
         while start_pos + 16 <= len(option_text):
             lcd.clear()
-            lcd.message = f"Select Option:\n{option_text[start_pos:start_pos+16]}"
+            lcd.message = f"{readlocal('100')}\n{option_text[start_pos:start_pos+16]}" #Select Option:
             start_pos += 1
             time.sleep(0.3)  # Adjust speed as needed
         # Return to beginning
         lcd.clear()
-        lcd.message = f"Select Option:\n{option_text[:16]}"
+        lcd.message = f"{readlocal('100')}\n{option_text[:16]}" #Select Option:
     else:
-        lcd.message = f"Select Option:\n{option_text[:16]}"
+        lcd.message = f"{readlocal('100')}\n{option_text[:16]}" #Select Option:
 
 def clear_and_return_to_menu():
     """Clear the LCD and return to the main menu."""
@@ -117,15 +192,15 @@ def clear_and_return_to_menu():
 def edit_settings_menu():
     """Function to navigate and edit settings."""
     options = [
-        'System Date/Time',  # New combined option
-        'Sunrise Time',
-        'Sunset Time',
-        'Irrigation',
-        'Temp Setpoint',
-        'Humid Set',  # Shortened from 'Humidity Setpoint'
-        'Camera On',
-        'Camera Off',
-        'Back'
+        f"{readlocal('101')}",  # System Date/Time New combined option
+        f"{readlocal('102')}",  # Sunrise Time
+        f"{readlocal('103')}",  # Sunset Time
+        f"{readlocal('104')}",  # Irrigation
+        f"{readlocal('105')}",  # Temp Setpoint
+        f"{readlocal('106')}",  # Humid Set,Shortened from 'Humidity Setpoint'
+        f"{readlocal('107')}",  # Camera On
+        f"{readlocal('108')}",  # Camera Off
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(options, index)
@@ -143,25 +218,25 @@ def edit_settings_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'System Date/Time':
+            if options[index] == f"{readlocal('101')}":     # System Date/Time
                 adjust_system_time('System Date/Time')
-            elif options[index] == 'Sunrise Time':
+            elif options[index] == f"{readlocal('102')}":   # Sunrise Time
                 adjust_time_parameter('sunrise', 'Sunrise Time')
-            elif options[index] == 'Sunset Time':
+            elif options[index] == f"{readlocal('103')}":   # Sunset Time
                 adjust_time_parameter('sunset', 'Sunset Time')
-            elif options[index] == 'Irrigation':
+            elif options[index] == f"{readlocal('104')}":   # Irrigation
                 irrigation_menu()
-            elif options[index] == 'Temp Setpoint':
+            elif options[index] == f"{readlocal('105')}":   # Temp Setpoint
                 adjust_parameter('maxTemp', 1, 0, 50, 'Temperature Setpoint')
-            elif options[index] == 'Humid Set':  # Changed to match new menu text
+            elif options[index] == f"{readlocal('106')}":   # Humid Set, Changed to match new menu text
                 adjust_parameter('maxHumid', 5, 0, 100, 'Humidity Set')
-            elif options[index] == 'Camera On':
+            elif options[index] == f"{readlocal('107')}":   # Camera On
                 config.update_config('PICAMERA', 'CameraSet', '1')
                 apply_settings()
-            elif options[index] == 'Camera Off':
+            elif options[index] == f"{readlocal('108')}":   # Camera Off
                 config.update_config('PICAMERA', 'CameraSet', '0')
                 apply_settings()
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":   # Back
                 return
             display_menu(options, index)
             time.sleep(0.5)  # Pause before returning to menu
@@ -188,7 +263,7 @@ def adjust_parameter(parameter_name, step, min_val, max_val, display_name):
             config.update_config('PLANTCFG', parameter_name, str(value))
             apply_settings()  # Apply the parameter change
             lcd.clear()
-            lcd.message = f"Set to:\n{value}"
+            lcd.message = f"{readlocal('110')}\n{value}" # Set to:
             time.sleep(1)  # Show the set message
             return  # Simply return to previous menu
         time.sleep(0.2)  # Reduce refresh rate to minimize jitter
@@ -226,7 +301,7 @@ def adjust_time_parameter(parameter_name, display_name):
             config.update_config('PLANTCFG', parameter_name, f"{hours},{minutes}")
             apply_settings()  # Apply the time parameter change
             lcd.clear()
-            lcd.message = f"Set to:\n{hours:02d}:{minutes:02d}"
+            lcd.message = f"{readlocal('110')}\n{hours:02d}:{minutes:02d}" #Set to:
             time.sleep(1)  # Show the set message
             return
         time.sleep(0.2)  # Reduce refresh rate to minimize jitter
@@ -388,8 +463,8 @@ def adjust_system_time(display_name):
                 date_str = f"{current['year']}-{current['month']:02d}-{current['day']:02d}"
                 time_str = f"{current['hours']:02d}:{current['minutes']:02d}:00"
                 
-                subprocess.run(["sudo", "date", "-s", f"{date_str} {time_str}"], check=True)
-                subprocess.run(["sudo", "hwclock", "-w"], check=True)
+                subprocess.run(f"echo grobot | sudo -S date -s \"{date_str} {time_str}\"", shell=True, check=True) #Needs \ to escape " as date and time string needs to be wrapped by "" for date -s
+                subprocess.run("echo grobot | sudo -S hwclock -w", shell=True, check=True) #Write system date to RTC
                 
                 lcd.clear()
                 lcd.message = f"{date_str}\n{time_str}"
@@ -398,7 +473,7 @@ def adjust_system_time(display_name):
                 
             except Exception as e:
                 lcd.clear()
-                lcd.message = "Error Setting\nTime"
+                lcd.message = f"{readlocal('124')}\n{readlocal('159')}" # Error Setting \n Time
                 time.sleep(1)
                 return
         
@@ -407,10 +482,10 @@ def adjust_system_time(display_name):
 def irrigation_menu():
     """Function to navigate and edit irrigation settings."""
     options = [
-        'Moist Thresh',  # Shortened text
-        'Water Vol',
-        'Watering Time',
-        'Back'
+        f"{readlocal('125')}",  # Moist Thresh, Shortened text
+        f"{readlocal('126')}",  # Water Vol
+        f"{readlocal('127')}",  # Watering Time
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(options, index)
@@ -428,13 +503,13 @@ def irrigation_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'Moist Thresh':
+            if options[index] == f"{readlocal('125')}":     # Moist Thresh
                 adjust_soil_moisture_threshold()
-            elif options[index] == 'Water Vol':
+            elif options[index] == f"{readlocal('126')}":   # Water Vol
                 adjust_parameter('waterVol', 1, 0, 50, 'Water mm of Rain')
-            elif options[index] == 'Watering Time':
+            elif options[index] == f"{readlocal('127')}":   # Watering Time
                 adjust_time_parameter('checkTime', 'Watering Time')
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":   # Back
                 return
             display_menu(options, index)
             time.sleep(0.5)
@@ -445,7 +520,7 @@ def adjust_soil_moisture_threshold():
     value = int(cfg['PLANTCFG']['dryValue'])
     percentage = int((value / 1000) * 100)  # Convert to percentage
     lcd.clear()
-    lcd.message = f"Soil Moisture:\n{percentage}%"
+    lcd.message = f"{readlocal('128')}\n{percentage}%" # Soil Moisture:
     last_update = time.monotonic()
     hold_start = None
     while True:
@@ -458,7 +533,7 @@ def adjust_soil_moisture_threshold():
                 percentage = min(percentage + 10, 100)
             if current_time - last_update > 0.1:  # Update display every 0.1 seconds
                 lcd.clear()
-                lcd.message = f"Soil Moisture:\n{percentage}%"
+                lcd.message = f"{readlocal('128')}\n{percentage}%" # Soil Moisture
                 last_update = current_time
         elif lcd.down_button:
             if hold_start is None:
@@ -468,7 +543,7 @@ def adjust_soil_moisture_threshold():
                 percentage = max(percentage - 10, 0)
             if current_time - last_update > 0.1:  # Update display every 0.1 seconds
                 lcd.clear()
-                lcd.message = f"Soil Moisture:\n{percentage}%"
+                lcd.message = f"{readlocal('128')}\n{percentage}%" # Soil Moisture
                 last_update = current_time
         else:
             hold_start = None
@@ -478,7 +553,7 @@ def adjust_soil_moisture_threshold():
             config.update_config('PLANTCFG', 'dryValue', str(value))
             apply_settings()  # Apply the parameter change
             lcd.clear()
-            lcd.message = f"Set to:\n{percentage}%"
+            lcd.message = f"{readlocal('110')}\n{percentage}%" # Set to:
             time.sleep(1)  # Show the set message
             return  # Simply return to previous menu instead of clear_and_return_to_menu()
         time.sleep(0.05)  # Reduce CPU usage
@@ -486,22 +561,22 @@ def adjust_soil_moisture_threshold():
 def manual_control_menu():
     """Function to handle manual controls."""
     options = [
-        'Water Now', 
-        'Stop Watering', 
-        'Light On Now', 
-        'Light Off Now', 
-        'Fan On Now', 
-        'Fan Off Now',
-        'Take Picture Now',
-        'Record Data Now',  # New option
-        'Back'
+        f"{readlocal('129')}",  # Water Now
+        f"{readlocal('130')}",  # Stop Watering
+        f"{readlocal('131')}",  # Light On Now
+        f"{readlocal('132')}",  # Light Off Now
+        f"{readlocal('133')}",  # Fan On Now
+        f"{readlocal('134')}",  # Fan Off Now
+        f"{readlocal('135')}",  # Take Picture Now
+        f"{readlocal('136')}",  # Record Data Now, New option
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(options, index)
     while True:
         if watering_active:
             # If watering is active, ignore all button presses except Stop Watering
-            if lcd.select_button and options[index] == 'Stop Watering':
+            if lcd.select_button and options[index] == f"{readlocal('130')}":   # Stop Watering
                 debounce(lambda: lcd.select_button)
                 control_watering(False)
             time.sleep(0.1)
@@ -520,41 +595,27 @@ def manual_control_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'Take Picture Now':
-                start_picture_thread()
-            elif options[index] == 'Water Now':
-                start_watering_thread()
-            elif options[index] == 'Stop Watering':
+            if options[index] == f"{readlocal('135')}":     # Take Picture Now 
+                control_picture()
+            elif options[index] == f"{readlocal('129')}":   # Water Now
+                control_watering(True)
+            elif options[index] == f"{readlocal('130')}":   # Stop Watering
                 control_watering(False)
-            elif options[index] == 'Light On Now':
+            elif options[index] == f"{readlocal('131')}":   # Light On Now
                 control_light(True)
-            elif options[index] == 'Light Off Now':
+            elif options[index] == f"{readlocal('132')}":   # Light Off Now
                 control_light(False)
-            elif options[index] == 'Fan On Now':
-                start_fan_thread()
-            elif options[index] == 'Fan Off Now':
+            elif options[index] == f"{readlocal('133')}":   # Fan On Now
+                control_fan(True)
+            elif options[index] == f"{readlocal('134')}":   # Fan Off Now
                 control_fan(False)
-            elif options[index] == 'Record Data Now':  # Handle new option
+            elif options[index] == f"{readlocal('136')}":   # Record Data Now, Handle new option
                 record_data_to_excel()
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":   # Back
                 if not watering_active:  # Only allow back if not watering
                     return
             display_menu(options, index)
             time.sleep(0.5)
-
-def start_fan_thread():
-    """Start the fan in a separate thread."""
-    threading.Thread(target=control_fan, args=(True,)).start()
-
-def start_picture_thread():
-    """Start the picture-taking process in a separate thread."""
-    threading.Thread(target=control_picture).start()
-
-def start_watering_thread():
-    """Start a thread for the watering process."""
-    global watering_active
-    watering_active = True
-    threading.Thread(target=control_watering, args=(True,)).start()
 
 def control_light(turn_on):
     """Control the grow light."""
@@ -569,12 +630,12 @@ def control_light(turn_on):
             manual_override["light"] = False
         set_lcd_color("normal")  # Back to normal when done
         lcd.clear()
-        lcd.message = ("Light On" if turn_on else "Light Off") if result else "Light Change Failed"
+        lcd.message = (f"{readlocal('137')}" if turn_on else f"{readlocal('138')}") if result else f"{readlocal('139')}" # Light On, Light Off, Light Change Failed
         time.sleep(2)
     except Exception as e:
         set_lcd_color("error")
         lcd.clear()
-        lcd.message = f"Error: {e}"
+        lcd.message = f"{readlocal('140')}: {e}" # Error:
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -583,17 +644,17 @@ def control_picture():
     try:
         set_lcd_color("in_progress")
         lcd.clear()
-        lcd.message = "Taking Picture..."
+        lcd.message = f"{readlocal('141')}" # Taking Picture...
         # Don't check buttons during picture capture
         result = picam_capture()
         set_lcd_color("normal")
         lcd.clear()
-        lcd.message = "Picture Taken" if result else "Picture Failed"
+        lcd.message = f"{readlocal('189')}" if result else f"{readlocal('190')}" # Picture Taken, Picture Failed
         time.sleep(2)
     except Exception as e:
         set_lcd_color("error")
         lcd.clear()
-        lcd.message = f"Error: {e}"
+        lcd.message = f"{readlocal('140')} {e}" #Error:
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -606,7 +667,7 @@ def control_watering(start):
             # Clear and set message before starting watering
             lcd.clear()
             set_lcd_color("in_progress")
-            lcd.message = "Watering..."
+            lcd.message = f"{readlocal('191')}" # Watering
             
             # Start watering
             result = autorain(settings['waterVol'])
@@ -615,7 +676,7 @@ def control_watering(start):
             # Only update display after watering is complete
             lcd.clear()
             set_lcd_color("normal")
-            lcd.message = "Watering Done" if result == 1 else "Watering Failed"
+            lcd.message = f"{readlocal('192')}" if result == 1 else f"{readlocal('193')}" # Watering Done, Watering Failed
             watering_active = False
             time.sleep(2)
         else:
@@ -628,12 +689,12 @@ def control_watering(start):
             
             lcd.clear()
             set_lcd_color("normal")
-            lcd.message = "Water Stopped"
+            lcd.message = f"{readlocal('194')}" # Water Stopped
             time.sleep(2)
     except Exception as e:
         lcd.clear()
         set_lcd_color("error")
-        lcd.message = f"Error: {e}"
+        lcd.message = f"{readlocal('140')} {e}" # Error:
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -641,7 +702,7 @@ def return_to_initial_screen():
     """Function to display the initial LCD screen with time and prompt."""
     while True:
         current_time = datetime.now().strftime("%H:%M:%S")
-        lcd.message = f"{current_time}\nPress Select"
+        lcd.message = f"{current_time}\n{readlocal('164')}" # Press Select
         if lcd.select_button:
             debounce(lambda: lcd.select_button)
             main_menu()  # Return to the main menu when "Select" is pressed
@@ -656,28 +717,24 @@ def control_fan(turn_on):
         if turn_on:
             set_lcd_color("in_progress")
             lcd.clear()
-            lcd.message = "Starting Fan..."
-            result = fanon(settings['fanTime'])
+            lcd.message = f"{readlocal('195')}" # Starting Fan...
+            result = fanon(10) #Set fan on to 10s as default 30 is very long for manual control.
             manual_override["fan"] = True
-            # Don't check buttons during fan operation
-            lcd.clear()
-            lcd.message = "Fan Running..."
-            time.sleep(settings['fanTime'])  # Wait for fan cycle
             set_lcd_color("normal")
             lcd.clear()
-            lcd.message = "Fan Done" if result else "Fan Failed"
+            lcd.message = f"{readlocal('197')}" if result else f"{readlocal('198')}" # Fan Done, Fan Failed
         else:
             set_lcd_color("in_progress")
             result = fanoff()
             manual_override["fan"] = False
             set_lcd_color("normal")
             lcd.clear()
-            lcd.message = "Fan Off" if result else "Fan Off Failed"
+            lcd.message = f"{readlocal('199')}" if result else f"{readlocal('200')}" # Fan Off, Fan Off Failed
         time.sleep(2)
     except Exception as e:
         set_lcd_color("error")
         lcd.clear()
-        lcd.message = f"Error: {e}"
+        lcd.message = f"{readlocal('140')} {e}" # Error:
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -716,11 +773,11 @@ def apply_settings():
 def main_menu():
     """Function to navigate between different settings."""
     options = [
-        'System Info',
-        'Edit Settings', 
-        'Manual Control',
-        'Monitor Data',  # New menu item replacing 'Soil Moisture'
-        'Back'
+        f"{readlocal('142')}",  # System Info
+        f"{readlocal('143')}",  # Edit Settings
+        f"{readlocal('144')}",  # Manual Control
+        f"{readlocal('145')}",  # Monitor Data, New menu item replacing 'Soil Moisture'
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(options, index)
@@ -738,15 +795,15 @@ def main_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'System Info':
+            if options[index] == f"{readlocal('142')}":     # System Info
                 system_info_menu()
-            elif options[index] == 'Edit Settings':
+            elif options[index] == f"{readlocal('143')}":   # Edit Settings
                 edit_settings_menu()
-            elif options[index] == 'Manual Control':
+            elif options[index] == f"{readlocal('144')}":   # Manual Control
                 manual_control_menu()
-            elif options[index] == 'Monitor Data':
+            elif options[index] == f"{readlocal('145')}":   # Monitor Data
                 monitor_data_menu()  # New menu function
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":   # Back
                 return
             display_menu(options, index)
             time.sleep(0.5)
@@ -754,10 +811,10 @@ def main_menu():
 def system_info_menu():
     """Display system information menu"""
     menu_items = [
-        "System Version",
-        "Update Firmware",
-        "Log Export",
-        "Back"
+        f"{readlocal('146')}",  # System Version
+        f"{readlocal('147')}",  # Update Firmware
+        f"{readlocal('148')}",  # Log Export
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(menu_items, index)
@@ -777,13 +834,13 @@ def system_info_menu():
             display_menu(menu_items, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if menu_items[index] == "System Version":
+            if menu_items[index] == f"{readlocal('146')}":      # System Version
                 show_system_info()
-            elif menu_items[index] == "Update Firmware":
+            elif menu_items[index] == f"{readlocal('147')}":    # Update Firmware
                 update_firmware_screen()
-            elif menu_items[index] == "Log Export":
+            elif menu_items[index] == f"{readlocal('148')}":    # Log Export
                 export_log_screen()
-            elif menu_items[index] == "Back":
+            elif menu_items[index] == f"{readlocal('109')}":    # Back
                 return
             display_menu(menu_items, index)
             time.sleep(0.5)
@@ -807,7 +864,7 @@ def show_system_info():
             
     except Exception as e:
         lcd.clear()
-        lcd.message = "Error reading\nversion info"
+        lcd.message = f"{readlocal('149')}\n{readlocal('160')}" # Error reading \n version info
         time.sleep(2)
 
 def get_version_info():
@@ -818,15 +875,15 @@ def get_version_info():
         fw_version = readcsv('fw_version')  # From Software/userdata/ulnoowegdat
         return f"SW Ver: {sw_version}\nFW Ver: {fw_version}"
     except Exception as e:
-        return "Error reading\nversion info"
+        return f"{readlocal('149')}\n{readlocal('160')}" # Error reading \n version info
 
 def monitor_data_menu():
     """Function to display monitoring options."""
     options = [
-        'View Moisture',
-        'Monitor Live',
-        'Show Threshold',
-        'Back'
+        f"{readlocal('150')}",  # View Moisture
+        f"{readlocal('151')}",  # Monitor Live
+        f"{readlocal('152')}",  # Show Threshold
+        f"{readlocal('109')}"   # Back
     ]
     index = 0
     display_menu(options, index)
@@ -844,13 +901,13 @@ def monitor_data_menu():
             display_menu(options, index)
         elif lcd.select_button:
             debounce(lambda: lcd.select_button)
-            if options[index] == 'View Moisture':
+            if options[index] == f"{readlocal('150')}":     # View Moisture
                 show_current_moisture()
-            elif options[index] == 'Monitor Live':
+            elif options[index] == f"{readlocal('151')}":   # Monitor Live
                 monitor_moisture()
-            elif options[index] == 'Show Threshold':
+            elif options[index] == f"{readlocal('152')}":   # Show Threshold
                 show_moisture_threshold()
-            elif options[index] == 'Back':
+            elif options[index] == f"{readlocal('109')}":   # Back
                 return
             display_menu(options, index)
             time.sleep(0.5)
@@ -861,7 +918,7 @@ def show_current_moisture():
         from sensorfeed import feedread
         
         lcd.clear()
-        lcd.message = "Reading sensor..."
+        lcd.message = f"{readlocal('153')}" # Reading Sensor...
         # Get current reading
         _, _, soil_moisture = feedread()
         
@@ -869,7 +926,7 @@ def show_current_moisture():
         moisture_percent = int((soil_moisture / 1000) * 100)
         
         lcd.clear()
-        lcd.message = f"Soil Moisture:\n{moisture_percent}% ({soil_moisture})"
+        lcd.message = f"{readlocal('154')}\n{moisture_percent}% ({soil_moisture})"  # Soil Moisture:
         
         # Wait for select button
         while True:
@@ -880,7 +937,7 @@ def show_current_moisture():
             
     except Exception as e:
         lcd.clear()
-        lcd.message = "Error reading\nsensor"
+        lcd.message = f"{readlocal('149')}\n{readlocal('161')}" # Error reading \n sensor
         time.sleep(2)
 
 def monitor_moisture():
@@ -889,7 +946,7 @@ def monitor_moisture():
         from sensorfeed import feedread
         
         lcd.clear()
-        lcd.message = "Monitoring...\nSelect to exit"
+        lcd.message = f"{readlocal('155')}\n{readlocal('158')}" # Monitoring... \n Select to Exit
         time.sleep(1)
         
         while True:
@@ -899,7 +956,7 @@ def monitor_moisture():
             
             # Update display
             lcd.clear()
-            lcd.message = f"Live Reading:\n{moisture_percent}% ({soil_moisture})"
+            lcd.message = f"{readlocal('156')}\n{moisture_percent}% ({soil_moisture})" # Live Reading:
             
             # Check for exit - use shorter sleep and check more frequently
             for _ in range(20):  # Check every 100ms for 2 seconds total
@@ -910,7 +967,7 @@ def monitor_moisture():
             
     except Exception as e:
         lcd.clear()
-        lcd.message = "Error monitoring\nsensor"
+        lcd.message = f"{readlocal('157')}\n{readlocal('161')}" # Error Monitoring \n sensor
         time.sleep(2)
 
 def show_moisture_threshold():
@@ -923,7 +980,7 @@ def show_moisture_threshold():
         threshold_percent = int((dry_value / 1000) * 100)
         
         lcd.clear()
-        lcd.message = f"Dry Threshold:\n{threshold_percent}% ({dry_value})"
+        lcd.message = f"{readlocal('162')}\n{threshold_percent}% ({dry_value})" # Dry Threshold
         
         # Wait for select button
         while True:
@@ -934,14 +991,14 @@ def show_moisture_threshold():
             
     except Exception as e:
         lcd.clear()
-        lcd.message = "Error reading\nthreshold"
+        lcd.message = f"{readlocal('149')}\n{readlocal('163')}" # Error reading \n threshold
         time.sleep(2)
 
 def lcd_menu_thread():
     lcd.clear()
     while True:
         current_time = datetime.now().strftime("%H:%M:%S")
-        lcd.message = f"{current_time}\nPress Select"
+        lcd.message = f"{current_time}\n{readlocal('164')}" # Press Select
         if lcd.select_button:
             debounce(lambda: lcd.select_button)
             main_menu()
@@ -965,7 +1022,7 @@ def export_log_screen():
     try:
         lcd.clear()
         set_lcd_color("in_progress")  # Blue while exporting
-        lcd.message = "Exporting log...\nPlease wait"
+        lcd.message = f"{readlocal('165')}\n{readlocal('166')}" # Exporting Log... \n Please Wait
         
         # Call logtofile function
         from logoutput import logtofile
@@ -975,10 +1032,10 @@ def export_log_screen():
         lcd.clear()
         if result == 1:
             set_lcd_color("normal")  # Green for success
-            lcd.message = "Log exported\nsuccessfully!"
+            lcd.message = f"{readlocal('167')}\n{readlocal('168')}" # Log Exported \n successfully!
         else:
             set_lcd_color("error")  # Red for error
-            lcd.message = "Export failed!\nTry again"
+            lcd.message = f"{readlocal('169')}\n{readlocal('170')}" # Export failed! \n Try again
             
         time.sleep(2)  # Show result message
         set_lcd_color("normal")  # Return to normal color
@@ -986,7 +1043,7 @@ def export_log_screen():
     except Exception as e:
         lcd.clear()
         set_lcd_color("error")
-        lcd.message = "Error exporting\nlog file"
+        lcd.message = f"{readlocal('171')}\n{readlocal('172')}" # Error exporting \n log file
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -996,7 +1053,7 @@ def update_firmware_screen():
     try:
         lcd.clear()
         set_lcd_color("in_progress")  # Blue while updating
-        lcd.message = "Updating Firmware\nPlease wait..."
+        lcd.message = f"{readlocal('173')}\n{readlocal('174')}" # Updating Firmware \n Please wait...
         
         # Call the firmware update function
         result = updatefw.grobotfwupdate()
@@ -1005,20 +1062,21 @@ def update_firmware_screen():
         lcd.clear()
         if result == 1:
             set_lcd_color("normal")  # Green for success
-            lcd.message = "Update success!\nRestart needed"
+            lcd.message = f"{readlocal('175')}\n{readlocal('176')}" # Update success! \n Restart needed
             time.sleep(2)
             lcd.clear()
-            lcd.message = "Press SELECT to\nrestart GroBot"
+            lcd.message = f"{readlocal('177')}\n{readlocal('178')}" # Press SELECT to \n Restart Grobot
             
             # Wait for select button
             while True:
                 if lcd.select_button:
                     debounce(lambda: lcd.select_button)
-                    subprocess.run(['sudo', 'reboot'])
+                    set_lcd_color("error")
+                    subprocess.run("echo grobot | sudo -S shutdown -r now", shell=True)
                 time.sleep(0.1)
         else:
             set_lcd_color("error")  # Red for error
-            lcd.message = "Update failed!\nPress SELECT"
+            lcd.message = f"{readlocal('179')}\n{readlocal('180')}" # Update failed! \n Press SELECT
             while True:
                 if lcd.select_button:
                     debounce(lambda: lcd.select_button)
@@ -1028,7 +1086,7 @@ def update_firmware_screen():
     except Exception as e:
         lcd.clear()
         set_lcd_color("error")
-        lcd.message = "Error updating\nfirmware"
+        lcd.message = f"{readlocal('181')}\n{readlocal('182')}" # Error updating \n firmware
         time.sleep(2)
         set_lcd_color("normal")
 
@@ -1044,7 +1102,7 @@ def record_data_to_excel():
         
         lcd.clear()
         set_lcd_color("in_progress")
-        lcd.message = "Recording data...\nPlease wait"
+        lcd.message = f"{readlocal('183')}\n{readlocal('166')}" # Recording Data... \n Please Wait
         
         # Get current readings
         temp, humidity, soil_moisture = feedread()
@@ -1063,10 +1121,10 @@ def record_data_to_excel():
         lcd.clear()
         if result == 1:
             set_lcd_color("normal")
-            lcd.message = "Data recorded\nsuccessfully!"
+            lcd.message = f"{readlocal('184')}\n{readlocal('168')}" # Data Recorded \n successfully!
         else:
             set_lcd_color("error")
-            lcd.message = "Recording failed!\nTry again"
+            lcd.message = f"{readlocal('185')}\n{readlocal('186')}" # Recording failed! \n Try again
             
         time.sleep(2)
         set_lcd_color("normal")
@@ -1074,7 +1132,7 @@ def record_data_to_excel():
     except Exception as e:
         lcd.clear()
         set_lcd_color("error")
-        lcd.message = "Error recording\ndata"
+        lcd.message = f"{readlocal('187')}\n{readlocal('188')}" # Error Recording \n data
         time.sleep(2)
         set_lcd_color("normal")
 

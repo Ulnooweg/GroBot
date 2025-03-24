@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: grobotpicam
-#Version: 1.1
+#Version: 1.2
 #Description: This function takes picture using pi camera
 #Function: picam_capture(), capture image using rpi-still the using imagemagic convert to add annotations (timestamps)
 #Input: NONE
@@ -21,6 +21,7 @@ import subprocess
 import datetime
 import os
 import configparser
+from lcdfuncdef import set_lcd_color
 
 config = configparser.ConfigParser()
 
@@ -39,7 +40,7 @@ def picam_capture():
                 raise RuntimeError('PICAM CONFIG ERROR') #If there is no proper match, raise an error
         #This part takes an image    
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") #get current date and time
-        humantimestamp = datetime.datetime.now().strftime("%H:%M %d/%B/%Y") #Timestamp for image
+        humantimestamp = datetime.datetime.now().strftime("%H:%M:%S %Y-%m-%d") #Timestamp for image
 
         #Now this part will determine what directory to use
         directory = "/mnt/grobotextdat/pictures" #This is the main external directory associated with USB
@@ -48,17 +49,21 @@ def picam_capture():
         else: #if not return error to force a code restart
             raise RuntimeError('FILE IO FAIL')
 
-        filename = f"{directory}/camera-image-{timestamp}.jpeg" #construct filename structure using f-string
-        subprocess.run(['rpicam-still', '-o', filename]) #capture to filename which already have directory specified using libcamera command line tool
+        filename = f"{directory}/grobot-camera-image-{timestamp}.jpeg" #construct filename structure using f-string
+        subprocess.run(['rpicam-still', '-o', filename, '-v', '0']) #capture to filename which already have directory specified using libcamera command line tool
+        #-o specify output filename, -v specify verbosity to be none to not make the log file clutter
 
         #Now this part adds the timestamp text
         fontsize = '150' #Set timestamp font size in points
         fontcolour = '#DEC305' #Set font colour
         XYpos = '+100+2500' #Set text XY position from top left corner
+        outputsize = 'jpeg:extent=512kb' #Set the maximum size of the output jpeg that will be set by define
         #Not put it all together in a convert command
         #Note The command is 'convert filename -pointsize 150 -fill "#DEC035" -annotate +100+2500 'TIMESTAMP' filename'
-        subprocess.run(['convert', filename, '-pointsize', fontsize, '-fill', fontcolour, '-annotate', XYpos, humantimestamp, filename])
+        subprocess.run(['convert', filename, '-pointsize', fontsize, '-define', outputsize, '-fill', fontcolour, '-annotate', XYpos, humantimestamp, filename])
 
         return 1
     except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        set_lcd_color("error")
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
