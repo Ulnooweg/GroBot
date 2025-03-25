@@ -197,7 +197,7 @@ def edit_settings_menu():
         f"{readlocal('103')}",  # Sunset Time
         f"{readlocal('104')}",  # Irrigation
         f"{readlocal('105')}",  # Temp Setpoint
-        f"{readlocal('106')}",  # Humid Set,Shortened from 'Humidity Setpoint'
+        f"{readlocal('106')}",  # Humid Setpoint ,Shortened from 'Humidity Setpoint'
         f"{readlocal('107')}",  # Camera On
         f"{readlocal('108')}",  # Camera Off
         f"{readlocal('109')}"   # Back
@@ -221,15 +221,15 @@ def edit_settings_menu():
             if options[index] == f"{readlocal('101')}":     # System Date/Time
                 adjust_system_time('System Date/Time')
             elif options[index] == f"{readlocal('102')}":   # Sunrise Time
-                adjust_time_parameter('sunrise', 'Sunrise Time')
+                adjust_time_parameter('sunrise', f"{readlocal('102')}")
             elif options[index] == f"{readlocal('103')}":   # Sunset Time
-                adjust_time_parameter('sunset', 'Sunset Time')
+                adjust_time_parameter('sunset', f"{readlocal('103')}")
             elif options[index] == f"{readlocal('104')}":   # Irrigation
                 irrigation_menu()
             elif options[index] == f"{readlocal('105')}":   # Temp Setpoint
-                adjust_parameter('maxTemp', 1, 0, 50, 'Temperature Setpoint')
+                adjust_parameter('maxTemp', 1, 0, 50, f"{readlocal('105')}")
             elif options[index] == f"{readlocal('106')}":   # Humid Set, Changed to match new menu text
-                adjust_parameter('maxHumid', 5, 0, 100, 'Humidity Set')
+                adjust_parameter('maxHumid', 5, 0, 100, f"{readlocal('106')}")
             elif options[index] == f"{readlocal('107')}":   # Camera On
                 config.update_config('PICAMERA', 'CameraSet', '1')
                 apply_settings()
@@ -506,9 +506,9 @@ def irrigation_menu():
             if options[index] == f"{readlocal('125')}":     # Moist Thresh
                 adjust_soil_moisture_threshold()
             elif options[index] == f"{readlocal('126')}":   # Water Vol
-                adjust_parameter('waterVol', 1, 0, 50, 'Water mm of Rain')
+                adjust_parameter('waterVol', 1, 0, 50, f"{readlocal('201')}") # Water mm of rain
             elif options[index] == f"{readlocal('127')}":   # Watering Time
-                adjust_time_parameter('checkTime', 'Watering Time')
+                adjust_time_parameter('checkTime', f"{readlocal('127')}")
             elif options[index] == f"{readlocal('109')}":   # Back
                 return
             display_menu(options, index)
