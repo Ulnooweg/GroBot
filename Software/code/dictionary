@@ -5,7 +5,7 @@ responseid, text
 103,Sunset Time
 104,Irrigation
 105,Temp Setpoint
-106,Humid Set
+106,Humid Setpoint
 107,Camera On
 108,Camera Off
 109,Back
@@ -87,7 +87,7 @@ responseid, text
 198,Fan Failed
 199,Fan Off
 200,Fan Off Failed
-201
+201,Water mm of Rain
 202
 203
 204
