@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: fancontrol
-#Version: 1.2
+#Version: 2.0
 #Description: This function controls the growth chamber fan
 #Function: fanon(t), turns the fan on for time "t"
 #          fanmanon(), turns on the fan indefinitely
@@ -22,7 +22,6 @@
 import time  # need time for sleep function
 from diopinsetup import diopinset
 import subprocess
-from lcdfuncdef import set_lcd_color
 
 ##############################################
 # Handle the pins definition and sensor definition
@@ -39,7 +38,7 @@ def fanon(t):  # define function to turn on fan for t seconds as input
         return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def fanmanon():  # define function to turn on fan indefinitely for manual control. MUST BE USED WITH fanoff at the end always
@@ -48,7 +47,7 @@ def fanmanon():  # define function to turn on fan indefinitely for manual contro
         return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def fanoff():  # define function to turn off fan
@@ -57,5 +56,5 @@ def fanoff():  # define function to turn off fan
         return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

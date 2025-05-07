@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: grobotpicam
-#Version: 1.2
+#Version: 2.0
 #Description: This function takes picture using pi camera
 #Function: picam_capture(), capture image using rpi-still the using imagemagic convert to add annotations (timestamps)
 #Input: NONE
@@ -21,7 +21,6 @@ import subprocess
 import datetime
 import os
 import configparser
-from lcdfuncdef import set_lcd_color
 
 config = configparser.ConfigParser()
 
@@ -65,5 +64,5 @@ def picam_capture():
         return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
