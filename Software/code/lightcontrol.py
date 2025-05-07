@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: lightcontrol
-#Version: 1.2
+#Version: 2.0
 #Description: These functions controls the growlight
 #Function: growlighton(), turns growlight on
 #          growlightoff(), turns growlight off
@@ -20,7 +20,6 @@
 #MODULE IMPORTS
 from diopinsetup import diopinset
 import subprocess
-from lcdfuncdef import set_lcd_color
 
 ##############################################
 #Handle the pins definition and sensor definition
@@ -36,7 +35,7 @@ def growlighton(): #define function to turn on growlight
     
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def growlightoff(): #define function to turn off growlight
@@ -46,5 +45,5 @@ def growlightoff(): #define function to turn off growlight
     
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

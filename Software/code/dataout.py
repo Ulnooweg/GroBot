@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: dataout
-#Version: 1.2
+#Version: 2.0
 #Description: Code to write data to output excel file
 #Function: excelout(T,RH,SRH), write timestamp, "T" temperature, "RH" relative humidity, "SRH" soil humidity to excel file once called
 #Input: excelout(...) requires Temperature, Relative Humidity, Soil humidity as a numerical input
@@ -21,7 +21,6 @@ import os
 import datetime
 import threading
 import subprocess
-from lcdfuncdef import set_lcd_color
 import csv
 
 ##############################################
@@ -66,5 +65,5 @@ def excelout(T,RH,SRH):
         
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: main
-#Version: 1.2
+#Version: 2.0
 #Description: This is the main function that's ran by systemd grobot service.
 #Function: No callable function by itself but handles all the calling of other function and the main loop of GroBot. Consult Info.md for more information
 #Input: NONE
@@ -42,7 +42,7 @@ from grobotpicam import picam_capture
 from dataout import excelout
 from timecheck import checktimebetween
 from config import get_plant_settings, readcsv_mainflags, writecsv_mainflags
-from lcddispfunc import lcd_menu_thread, set_lcd_color
+#from lcddispfunc import TBD
 
 ##############################################
 ################# ON BOOTUP ##################
@@ -56,15 +56,15 @@ try:
     grobotboot() #This force all pin reset
 
     # This only initialize once on bootup
-    set_lcd_color("normal")  # Set LCD color to green on bootup
+    #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green on bootup
 
     # Start the LCD menu thread immediately
-    lcd_thread = threading.Thread(target=lcd_menu_thread)
+    lcd_thread = threading.Thread(target=#LCD_DISP_FUNC_HERE)
     lcd_thread.daemon = True #Set the thread as a daemon so main can exit without waiting for lcddisp to quit first, and lcddisp exits when main exits.
     lcd_thread.start()
 except Exception as errvar:
     subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-    set_lcd_color("error")
+    #LCD COLOUR HANDLING CODE (RED) HERE
     raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 # Starts with reading values from sensor
@@ -92,7 +92,7 @@ try:
 
 except Exception as errvar:
     subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-    set_lcd_color("error")
+    #LCD COLOUR HANDLING CODE (RED) HERE
     raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 ##############################################
@@ -102,7 +102,7 @@ except Exception as errvar:
 def EveryXX15(): # This schedule grouping runs at every quarter of hour
     try:
         settings = get_plant_settings()
-        set_lcd_color("in_progress")  # Set LCD color to blue when in progress
+        #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
 
         # This should read value from sensor and turn fan on or off
         # Read value from sensor
@@ -117,17 +117,17 @@ def EveryXX15(): # This schedule grouping runs at every quarter of hour
             raise RuntimeError('UKNOWN FAILURE')
         
         writecsv_mainflags("EveryXX15","0") #Set the execution flag for the function back to 0
-        set_lcd_color("normal")  # Set LCD color to green when done
+        #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
 
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EverySETTIME(): # This runs every settime read from grobot_cfg
     try:
         settings = get_plant_settings()
-        set_lcd_color("in_progress")  # Set LCD color to blue when in progress
+        #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
 
         # This should read value from sensor and autorain if Soil moisture too low
         # Read value from sensor
@@ -142,16 +142,16 @@ def EverySETTIME(): # This runs every settime read from grobot_cfg
             raise RuntimeError('UKNOWN FAILURE')
         
         writecsv_mainflags("EverySETTIME","0") #Set the execution flag for the function back to 0
-        set_lcd_color("normal")  # Set LCD color to green when done
+        #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
 
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EveryXX25(): # This code runs at every 25 minute mark of the hour
     try:
-        set_lcd_color("in_progress")  # Set LCD color to blue when in progress
+        #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
         # Read value from sensor and write it out to excel
         # Read value from sensor
         ReadVal = feedread() # T RH SRH in order
@@ -159,50 +159,50 @@ def EveryXX25(): # This code runs at every 25 minute mark of the hour
         excelout(ReadVal[0], ReadVal[1], ReadVal[2])
 
         writecsv_mainflags("EveryXX25","0") #Set the execution flag for the function back to 0
-        set_lcd_color("normal")  # Set LCD color to green when done
+        #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
 
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EveryXX35(): # Runs every 35 minute mark of the hour
     try:
-        set_lcd_color("in_progress")  # Set LCD color to blue when in progress
+        #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
         picam_capture() # Take picture with pi camera
 
         writecsv_mainflags("EveryXX35","0") #Set the execution flag for the function back to 0
-        set_lcd_color("normal")  # Set LCD color to green when done
+        #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
 
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EverySUNRISE(): # This should run every sunrise time to turn on the light
     try:
-        set_lcd_color("in_progress")  # Set LCD color to blue when in progress
+        #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
         growlighton()
 
         writecsv_mainflags("EverySUNRISE","0") #Set the execution flag for the function back to 0
-        set_lcd_color("normal")  # Set LCD color to green when done
+        #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
 
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def EverySUNSET(): # This should run every sunset time to turn off light
     try:
-        set_lcd_color("in_progress")  # Set LCD color to blue when in progress
+        #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
         growlightoff()
 
         writecsv_mainflags("EverySUNSET","0") #Set the execution flag for the function back to 0
-        set_lcd_color("normal")  # Set LCD color to green when done
+        #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
 
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 # Multithreading
@@ -230,7 +230,7 @@ def run_threaded(job_func): #Function that runs a given function input in a new 
             raise RuntimeError('THREAD FLAG NOT BOOLEAN')
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 # This is now the main running thread, one while loop that spawns subthreads as needed.
@@ -293,5 +293,5 @@ while 1:
 
     except Exception as errvar: #Catch any while loop exception
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: diopinsetup
-#Version: 1.2
+#Version: 2.0
 #Description: This function setup digital IO pins, their directions and sensor objects
 #Function: diopinset(), setup digitalIO pins and sensors and return them as object when called
 #Input: NONE
@@ -27,7 +27,6 @@ import adafruit_ahtx0
 from adafruit_seesaw.seesaw import Seesaw
 
 import subprocess
-from lcdfuncdef import set_lcd_color
 
 ##############################################
 
@@ -75,5 +74,5 @@ def diopinset(): #define diopinset function that takes no arguments
         return s1, s2, s3, s4, s5, s6, b1, ths, sms #return the pins and sensors as tuple of objects
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

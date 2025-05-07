@@ -19,7 +19,6 @@
 #MODULE IMPORTS
 import subprocess
 from config import readcsv, writecsvnote
-from lcdfuncdef import set_lcd_color
 
 #Define a function to update the firmware
 def grobotfwupdate():
@@ -133,5 +132,5 @@ def grobotfwupdate():
         return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

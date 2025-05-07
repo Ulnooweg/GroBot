@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: sensorfeed
-#Version: 1.2
+#Version: 2.0
 #Description: This function read sensor feeds and return its value
 #Function: feedread(), read sensor values and return it as a tuple of values
 #Input: NONE
@@ -19,7 +19,6 @@
 # MODULE IMPORTS
 from diopinsetup import diopinset
 import subprocess
-from lcdfuncdef import set_lcd_color
 
 ##############################################
 def feedread():  # define feedread function
@@ -39,5 +38,5 @@ def feedread():  # define feedread function
         return T, RH, SRH  # return tuple of all values
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None

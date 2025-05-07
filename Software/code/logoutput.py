@@ -8,7 +8,7 @@
 #
 #GroBot
 #Code: logoutput
-#Version: 1.2
+#Version: 2.0
 #Description: These functions write the log result of grobot process from journalctl to file
 #Function: logtofile(), output the grobot log from journalctl output to a logfile in /mnt/grobotextdat/userdata
 #Input: NONE
@@ -19,7 +19,6 @@
 #MODULE IMPORTS
 import subprocess
 import os
-from lcdfuncdef import set_lcd_color
 
 #Output log from journalctl to file
 def logtofile():
@@ -41,5 +40,5 @@ def logtofile():
         return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
