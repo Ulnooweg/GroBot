@@ -22,9 +22,9 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>0</y>
+     <y>70</y>
      <width>480</width>
-     <height>640</height>
+     <height>560</height>
     </rect>
    </property>
    <widget class="QWidget" name="start_page">
@@ -32,9 +32,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>410</y>
+       <y>290</y>
        <width>221</width>
-       <height>171</height>
+       <height>170</height>
       </rect>
      </property>
      <property name="font">
@@ -53,7 +53,7 @@
        <x>10</x>
        <y>20</y>
        <width>461</width>
-       <height>101</height>
+       <height>100</height>
       </rect>
      </property>
      <property name="layoutDirection">
@@ -66,34 +66,46 @@
        <x>10</x>
        <y>150</y>
        <width>461</width>
-       <height>101</height>
+       <height>100</height>
       </rect>
      </property>
      <property name="layoutDirection">
       <enum>Qt::LayoutDirection::LeftToRight</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="clockdisplay_label">
      <property name="geometry">
       <rect>
        <x>210</x>
        <y>130</y>
        <width>49</width>
-       <height>16</height>
+       <height>15</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Consolas</family>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Clock</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="sensordisplay_1_label">
      <property name="geometry">
       <rect>
        <x>210</x>
        <y>260</y>
        <width>49</width>
-       <height>16</height>
+       <height>15</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Comic Sans MS</family>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>sensor 1</string>
@@ -103,9 +115,9 @@
      <property name="geometry">
       <rect>
        <x>240</x>
-       <y>410</y>
+       <y>290</y>
        <width>221</width>
-       <height>171</height>
+       <height>170</height>
       </rect>
      </property>
      <property name="font">
@@ -220,8 +232,8 @@
     <widget class="QPushButton" name="monitordata_back_btn">
      <property name="geometry">
       <rect>
-       <x>260</x>
-       <y>470</y>
+       <x>250</x>
+       <y>360</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -354,29 +366,10 @@
     </widget>
    </widget>
    <widget class="QWidget" name="systeminfo_page">
-    <widget class="QPushButton" name="systemversion_page_btn">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>201</width>
-       <height>151</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>System Version</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="updatefirmware_page_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>10</x>
        <y>10</y>
        <width>201</width>
        <height>151</height>
@@ -395,8 +388,8 @@
     <widget class="QPushButton" name="logexport_page_btn">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>160</y>
+       <x>270</x>
+       <y>10</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -414,7 +407,7 @@
     <widget class="QPushButton" name="systeminfo_back_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>10</x>
        <y>160</y>
        <width>201</width>
        <height>151</height>
@@ -428,6 +421,19 @@
      </property>
      <property name="text">
       <string>Back</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="systemversion_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>320</y>
+       <width>91</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>System Version:</string>
      </property>
     </widget>
    </widget>
@@ -677,7 +683,7 @@
      <property name="geometry">
       <rect>
        <x>250</x>
-       <y>470</y>
+       <y>360</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -693,6 +699,20 @@
      </property>
     </widget>
    </widget>
+  </widget>
+  <widget class="QWidget" name="statusbar" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>480</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: gray
+</string>
+   </property>
   </widget>
  </widget>
  <resources/>

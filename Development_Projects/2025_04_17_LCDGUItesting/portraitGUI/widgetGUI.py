@@ -6,12 +6,13 @@ from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber
 from PySide6.QtCore import QDateTime, QTimer, Slot, SIGNAL
 from PySide6.QtGui import *
 from datetime import datetime
-
-# Important:
-# You need to run the following command to generate the ui_form.py file
-#     pyside6-uic form.ui -o ui_form.py, or
-#     pyside2-uic form.ui -o ui_form.py
 from ui_form import Ui_Form
+from config import (
+    get_plant_settings, 
+    readcsv,
+    readlocal,
+    readcsv_softver
+)
 
 if os.environ.get('DISPLAY','') == '':
     os.environ.__setitem__('DISPLAY', ':0.0')
@@ -23,11 +24,12 @@ class Widget(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
 
-    ### Button Functions ###
+    ### Button Functions & Label Logic ###
     # Primary Menus --------------------------------------------------------------------------------------------------------------
 
         # Start
         self.ui.continue_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page))
+        self.ui.close_btn.clicked.connect(self.close_program)
 
         # Main Menu ----------------
         self.ui.systeminfo_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.systeminfo_page))
@@ -37,7 +39,11 @@ class Widget(QWidget):
         self.ui.mainmenu_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.start_page)) #Back
 
         # System Info --------------
-        self.ui.systemversion_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.systemversion_page))
+
+             # System Version Label
+        systemversion = self.findChild(QLabel, "systemversion")
+        systemversion.setText("Test")
+
         self.ui.updatefirmware_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.updatefirmware_page))
         self.ui.logexport_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.logexport_page))
         self.ui.systeminfo_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) #Back
@@ -48,11 +54,11 @@ class Widget(QWidget):
         self.ui.editsettings_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) #Back
 
         # Manual Controls -----------
-        #self.ui.fanon_btn.clicked.connect()
-        #self.ui.lightswitch_btn.clicked.connect()
-        #self.ui.waternow_btn.clicked.connect()
-        #self.ui.takepicture_btn.clicked.connect()
-        #self.ui.recorddata_btn.clicked.connect()
+        self.ui.fanon_btn.clicked.connect(self.debug_press)
+        self.ui.lightswitch_btn.clicked.connect(self.debug_press)
+        self.ui.waternow_btn.clicked.connect(self.debug_press)
+        self.ui.takepicture_btn.clicked.connect(self.debug_press)
+        self.ui.recorddata_btn.clicked.connect(self.debug_press)
         self.ui.manualcontrols_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) #Back
 
         # Monitor Data -------------
@@ -69,13 +75,11 @@ class Widget(QWidget):
         sensor1 = self.findChild(QLCDNumber, "sensordisplay_1")
         sensor1.display(1)
 
-        
-
         # Clock Logic --------------
         self.lcd = self.findChild(QLCDNumber, "clockdisplay")
         self.lcd.setDigitCount(12)
         
-        # Global Clock -------------
+        # Timer --------------------
         self.timer = QTimer()
         self.timer.timeout.connect(self.display_time)
         self.timer.start(1000)
@@ -85,6 +89,22 @@ class Widget(QWidget):
         formatted_time = time.strftime("%H:%M:%S")
 
         self.lcd.display(formatted_time)
+
+    def debug_press(self):
+        print("button pressed")
+
+    def close_program(self):
+        exit()
+
+    def get_version_info():
+        """Get formatted version information string"""
+        try:
+            # Read from correct paths
+            sw_version = readcsv_softver('software_version')  # From Software/code/softver
+            fw_version = readcsv('fw_version')  # From Software/userdata/ulnoowegdat
+            return f"SW Ver: {sw_version}\nFW Ver: {fw_version}"
+        except Exception as e:
+            return f"{readlocal('149')}\n{readlocal('160')}" # Error reading \n version info
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
