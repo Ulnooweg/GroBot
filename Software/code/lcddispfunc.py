@@ -21,7 +21,10 @@ import sys
 import os
 import updatefw
 import time
+import board
 import subprocess
+from adafruit_seesaw.seesaw import Seesaw   # Import the library for the SEESAW capacitive moisture sensor
+import adafruit_tca9548a    # Import the library for the Multiplexer board
 from PySide6.QtWidgets import *
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber
 from PySide6.QtCore import QDateTime, QTimer, Slot, SIGNAL
@@ -59,12 +62,21 @@ class Widget(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
 
-    ### Button Functions & Label Logic ###
+    # Moisture Data Logic ------
+
+        i2c_bus = board.I2C()  # uses board.SCL and board.SDA
+        #i2c_bus = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
+
+        tca = adafruit_tca9548a.TCA9548A(i2c_bus)   # Initalizes Muxer board as the I2C Bus
+        self.ss1 = Seesaw(tca[0], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (The Muxer), on channel 0
+        self.ss2 = Seesaw(tca[1], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (The Muxer), on channel 1
+
+### Button Functions & Label Logic ###
 
     # Progress Bar
         # Progress Bar Logic -------
         self.statusbar = self.findChild(QLabel, "statusbar_label")
-        self.statusbar.setText("Welcome! :)")
+        self.statusbar.setText(self.welcome_message())
 
     # Primary Menus --------------------------------------------------------------------------------------------------------------
 
@@ -74,7 +86,7 @@ class Widget(QWidget):
         self.ui.close_btn.clicked.connect(self.close_program)
 
         # Main Menu ----------------
-                # Buttons
+            # Buttons
         self.ui.systeminfo_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.systeminfo_page))
         self.ui.editsettings_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page))
         self.ui.manualcontrols_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.manualcontrols_page))
@@ -92,10 +104,20 @@ class Widget(QWidget):
         self.ui.systeminfo_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) #Back
 
         # Edit Settings ------------
+
+
             # Buttons
         self.ui.irrigation_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.irrigation_page))
         self.ui.datetime_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.datetime_page))
         self.ui.editsettings_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) #Back
+
+            # Sliders
+        self.brightnesschanger = self.findChild(QSlider, "brightness_slider")
+        self.brightnesschanger.valueChanged.connect(self.change_brightness)
+
+            #Brightness Label
+        self.brightnesslabel = self.findChild(QLabel, "brightness_label")
+        self.brightnesslabel.setText(str(self.brightnesschanger.value()))
 
         # Manual Controls -----------
             # Buttons
@@ -119,9 +141,12 @@ class Widget(QWidget):
             # Buttons
         self.ui.datetime_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)) #Back
 
-        # Moisture Display Logic ---
-        sensor1 = self.findChild(QLCDNumber, "sensordisplay_1")
-        sensor1.display(1)
+        # Moisture Display ---------
+        self.sensor1 = self.findChild(QLCDNumber, "sensordisplay_1")
+        self.sensor1.setDigitCount(12)
+
+        self.sensor2 = self.findChild(QLCDNumber, "sensordisplay_2")
+        self.sensor2.setDigitCount(12)
 
         # Clock Logic --------------
         self.lcd = self.findChild(QLCDNumber, "clockdisplay")
@@ -130,19 +155,46 @@ class Widget(QWidget):
         # Timer --------------------
         self.timer = QTimer()
         self.timer.timeout.connect(self.display_time)
+        self.timer.timeout.connect(self.moisture_display)
         self.timer.start(1000)
+
+### GUI Functions
 
     def display_time(self):
         time = datetime.now()
         formatted_time = time.strftime("%H:%M:%S")
-
         self.lcd.display(formatted_time)
+
+    def moisture_display(self):
+        data1 = self.ss1.moisture_read()
+        data2 = self.ss2.moisture_read()
+        print("Moisture1:" + str(data1) + " Moisture2:" + str(data2))
+        self.sensor1.display(data1)
+        self.sensor2.display(data2)
+
+    def change_brightness(self):
+        photoncount = str(self.brightnesschanger.value())
+        self.brightnesslabel.setText(photoncount)
+        brightness_dir = '/sys/devices/platform/soc/3f205000.i2c/i2c-11/i2c-10/10-0045/backlight/10-0045/brightness'
+        with open(brightness_dir, 'w') as csvfile:
+            csvfile.write(photoncount)
+
+
+    #def change_brightness_fixed(self):
+        #subproccess.run("")
+
+### Debug functions ------------------
 
     def debug_press(self):
         print("button pressed")
 
+    def welcome_message(self):
+        return str("welcome!")
+
     def close_program(self):
         exit()
+
+### Imported functions ---------------
 
     def get_version_info(self):
         """Get formatted version information string"""
@@ -158,7 +210,7 @@ class Widget(QWidget):
         """Handle firmware update process"""
         try:
             ###set_lcd_color("in_progress")  # Blue while updating
-            self.statusbar.setText(f"{readlocal('173')}\n{readlocal('174')}") # Updating Firmware \n Please wait...
+            self.statusbar.setText("Updating Firmware") # Updating Firmware \n Please wait...
             print("Updating Firmware")
             time.sleep(2)
             # Call the firmware update function
