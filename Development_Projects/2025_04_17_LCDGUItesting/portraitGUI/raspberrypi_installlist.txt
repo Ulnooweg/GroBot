@@ -1,6 +1,10 @@
 [Config]
 dtoverlay=vc4-kms-dsi-waveshare-panel,2_8_inch
 
+[.config/wf-panel-pi.ini]
+autohide=true
+autohide_duration=500
+
 [Pip3]
 datetime
 pyside6

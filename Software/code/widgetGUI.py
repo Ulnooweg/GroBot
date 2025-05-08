@@ -7,7 +7,7 @@ from PySide6.QtCore import QDateTime, QTimer, Slot, SIGNAL
 from PySide6.QtGui import *
 from datetime import datetime
 from ui_form import Ui_Form
-from config import (
+from configwin import (
     get_plant_settings, 
     readcsv,
     readlocal,
@@ -41,8 +41,8 @@ class Widget(QWidget):
         # System Info --------------
 
              # System Version Label
-        self.systemversion = self.findChild(QLabel, "systemversion")
-        self.systemversion.setText("Test")
+        self.systemversionlabel = self.findChild(QLabel, "systemversion_label")
+        self.systemversionlabel.setText(f"{self.get_version_info()}")
 
         self.ui.updatefirmware_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.updatefirmware_page))
         self.ui.logexport_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.logexport_page))
@@ -96,7 +96,7 @@ class Widget(QWidget):
     def close_program(self):
         exit()
 
-    def get_version_info():
+    def get_version_info(self):
         """Get formatted version information string"""
         try:
             # Read from correct paths
@@ -104,7 +104,9 @@ class Widget(QWidget):
             fw_version = readcsv('fw_version')  # From Software/userdata/ulnoowegdat
             return f"SW Ver: {sw_version}\nFW Ver: {fw_version}"
         except Exception as e:
-            return f"{readlocal('149')}\n{readlocal('160')}" # Error reading \n version info
+            return "Error reading version info" # Error reading \n version info
+        
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

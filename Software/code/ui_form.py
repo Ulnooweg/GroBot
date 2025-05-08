@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formZNsJqd.ui'
+## Form generated from reading UI file 'formZDJulT.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -149,7 +149,11 @@ class Ui_Form(object):
         self.systeminfo_back_btn.setFont(font4)
         self.systemversion_label = QLabel(self.systeminfo_page)
         self.systemversion_label.setObjectName(u"systemversion_label")
-        self.systemversion_label.setGeometry(QRect(10, 320, 91, 61))
+        self.systemversion_label.setGeometry(QRect(10, 320, 451, 61))
+        font7 = QFont()
+        font7.setFamilies([u"Segoe UI"])
+        font7.setPointSize(17)
+        self.systemversion_label.setFont(font7)
         self.pagelayoutwidget.addWidget(self.systeminfo_page)
         self.editsettings_page = QWidget()
         self.editsettings_page.setObjectName(u"editsettings_page")
@@ -188,11 +192,11 @@ class Ui_Form(object):
         self.datetimenumber = QLineEdit(self.datetime_page)
         self.datetimenumber.setObjectName(u"datetimenumber")
         self.datetimenumber.setGeometry(QRect(50, 120, 381, 111))
-        font7 = QFont()
-        font7.setFamilies([u"Segoe UI"])
-        font7.setPointSize(25)
-        font7.setBold(True)
-        self.datetimenumber.setFont(font7)
+        font8 = QFont()
+        font8.setFamilies([u"Segoe UI"])
+        font8.setPointSize(25)
+        font8.setBold(True)
+        self.datetimenumber.setFont(font8)
         self.datetimenumber.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.verticalSlider = QSlider(self.datetime_page)
         self.verticalSlider.setObjectName(u"verticalSlider")
@@ -228,6 +232,13 @@ class Ui_Form(object):
         self.statusbar.setGeometry(QRect(0, 0, 480, 80))
         self.statusbar.setStyleSheet(u"background-color: gray\n"
 "")
+        self.statusbar_label = QLabel(self.statusbar)
+        self.statusbar_label.setObjectName(u"statusbar_label")
+        self.statusbar_label.setGeometry(QRect(20, 10, 441, 61))
+        font9 = QFont()
+        font9.setFamilies([u"Segoe UI"])
+        font9.setPointSize(10)
+        self.statusbar_label.setFont(font9)
 
         self.retranslateUi(Form)
 
@@ -255,7 +266,7 @@ class Ui_Form(object):
         self.updatefirmware_page_btn.setText(QCoreApplication.translate("Form", u"Update Firmware", None))
         self.logexport_page_btn.setText(QCoreApplication.translate("Form", u"Log Export", None))
         self.systeminfo_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
-        self.systemversion_label.setText(QCoreApplication.translate("Form", u"System Version:", None))
+        self.systemversion_label.setText(QCoreApplication.translate("Form", u"<<System Version>>", None))
         self.irrigation_page_btn.setText(QCoreApplication.translate("Form", u"Irrigation", None))
         self.editsettings_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.datetime_page_btn.setText(QCoreApplication.translate("Form", u"Date/Time", None))
@@ -269,5 +280,6 @@ class Ui_Form(object):
         self.humidset_page_btn.setText(QCoreApplication.translate("Form", u"Humid Set", None))
         self.irrigation_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.humidset_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
+        self.statusbar_label.setText(QCoreApplication.translate("Form", u"<<Status Bar>> ", None))
     # retranslateUi
 

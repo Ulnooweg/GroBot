@@ -30,15 +30,17 @@ class Widget(QWidget):
     # Moisture Data Logic ------
 
         i2c_bus = board.I2C()  # uses board.SCL and board.SDA
-        # i2c_bus = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
+        #i2c_bus = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
 
         tca = adafruit_tca9548a.TCA9548A(i2c_bus)   # Initalizes Muxer board as the I2C Bus
-        self.ss1 = Seesaw(tca[0], addr=0x36)             # Sets the first seesaw sensor address through the I2C Bus (The Muxer), on channel 0
+        self.ss1 = Seesaw(tca[0], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (The Muxer), on channel 0
+        self.ss2 = Seesaw(tca[1], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (The Muxer), on channel 1
 
     ### Button Functions ###
     # Primary Menus --------------------------------------------------------------------------------------------------------------
 
         # Start
+        self.ui.close_btn.clicked.connect(self.close)
         self.ui.continue_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page))
 
         # Main Menu ----------------
@@ -49,7 +51,6 @@ class Widget(QWidget):
         self.ui.mainmenu_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.start_page)) #Back
 
         # System Info --------------
-        self.ui.systemversion_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.systemversion_page))
         self.ui.updatefirmware_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.updatefirmware_page))
         self.ui.logexport_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.logexport_page))
         self.ui.systeminfo_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) #Back
@@ -81,33 +82,37 @@ class Widget(QWidget):
         self.sensor1 = self.findChild(QLCDNumber, "sensordisplay_1")
         self.sensor1.setDigitCount(12)
 
+        self.sensor2 = self.findChild(QLCDNumber, "sensordisplay_2")
+        self.sensor2.setDigitCount(12)
+
         # Clock Logic --------------
         self.lcd = self.findChild(QLCDNumber, "clockdisplay")
         self.lcd.setDigitCount(12)
         
         # Global Clock -------------
         # Clock
-        self.timer0 = QTimer()
-        self.timer0.timeout.connect(self.display_time)
-        self.timer0.start(1000)
-
-        # Sensor1
-        self.timer2 = QTimer()
-        self.timer2.timeout.connect(self.moisture_display)
-        self.timer2.start(1000)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.display_time)
+        self.timer.timeout.connect(self.moisture_display)
+        self.timer.start(1000)
 
     def display_time(self):
         time = datetime.now()
         formatted_time = time.strftime("%H:%M:%S")
         self.lcd.display(formatted_time)
+    
+    def close(self):
+        exit()
 
     def debug_press(self):
         print("button pressed")
 
     def moisture_display(self):
         data1 = self.ss1.moisture_read()
-        print("Moisture1:" + str(data1))
+        data2 = self.ss2.moisture_read()
+        print("Moisture1:" + str(data1) + " Moisture2:" + str(data2))
         self.sensor1.display(data1)
+        self.sensor2.display(data2)
     
 
 

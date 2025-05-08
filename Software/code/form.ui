@@ -428,12 +428,18 @@
       <rect>
        <x>10</x>
        <y>320</y>
-       <width>91</width>
+       <width>451</width>
        <height>61</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>17</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>System Version:</string>
+      <string>&lt;&lt;System Version&gt;&gt;</string>
      </property>
     </widget>
    </widget>
@@ -713,6 +719,25 @@
     <string notr="true">background-color: gray
 </string>
    </property>
+   <widget class="QLabel" name="statusbar_label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>441</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;&lt;Status Bar&gt;&gt; </string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
