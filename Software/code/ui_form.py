@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formrZQXNo.ui'
+## Form generated from reading UI file 'formIDsWPD.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -57,9 +57,10 @@ class Ui_Form(object):
         self.clockdisplay_label.setFont(font2)
         self.sensordisplay_1_label = QLabel(self.start_page)
         self.sensordisplay_1_label.setObjectName(u"sensordisplay_1_label")
-        self.sensordisplay_1_label.setGeometry(QRect(90, 260, 49, 15))
+        self.sensordisplay_1_label.setGeometry(QRect(90, 260, 71, 16))
         font3 = QFont()
         font3.setFamilies([u"Comic Sans MS"])
+        font3.setPointSize(13)
         font3.setBold(True)
         self.sensordisplay_1_label.setFont(font3)
         self.close_btn = QPushButton(self.start_page)
@@ -72,7 +73,7 @@ class Ui_Form(object):
         self.sensordisplay_2.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.sensordisplay_1_label_2 = QLabel(self.start_page)
         self.sensordisplay_1_label_2.setObjectName(u"sensordisplay_1_label_2")
-        self.sensordisplay_1_label_2.setGeometry(QRect(350, 260, 49, 15))
+        self.sensordisplay_1_label_2.setGeometry(QRect(350, 260, 71, 16))
         self.sensordisplay_1_label_2.setFont(font3)
         self.pagelayoutwidget.addWidget(self.start_page)
         self.mainmenu_page = QWidget()

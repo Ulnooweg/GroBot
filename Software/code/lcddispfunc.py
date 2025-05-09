@@ -52,15 +52,15 @@ from config import (
 #print("Hello world!")
 #time.sleep(2)
 
-if os.environ.get('DISPLAY','') == '':
+if os.environ.get('DISPLAY','') == '': # Handles raspberry pi environment variable, for launching a python program on a display
     os.environ.__setitem__('DISPLAY', ':0.0')
 
-class Widget(QWidget):
+class Widget(QWidget): # Creates a class containing attributes imported from ui_form.py
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.resize(480, 640)
-        self.ui = Ui_Form()
-        self.ui.setupUi(self)
+        self.resize(480, 640) # Sets resolution
+        self.ui = Ui_Form() # defines UI
+        self.ui.setupUi(self) # Imports setupUI from UI_Form which contains all objects such as QPushButtons, QSliders, QLabels, QCLD
 
     # Moisture Data Logic ------
 
@@ -68,131 +68,127 @@ class Widget(QWidget):
         #i2c_bus = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
 
         tca = adafruit_tca9548a.TCA9548A(i2c_bus)   # Initalizes Muxer board as the I2C Bus
-        self.ss1 = Seesaw(tca[0], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (The Muxer), on channel 0
-        self.ss2 = Seesaw(tca[1], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (The Muxer), on channel 1
+        self.ss1 = Seesaw(tca[0], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (TCA9548a), on channel 0
+        self.ss2 = Seesaw(tca[1], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (TCA9548a), on channel 1
 
 ### Button Functions & Label Logic ###
 
     # Progress Bar
         # Progress Bar Logic -------
-        self.statusbar = self.findChild(QLabel, "statusbar_label")
-        self.statusbar.setText(self.welcome_message())
+        self.statusbar = self.findChild(QLabel, "statusbar_label") # Finds object QLabel "statusbar_label" in Ui_Form
+        self.statusbar.setText(self.welcome_message()) # Sets text of "statusbar_label" to welcome_message function
 
     # Primary Menus --------------------------------------------------------------------------------------------------------------
 
         # Start
             # Buttons
-        self.ui.continue_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page))
-        self.ui.close_btn.clicked.connect(self.close_program)
+        self.ui.continue_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) # Button event when pressed: changes page to mainmenu_page
+        self.ui.close_btn.clicked.connect(self.close_program) # Button event when pressed: closes program
+
+            # Moisture Display ---------
+        self.sensor1 = self.findChild(QLCDNumber, "sensordisplay_1") # Finds QLCDNumber object "sensordisplay_1" in Ui_Form
+        self.sensor1.setDigitCount(12) # Sets digit count to 12
+        self.sensor2 = self.findChild(QLCDNumber, "sensordisplay_2") # Finds QLCDNumber object "sensordisplay_2" in Ui_Form
+        self.sensor2.setDigitCount(12) # Sets digit count to 12
+
+            # Clock Logic --------------
+        self.lcd = self.findChild(QLCDNumber, "clockdisplay") # Finds QLCDNumber object "clockdisplay" in Ui_Form
+        self.lcd.setDigitCount(12) # Sets digit count to 12
+        
+            # Timer --------------------
+        self.timer = QTimer() # Defines QTimer
+        self.timer.timeout.connect(self.display_time) # Connects QTimer output to function display_time
+        self.timer.timeout.connect(self.moisture_display) # Connects QTimer output to function moisture_display
+        self.timer.start(1000)
 
         # Main Menu ----------------
             # Buttons
-        self.ui.systeminfo_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.systeminfo_page))
-        self.ui.editsettings_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page))
-        self.ui.manualcontrols_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.manualcontrols_page))
-        self.ui.monitordata_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.monitordata_page))
+        self.ui.systeminfo_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.systeminfo_page)) # Button event when pressed: changes page to systeminfo_page
+        self.ui.editsettings_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)) # Button event when pressed: changes page to editsettings_page
+        self.ui.manualcontrols_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.manualcontrols_page)) # Button event when pressed: changes page to manualcontrols_page
+        self.ui.monitordata_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.monitordata_page)) # Button event when pressed: changes page to monitordata_page
         self.ui.mainmenu_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.start_page)) #Back
 
         # System Info --------------
             # System Version Label
-        self.systemversionlabel = self.findChild(QLabel, "systemversion_label")
-        self.systemversionlabel.setText(f"{self.get_version_info()}") # Fetches system versions from config
+        self.systemversionlabel = self.findChild(QLabel, "systemversion_label") # Finds QLabel object "systemversion_label" in Ui_Form
+        self.systemversionlabel.setText(f"{self.get_version_info()}") # Changes QLabel text to version number; calls read_csv & readcsv_softver from config, which reads from softver
 
             # Buttons
-        self.ui.updatefirmware_page_btn.clicked.connect(self.update_firmware)
-        self.ui.logexport_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.logexport_page))
+        self.ui.updatefirmware_page_btn.clicked.connect(self.update_firmware) # Button event when pressed: calls update_firmware
+        self.ui.logexport_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.logexport_page)) # Button event when pressed: changes page to logexport_page
         self.ui.systeminfo_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) #Back
 
         # Edit Settings ------------
 
-
             # Buttons
-        self.ui.irrigation_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.irrigation_page))
-        self.ui.datetime_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.datetime_page))
+        self.ui.irrigation_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.irrigation_page)) # Button event when pressed: changes page to irrigation_page
+        self.ui.datetime_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.datetime_page)) # Button event when pressed: changes page to datetime_page
         self.ui.editsettings_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) #Back
 
             # Sliders
-        self.brightnesschanger = self.findChild(QSlider, "brightness_slider")
-        self.brightnesschanger.valueChanged.connect(self.change_brightness)
-
+        self.brightnesschanger = self.findChild(QSlider, "brightness_slider") # Finds QSlider object "brighness_slider" in Ui_Form
+        self.brightnesschanger.valueChanged.connect(self.change_brightness) # On a changed value from QSlider, calls function that writes to backlighh text file
             #Brightness Label
-        self.brightnesslabel = self.findChild(QLabel, "brightness_label")
-        self.brightnesslabel.setText(str(self.brightnesschanger.value()))
+        self.brightnesslabel = self.findChild(QLabel, "brightness_label") # Finds QSlider object "brighness_label" in Ui_Form
+        self.brightnesslabel.setText(str(self.brightnesschanger.value())) # Sets text of "brightness_label" to the value of the QSlider object
 
         # Manual Controls -----------
             # Buttons
-        self.ui.fanon_btn.clicked.connect(self.debug_press)
-        self.ui.lightswitch_btn.clicked.connect(self.debug_press)
-        self.ui.waternow_btn.clicked.connect(self.debug_press)
-        self.ui.takepicture_btn.clicked.connect(self.debug_press)
-        self.ui.recorddata_btn.clicked.connect(self.debug_press)
+        self.ui.fanon_btn.clicked.connect(self.debug_press) # Button event when pressed: Debug press prints to console
+        self.ui.lightswitch_btn.clicked.connect(self.debug_press) # Button event when pressed: Debug press prints to console
+        self.ui.waternow_btn.clicked.connect(self.debug_press) # Button event when pressed: Debug press prints to console
+        self.ui.takepicture_btn.clicked.connect(self.debug_press) # Button event when pressed: Debug press prints to console
+        self.ui.recorddata_btn.clicked.connect(self.debug_press) # Button event when pressed: Debug press prints to console
         self.ui.manualcontrols_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) #Back
 
         # Monitor Data -------------
             # Buttons
-        self.ui.monitordata_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page))
+        self.ui.monitordata_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)) # Button event when pressed: changes page to mainmenu_page
 
         # Irrigation ---------------
             # Buttons
-        self.ui.irrigation_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.irrigation_page))
+        self.ui.irrigation_page_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.irrigation_page)) # Button event when pressed: changes page to irrigation_page
         self.ui.irrigation_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)) #Back
 
         # Date/Time ----------------
             # Buttons
         self.ui.datetime_back_btn.clicked.connect(lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)) #Back
 
-        # Moisture Display ---------
-        self.sensor1 = self.findChild(QLCDNumber, "sensordisplay_1")
-        self.sensor1.setDigitCount(12)
-
-        self.sensor2 = self.findChild(QLCDNumber, "sensordisplay_2")
-        self.sensor2.setDigitCount(12)
-
-        # Clock Logic --------------
-        self.lcd = self.findChild(QLCDNumber, "clockdisplay")
-        self.lcd.setDigitCount(12)
-        
-        # Timer --------------------
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.display_time)
-        self.timer.timeout.connect(self.moisture_display)
-        self.timer.start(1000)
-
 ### GUI Functions
 
-    def display_time(self):
-        time = datetime.now()
-        formatted_time = time.strftime("%H:%M:%S")
-        self.lcd.display(formatted_time)
+    def display_time(self): # Sets time from library datetime, and alters QLCD clock for time
+        time = datetime.now() # time variable equal to a set datetime
+        formatted_time = time.strftime("%H:%M:%S") # format of desired time
+        self.lcd.display(formatted_time) # changes QLCD to format of desired time
 
-    def moisture_display(self):
-        data1 = self.ss1.moisture_read()
-        data2 = self.ss2.moisture_read()
-        print("Moisture1:" + str(data1) + " Moisture2:" + str(data2))
-        self.sensor1.display(data1)
-        self.sensor2.display(data2)
+    def change_brightness(self): # When called, changes brightness value of the touchscreen
+        lumos_maxima = str(self.brightnesschanger.value()) # Defines "lumos_maxima" as string of QSlider value
+        self.brightnesslabel.setText(lumos_maxima) # Sets text of "brightness_label" to lumos_maxima
+        brightness_dir = '/sys/devices/platform/soc/3f205000.i2c/i2c-11/i2c-10/10-0045/backlight/10-0045/brightness' # Defines directory of brightness value in raspberry pi
+        try:
+            with open(brightness_dir, 'w') as csvfile: # Opens brightness directory to write
+                csvfile.write(lumos_maxima) # Writes brightness value to directory
+        except Exception as e:
+            return "Error writing to brightness setting" # Error reading \n version info
 
-    def change_brightness(self):
-        photoncount = str(self.brightnesschanger.value())
-        self.brightnesslabel.setText(photoncount)
-        brightness_dir = '/sys/devices/platform/soc/3f205000.i2c/i2c-11/i2c-10/10-0045/backlight/10-0045/brightness'
-        with open(brightness_dir, 'w') as csvfile:
-            csvfile.write(photoncount)
-
-
-    #def change_brightness_fixed(self):
-        #subproccess.run("")
+    def close_program(self): # Simple function to close the program
+        exit()
 
 ### Debug functions ------------------
 
-    def debug_press(self):
+    def moisture_display(self): # Handles moisture output from adafruit SEESAW capacitive moisture sensors
+        data1 = self.ss1.moisture_read() # defines "data1" as the output from I2C bus channel [0] and calls moisture detection
+        data2 = self.ss2.moisture_read() # defines "data2" as the output from I2C bus channel [1] and calls moisture detection
+        print("Moisture1:" + str(data1) + " Moisture2:" + str(data2)) # Prints moisture values
+        self.sensor1.display(data1) # Sets value of "sensordisplay_1" to moisture value from channel [0]
+        self.sensor2.display(data2) # Sets value of "sensordisplay_1" to moisture value from channel [1]
+
+    def debug_press(self): # Simple function that prints to console if a button was pressed
         print("button pressed")
 
-    def welcome_message(self):
+    def welcome_message(self): # Welcome message on status bar
         return str("welcome!")
-
-    def close_program(self):
-        exit()
 
 ### Imported functions ---------------
 
