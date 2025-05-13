@@ -12,11 +12,13 @@ autohide_duration=500
 datetime
 ### GUI
 pyside6
-### Adafruit Moisture Sensing
+### Adafruit Products
 Adafruit_CircuitPython_TCA9548A
 adafruit-circuitpython-seesaw
+adafruit-circuitpython-ahtx0
 
 [Other]
+### Cursor Dev
 sudo apt-get install -y libxcb-cursor-dev
 ### Adafruit Drivers
 Blinka (see working document)
@@ -26,3 +28,5 @@ unzip Brightness.zip
 cd Brightness
 sudo chmod +x install.sh
 ./install.sh
+### Font Package
+sudo apt-get install ttf-mscorefonts-installer

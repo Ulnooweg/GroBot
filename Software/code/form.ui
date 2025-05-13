@@ -27,6 +27,12 @@
      <height>560</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <bold>false</bold>
+    </font>
+   </property>
    <widget class="QWidget" name="start_page">
     <widget class="QPushButton" name="continue_btn">
      <property name="geometry">
@@ -41,23 +47,11 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>30</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
       <string>Continue</string>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="clockdisplay">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>20</y>
-       <width>480</width>
-       <height>100</height>
-      </rect>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LayoutDirection::LeftToRight</enum>
      </property>
     </widget>
     <widget class="QLCDNumber" name="sensordisplay_1">
@@ -73,23 +67,27 @@
       <enum>Qt::LayoutDirection::LeftToRight</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="clockdisplay_label">
+    <widget class="QLabel" name="clockdisplay">
      <property name="geometry">
       <rect>
-       <x>210</x>
-       <y>130</y>
-       <width>49</width>
-       <height>15</height>
+       <x>0</x>
+       <y>14</y>
+       <width>471</width>
+       <height>131</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <family>Consolas</family>
+       <family>Comic Sans MS</family>
+       <pointsize>47</pointsize>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
-      <string>Clock</string>
+      <string>&lt;&lt;Clock&gt;&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="sensordisplay_1_label">
@@ -125,6 +123,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>30</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -179,6 +178,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -198,6 +198,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -217,6 +218,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>25</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -236,6 +238,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>18</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -255,6 +258,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -276,6 +280,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>25</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -297,6 +302,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -316,6 +322,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -335,6 +342,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -354,6 +362,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -373,6 +382,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -392,6 +402,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -413,6 +424,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>18</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -432,6 +444,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -451,6 +464,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>20</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -470,6 +484,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>17</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -491,6 +506,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>25</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -510,6 +526,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>25</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -529,6 +546,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>25</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -548,6 +566,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>18</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="layoutDirection">
@@ -563,7 +582,7 @@
        <x>20</x>
        <y>330</y>
        <width>441</width>
-       <height>51</height>
+       <height>68</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -576,7 +595,27 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>10</pointsize>
+       <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">.QSlider {
+    min-height: 68px;
+    max-height: 68px;
+}
+
+.QSlider::groove:horizontal {
+    border: 1px solid #262626;
+    height: 5px;
+    margin: 0 12px;
+}
+
+.QSlider::handle:horizontal {
+    background: Grey;
+    width: 46px;
+    height: 100px;
+	margin: -24px -12px
+}</string>
      </property>
      <property name="minimum">
       <number>25</number>
@@ -632,6 +671,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>25</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -651,6 +691,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>30</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -670,6 +711,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>30</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -729,56 +771,477 @@
     </widget>
    </widget>
    <widget class="QWidget" name="irrigation_page">
-    <widget class="QPushButton" name="humidset_page_btn">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>201</width>
-       <height>151</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>25</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Humid Set</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="irrigation_back_btn">
      <property name="geometry">
       <rect>
        <x>270</x>
-       <y>10</y>
+       <y>430</y>
        <width>201</width>
-       <height>151</height>
+       <height>131</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Segoe UI</family>
        <pointsize>25</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
       <string>Back</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QWidget" name="humidset_page">
-    <widget class="QOpenGLWidget" name="openGLWidget">
+    <widget class="QPushButton" name="wateringtime_page_btn">
      <property name="geometry">
       <rect>
-       <x>70</x>
-       <y>150</y>
-       <width>300</width>
-       <height>200</height>
+       <x>10</x>
+       <y>10</y>
+       <width>191</width>
+       <height>151</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>20</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Watering
+Time</string>
+     </property>
     </widget>
+    <widget class="QPushButton" name="irrigation_save_btn">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>430</y>
+       <width>201</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>25</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Save</string>
+     </property>
+    </widget>
+    <widget class="QSlider" name="watervol_slider">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>170</y>
+       <width>331</width>
+       <height>68</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">.QSlider {
+    min-height: 68px;
+    max-height: 68px;
+}
+
+.QSlider::groove:horizontal {
+    border: 1px solid #262626;
+    height: 5px;
+    margin: 0 12px;
+}
+
+.QSlider::handle:horizontal {
+    background: Grey;
+    width: 46px;
+    height: 100px;
+	margin: -24px -12px
+}</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="invertedAppearance">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="watervol_label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>190</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <bold>false</bold>
+       <underline>true</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>Water Vol</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="moistthresh_label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>250</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <bold>false</bold>
+       <underline>true</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>Moist Thresh</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QSlider" name="moistthresh_slider">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>230</y>
+       <width>331</width>
+       <height>68</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">.QSlider {
+    min-height: 68px;
+    max-height: 68px;
+}
+
+.QSlider::groove:horizontal {
+    border: 1px solid #262626;
+    height: 5px;
+    margin: 0 12px;
+}
+
+.QSlider::handle:horizontal {
+    background: Grey;
+    width: 46px;
+    height: 100px;
+	margin: -24px -12px
+}</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QSlider" name="tempset_slider">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>290</y>
+       <width>331</width>
+       <height>68</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">.QSlider {
+    min-height: 68px;
+    max-height: 68px;
+}
+
+.QSlider::groove:horizontal {
+    border: 1px solid #262626;
+    height: 5px;
+    margin: 0 12px;
+}
+
+.QSlider::handle:horizontal {
+    background: Grey;
+    width: 46px;
+    height: 100px;
+	margin: -24px -12px
+}</string>
+     </property>
+     <property name="minimum">
+      <number>5</number>
+     </property>
+     <property name="maximum">
+      <number>30</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QSlider" name="humidset_slider">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>350</y>
+       <width>331</width>
+       <height>68</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">.QSlider {
+    min-height: 68px;
+    max-height: 68px;
+}
+
+.QSlider::groove:horizontal {
+    border: 1px solid #262626;
+    height: 5px;
+    margin: 0 12px;
+}
+
+.QSlider::handle:horizontal {
+    background: Grey;
+    width: 46px;
+    height: 100px;
+	margin: -24px -12px
+}</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tempset_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>310</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <bold>false</bold>
+       <underline>true</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>Temperature Set</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="humidset_label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>370</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <bold>false</bold>
+       <underline>true</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>Humid Set</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="irrigation_description_label">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>20</y>
+       <width>161</width>
+       <height>161</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>12</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Description:
+Water Vol: (1-20) [mm of rain]
+Moist Thresh: (%)
+Temp Set: (°C)
+Humid Set: (%) </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="irrigation_description_label_2">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>20</y>
+       <width>91</width>
+       <height>161</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>12</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Default:
+[1 mm]
+
+[750]
+[25°C]
+[90%]</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="watervol_indicator">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>210</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>13</pointsize>
+       <bold>false</bold>
+       <underline>false</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>&lt;&lt;value&gt;&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="moistthresh_idicator">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>270</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>13</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>&lt;&lt;value&gt;&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tempset_indicator">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>330</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>13</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>&lt;&lt;value&gt;&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="humidset_indicator">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>390</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>13</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>&lt;&lt;value&gt;&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="humidtempset_page"/>
+   <widget class="QWidget" name="humidset_page">
     <widget class="QPushButton" name="humidset_back_btn">
      <property name="geometry">
       <rect>
@@ -792,6 +1255,7 @@
       <font>
        <family>Segoe UI</family>
        <pointsize>25</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -824,8 +1288,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Segoe UI</family>
-      <pointsize>10</pointsize>
+      <family>Comic Sans MS</family>
+      <pointsize>15</pointsize>
      </font>
     </property>
     <property name="text">
