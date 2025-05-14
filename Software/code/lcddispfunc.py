@@ -27,13 +27,15 @@ import adafruit_tca9548a    # Import the library for the Multiplexer board
 from adafruit_seesaw.seesaw import Seesaw   # Import the library for the SEESAW capacitive moisture sensor
 from PySide6.QtWidgets import *
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber
-from PySide6.QtCore import QDateTime, QTimer, Slot, SIGNAL
+from PySide6.QtCore import QDateTime, QTimer, Slot, SIGNAL, QThreadPool, QRunnable
 from PySide6.QtGui import *
 from datetime import datetime
 from ui_form import Ui_Form
 from logoutput import logtofile
 from diopinsetup import diopinset
 from watercontrol import autorain, stopwater, startwater
+from fancontrol import fanmanon, fanoff
+from lightcontrol import growlightoff, growlighton
 
 # configwin.py is for windows testing ONLY!
 # from configwin import (
@@ -52,18 +54,6 @@ from config import (
     readcsv_softver
 )
 
-diop = diopinset()
-s1, s2, s3, s4, s5, s6, b1, ths, sms = diop[0], diop[1], diop[2], diop[3], diop[4], diop[5], diop[6], diop[7], diop[8]
-
-# Global variables for manual override and watering state
-manual_override = {
-    "light": False,
-    "fan": False,
-    "watering": False
-}
-
-watering_active = False
-
 if os.environ.get('DISPLAY','') == '': # Handles raspberry pi environment variable, for launching a python program on a display
     os.environ.__setitem__('DISPLAY', ':0.0')
 
@@ -76,8 +66,15 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         # self.setWindowFlag(Qt.FramelessWindowHint)
         # self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
 
-        self.toggle = False
         cfg = config.read_config()
+
+        self.togglewater = False # Initial Toggle state for waterpump
+        self.togglelight = False # Initial Toggle state for UV growlamp
+        self.togglefan = False # Intital Toggle state for enclosure fan
+
+        self.threadpool = QThreadPool() # Define QThreadPool
+        thread_count = self.threadpool.maxThreadCount() # Define Thread Count
+        print(f"Multithreading with maximum {thread_count} threads") # Print Thread Count
 
     # Moisture Data Logic ------ Currently disabled
 
@@ -203,10 +200,10 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         # Manual Controls -----------
             # Buttons
         self.ui.fanon_btn.clicked.connect(
-            self.debug_press
+            self.fan_toggle
             ) # Button event when pressed: Debug press prints to console
         self.ui.lightswitch_btn.clicked.connect(
-            self.debug_press
+            self.light_toggle
             ) # Button event when pressed: Debug press prints to console
         self.ui.waternow_btn.clicked.connect(
             self.water_toggle
@@ -231,7 +228,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         # Irrigation ---------------
             # Buttons
         self.ui.wateringtime_page_btn.clicked.connect(
-            lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.wateringtime_page)
+            lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.watertiming_page)
             )
         self.ui.irrigation_save_btn.clicked.connect(
             self.save_irr_settings
@@ -318,6 +315,55 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             str(self.humidset_changer.value())
             ) # Sets text of "humidset_indicator" to the value of the QSlider object "humidset_changer"
 
+        # Water Timing -------------
+
+            # Hour Label
+        self.waterhour_label = self.findChild(
+            QLabel, "waterhours_label"
+            )
+            # Minute Label
+        self.waterminutes_label = self.findChild(
+            QLabel, "waterminutes_label"
+            )
+
+            # Buttons
+            # Hour Plus
+        self.ui.hoursplus_btn.clicked.connect(
+            self.watertime_hourplus
+            )
+            # Hour Minus
+        self.ui.hoursminus_btn.clicked.connect(
+            self.watertime_hourminus
+            )
+            # Minute Plus
+        self.ui.minutesplus_btn.clicked.connect(
+            self.debug_press
+            )
+            # Minute Minus
+        self.ui.minutesminus_btn.clicked.connect(
+            self.debug_press
+            )
+            # Watertime Save
+        self.ui.watertiming_save_btn.clicked.connect(
+            self.debug_press
+            )
+        
+        self.ui.checktime_btn.clicked.connect(
+            self.debug_press
+            )
+
+        self.ui.sunrise_btn.clicked.connect(
+            self.debug_press
+            )
+        
+        self.ui.sunset_btn.clicked.connect(
+            self.debug_press
+            )
+        
+        self.ui.watertiming_back_btn.clicked.connect(
+            lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.irrigation_page)
+            ) # Back
+
         # Date/Time ----------------
             # Buttons
         self.ui.datetime_back_btn.clicked.connect(
@@ -326,8 +372,38 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
 
 ### GUI Functions
 
+    def watertime_hourplus(self):
+        pass
+    
+    def watertime_hourminus(self):
+        pass
+
+    def watertime_minutesplus(self):
+        pass
+
+    def watertime_minutesminus(self):
+        pass
+
+    def fan_toggle(self):
+        if self.togglefan:
+            fanoff()
+            print("Fan off")
+        else:
+            fanmanon()
+            print("Fan on")
+        self.togglefan = not self.togglefan
+
+    def light_toggle(self):
+        if self.togglelight:
+            growlightoff()
+            print("light off")
+        else:
+            growlighton()
+            print("Light on")
+        self.togglelight = not self.togglelight
+
     def water_toggle(self): # Toggles whether the water pump is on indefinetly, or off
-        if self.toggle:
+        if self.togglewater:
             stopwater()
             self.statusbar.setText("Stopped Watering")
             self.tasksleep(2)
@@ -335,7 +411,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         else:
             self.statusbar.setText("Watering in Progress...")
             startwater()
-        self.toggle = not self.toggle
+        self.togglewater = not self.togglewater
 
     def display_time(self): # Sets time from library datetime, and alters QLCD clock for time
         time = datetime.now() # time variable equal to a set datetime
