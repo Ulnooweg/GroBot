@@ -27,35 +27,99 @@ import adafruit_tca9548a    # Import the library for the Multiplexer board
 from adafruit_seesaw.seesaw import Seesaw   # Import the library for the SEESAW capacitive moisture sensor
 from PySide6.QtWidgets import *
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber
-from PySide6.QtCore import QDateTime, QTimer, Slot, SIGNAL, QThreadPool, QRunnable
+from PySide6.QtCore import QDateTime, QTimer, Slot, Signal, QThreadPool, QRunnable, QObject
 from PySide6.QtGui import *
-from datetime import datetime
+from datetime import datetime, time as time2
 from ui_form import Ui_Form
+from timecheck import checktimebetween
+from sensorfeed import feedread
+from BoardMOSFETReset import grobotboot
 from logoutput import logtofile
-from diopinsetup import diopinset
+try:
+    logtofile() #Write log to file immediately after boot in case needed for debugging
+except Exception as errvar:
+    #Note: There is no force reboot yet here as logoutput should be the first thing imported and done
+    #It's also already handled in the logoutput file itself.
+    raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 from watercontrol import autorain, stopwater, startwater
-from fancontrol import fanmanon, fanoff
+from fancontrol import fanmanon, fanoff, fanon
 from lightcontrol import growlightoff, growlighton
-
-# configwin.py is for windows testing ONLY!
-# from configwin import (
-#     get_plant_settings, 
-#     readcsv,
-#     readlocal,
-#     readcsv_softver
-# )
+from grobotpicam import picam_capture
+from dataout import excelout
 
 # config.py is for linux.
 import config
 from config import (
-   get_plant_settings, 
+    get_plant_settings, 
     readcsv,
     readlocal,
-    readcsv_softver
+    readcsv_softver,
+    readcsv_mainflags,
+    writecsv_mainflags
 )
+
+##############################################
+################# ON BOOTUP ##################
+##############################################
+
+# sys.tracebacklimit = 0 # Imported from main.py | cleans up the console of unessecary error messages
 
 if os.environ.get('DISPLAY','') == '': # Handles raspberry pi environment variable, for launching a python program on a display
     os.environ.__setitem__('DISPLAY', ':0.0')
+
+print("Starting GUI...")
+grobotboot()
+
+try:
+    #Suppress traceback for cleaner error log
+    sys.tracebacklimit = 0
+
+    #Runs BoardMostfetReset
+    grobotboot() #This force all pin reset
+
+    # This only initialize once on bootup
+    #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green on bootup
+
+    # Start the LCD menu thread immediately
+except Exception as errvar:
+    subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+    #LCD COLOUR HANDLING CODE (RED) HERE
+    raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+# Starts with reading values from sensor
+try:
+    ReadVal = feedread() # T RH SRH in order
+    
+    # Now do an initial read of the configuration value
+    settings = get_plant_settings()
+
+    # Now check if light needs to be on or off
+    if checktimebetween(time2(settings['sunrise'][0], settings['sunrise'][1]), time2(settings['sunset'][0], settings['sunset'][1])) == True:
+        growlighton()
+    elif checktimebetween(time2(settings['sunrise'][0], settings['sunrise'][1]), time2(settings['sunset'][0], settings['sunset'][1])) == False:
+        growlightoff()
+    else:
+        raise RuntimeError('UNKNOWN FAILURE')
+
+    # Check if internal humidity or temperature is too high and the fan needs to be on
+    if ReadVal[0] > settings['maxTemp'] or ReadVal[1] > settings['maxHumid']:
+        fanon(settings['fanTime'])
+    elif ReadVal[0] <= settings['maxTemp'] and ReadVal[1] <= settings['maxHumid']:
+        pass
+    else:
+        raise RuntimeError('UNKNOWN FAILURE')
+
+except Exception as errvar:
+    subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+    #LCD COLOUR HANDLING CODE (RED) HERE
+    raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+##############################################
+################# GUI CLASS ##################
+##############################################
+
+# Important notes for GUI buttons: when connecting a function to a QPushButton object, the function must be preceeded by
+# "lambda:". Without this, any function placed inside the clicked.connect() method will be called on Grobot startup.
 
 class Widget(QWidget): # Creates a class containing attributes imported from ui_form.py
     def __init__(self, parent=None):
@@ -66,15 +130,21 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         # self.setWindowFlag(Qt.FramelessWindowHint)
         # self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
 
-        cfg = config.read_config()
+# Startup parameters
 
         self.togglewater = False # Initial Toggle state for waterpump
         self.togglelight = False # Initial Toggle state for UV growlamp
         self.togglefan = False # Intital Toggle state for enclosure fan
 
-        self.threadpool = QThreadPool() # Define QThreadPool
-        thread_count = self.threadpool.maxThreadCount() # Define Thread Count
+        self.thread_manager = QThreadPool() # Define QThreadPool
+        thread_count = self.thread_manager.maxThreadCount() # Define Thread Count
+        activethread_count = self.thread_manager.activeThreadCount()
         print(f"Multithreading with maximum {thread_count} threads") # Print Thread Count
+        self.start_thread(self.schedule_routine)
+        print("Routine Running")
+        print(f"Now running with {thread_count-activethread_count} threads") # Print Thread Count
+
+        cfg = config.read_config()
 
     # Moisture Data Logic ------ Currently disabled
 
@@ -160,10 +230,10 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
 
             # Buttons
         self.ui.updatefirmware_page_btn.clicked.connect(
-            self.update_firmware
+            lambda: self.start_thread(self.update_firmware)
             ) # Button event when pressed: calls update_firmware
         self.ui.logexport_page_btn.clicked.connect(
-            self.export_log
+            lambda: self.start_thread(self.export_log)
             ) # Button event when pressed: exports log
         self.ui.systeminfo_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
@@ -186,7 +256,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             QSlider, "brightness_slider"
             ) # Finds QSlider object "brighness_slider" in Ui_Form
         self.brightnesschanger.valueChanged.connect(
-            self.change_brightness
+            lambda: self.start_thread(self.change_brightness)
             ) # On a changed value from QSlider, calls function that writes to backlight text file
 
             #Brightness Label
@@ -200,13 +270,13 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         # Manual Controls -----------
             # Buttons
         self.ui.fanon_btn.clicked.connect(
-            self.fan_toggle
+            lambda: self.start_thread(self.fan_toggle)
             ) # Button event when pressed: Debug press prints to console
         self.ui.lightswitch_btn.clicked.connect(
-            self.light_toggle
+            lambda: self.start_thread(self.light_toggle)
             ) # Button event when pressed: Debug press prints to console
         self.ui.waternow_btn.clicked.connect(
-            self.water_toggle
+            lambda: self.start_thread(self.water_toggle)
             ) # Button event when pressed: Initiate watering
         self.ui.takepicture_btn.clicked.connect(
             self.debug_press
@@ -231,7 +301,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.watertiming_page)
             )
         self.ui.irrigation_save_btn.clicked.connect(
-            self.save_irr_settings
+            lambda: self.start_thread(self.save_irr_settings)
             ) # Saves options set by QSlider objects
         self.ui.irrigation_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)
@@ -320,45 +390,45 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             # Hour Label
         self.waterhour_label = self.findChild(
             QLabel, "waterhours_label"
-            )
+            ) # Finds QLabel object "waterhours_label" in Ui_Form
             # Minute Label
         self.waterminutes_label = self.findChild(
             QLabel, "waterminutes_label"
-            )
+            ) # Finds QLabel object "waterminutes_label" in Ui_Form
 
             # Buttons
             # Hour Plus
         self.ui.hoursplus_btn.clicked.connect(
             self.watertime_hourplus
-            )
+            ) # Button event when pressed: increments hour of selected config time by one
             # Hour Minus
         self.ui.hoursminus_btn.clicked.connect(
             self.watertime_hourminus
-            )
+            ) # Button event when pressed: decrements hour of selected config time by one
             # Minute Plus
         self.ui.minutesplus_btn.clicked.connect(
             self.debug_press
-            )
+            ) # Button event when pressed: Debug press prints to console
             # Minute Minus
         self.ui.minutesminus_btn.clicked.connect(
             self.debug_press
-            )
+            ) # Button event when pressed: Debug press prints to console
             # Watertime Save
         self.ui.watertiming_save_btn.clicked.connect(
             self.debug_press
-            )
+            ) # Button event when pressed: Debug press prints to console
         
         self.ui.checktime_btn.clicked.connect(
             self.debug_press
-            )
+            ) # Button event when pressed: Debug press prints to console
 
         self.ui.sunrise_btn.clicked.connect(
             self.debug_press
-            )
+            ) # Button event when pressed: Debug press prints to console
         
         self.ui.sunset_btn.clicked.connect(
             self.debug_press
-            )
+            ) # Button event when pressed: Debug press prints to console
         
         self.ui.watertiming_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.irrigation_page)
@@ -370,48 +440,53 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)
             ) #Back
 
-### GUI Functions
+##################################################
+################# GUI FUNCTIONS ##################
+##################################################
 
-    def watertime_hourplus(self):
+    def watertime_hourplus(self): # Placeholder Function: Will add one to hour position of current selected config time
         pass
     
-    def watertime_hourminus(self):
+    def watertime_hourminus(self): # Placeholder Function: Will subtract one to hour position of current selected config time
         pass
 
-    def watertime_minutesplus(self):
+    def watertime_minutesplus(self): # Placeholder Function: Will add one to minute position of current selected config time
         pass
 
-    def watertime_minutesminus(self):
+    def watertime_minutesminus(self): # Placeholder Function: Will subtract one to minute position of current selected config time
         pass
 
-    def fan_toggle(self):
-        if self.togglefan:
-            fanoff()
-            print("Fan off")
+    @Slot() # Decorator for multithreading
+    def fan_toggle(self): # Function that toggles fan 
+        if self.togglefan: # self.togglefan is False by default
+            fanoff() # turns fan off
+            print("Fan off") # prints to console
         else:
-            fanmanon()
-            print("Fan on")
-        self.togglefan = not self.togglefan
+            fanmanon() # turns fan on (this is the manual variant, meaning it will stay on indefinetly)
+            print("Fan on") # prints to console
+        self.togglefan = not self.togglefan # resets self.togglefan to opposite of previous bool
 
-    def light_toggle(self):
-        if self.togglelight:
-            growlightoff()
-            print("light off")
+    @Slot() # Decorator for multithreading
+    def light_toggle(self): # Function that toggles growlight
+        if self.togglelight: # self.togglefan is False by default
+            growlightoff() # turns off growlight
+            print("light off") # prints to console
         else:
-            growlighton()
-            print("Light on")
-        self.togglelight = not self.togglelight
+            growlighton() # turns on fan
+            print("Light on") # prints to console
+        self.togglelight = not self.togglelight # resets self.togglelight to opposite of previous bool
 
+    @Slot() # Decorator for multithreading
     def water_toggle(self): # Toggles whether the water pump is on indefinetly, or off
-        if self.togglewater:
-            stopwater()
-            self.statusbar.setText("Stopped Watering")
-            self.tasksleep(2)
-            self.statusbar.setText(self.welcome_message())
+        if self.togglewater: # self.toggle 
+            stopwater() # turns off waterpump
+            self.statusbar.setText("Stopped Watering") # changes text of statusbar to "Stopped Watering"
+            self.tasksleep(2) # sleeps for 2 seconds
+            self.statusbar.setText(self.welcome_message()) # resets statubsbar to default statusbar message
         else:
-            self.statusbar.setText("Watering in Progress...")
-            startwater()
-        self.togglewater = not self.togglewater
+            self.statusbar.setText("Watering in Progress...") # changes text of statusbar to "Watering in Progress..."
+            startwater() # turns on waterpump indefinetly
+        self.togglewater = not self.togglewater # resets self.togglewater to opposite of previous bool
 
     def display_time(self): # Sets time from library datetime, and alters QLCD clock for time
         time = datetime.now() # time variable equal to a set datetime
@@ -448,15 +523,15 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
     
     def save_irr_settings(self): # Saves values of QSlider object(s) to PLANTCFG
         try:
-            config.update_config('PLANTCFG', 'waterVol', str(self.watervolume_changer.value()))
-            config.update_config('PLANTCFG', 'dryValue', str(self.moistthresh_changer.value()))
-            config.update_config('PLANTCFG', 'maxHumid', str(self.humidset_changer.value()))
-            config.update_config('PLANTCFG', 'maxTemp', str(self.tempset_changer.value()))
-            self.statusbar.setText("New Config Parameters Saved!")
-            self.tasksleep(2)
-            self.statusbar.setText(self.welcome_message())
+            config.update_config('PLANTCFG', 'waterVol', str(self.watervolume_changer.value())) # updates config with new value of watervolume slider
+            config.update_config('PLANTCFG', 'dryValue', str(self.moistthresh_changer.value())) # updates config with new value of moisture threshold slider
+            config.update_config('PLANTCFG', 'maxHumid', str(self.humidset_changer.value())) # updates config with new value of humid set slider
+            config.update_config('PLANTCFG', 'maxTemp', str(self.tempset_changer.value())) # updates config with new value of temperature set slider
+            self.statusbar.setText("New Config Parameters Saved!") # changes text of statubs bar to "New Config Parameters Saved!"
+            self.tasksleep(2) # sleeps for 2 seconds
+            self.statusbar.setText(self.welcome_message()) # resets statubsbar to default statusbar message
         except Exception as errvar:
-            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True) # if there is an error writing to config, automatically reboots Grobot
             #LCD COLOUR HANDLING CODE (RED) HERE
             raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
@@ -470,7 +545,9 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
     def adjust_system_time(self):
         pass
 
-### Debug functions ------------------
+####################################################
+################# DEBUG FUNCTIONS ##################
+####################################################
 
     # def moisture_display(self): # Handles moisture output from adafruit SEESAW capacitive moisture sensors
     #     data1 = self.ss1.moisture_read() # defines "data1" as the output from I2C bus channel [0] and calls moisture detection
@@ -485,7 +562,9 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
     def welcome_message(self): # Welcome message on status bar
         return str("Welcome!")
 
-### Imported functions ---------------
+#######################################################
+################# IMPORTED FUNCTIONS ##################
+#######################################################
 
     def get_version_info(self):
         """Get formatted version information string"""
@@ -533,7 +612,6 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
 
     def export_log(self):
         """Handle log export process"""
-            
         try:
             ###set_lcd_color("in_progress")  # Blue while exporting
             self.statusbar.setText(f"{readlocal('165')}\n{readlocal('166')}") # Exporting Log... \n Please Wait
@@ -557,12 +635,273 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             self.tasksleep(2)  # Show result message
             ###set_lcd_color("normal")  # Return to normal color
             
-        except Exception as e:
+        except Exception:
             ###set_lcd_color("error")
             self.statusbar.setText(f"{readlocal('171')}\n{readlocal('172')}") # Error exporting \n log file
             self.tasksleep(2)
             self.statusbar.setText(self.welcome_message())
             ###set_lcd_color("normal")
+
+##############################################
+################# MAIN.PY ####################
+##############################################
+
+    def EveryXX15(*args, **kwargs): # This schedule grouping runs at every quarter of hour
+        try:
+            settings = get_plant_settings()
+            #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
+
+            # This should read value from sensor and turn fan on or off
+            # Read value from sensor
+            ReadVal = feedread() # T RH SRH in order
+
+            # Turn on fan if temp or humidity exceeds the limit 
+            if ReadVal[0] > settings['maxTemp'] or ReadVal[1] > settings['maxHumid']:
+                fanon(settings['fanTime'])
+            elif ReadVal[0] <= settings['maxTemp'] and ReadVal[1] <= settings['maxHumid']:
+                pass
+            else:
+                raise RuntimeError('UKNOWN FAILURE')
+            
+            writecsv_mainflags("EveryXX15","0") #Set the execution flag for the function back to 0
+            #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+    def EverySETTIME(*args, **kwargs): # This runs every settime read from grobot_cfg
+        try:
+            settings = get_plant_settings()
+            #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
+
+            # This should read value from sensor and autorain if Soil moisture too low
+            # Read value from sensor
+            ReadVal = feedread() # T RH SRH in order
+
+            # Now water plant if soil too dry
+            if ReadVal[2] <= settings['dryValue']:
+                autorain(settings['waterVol'])
+            elif ReadVal[2] > settings['dryValue']:
+                pass
+            else:
+                raise RuntimeError('UKNOWN FAILURE')
+            
+            writecsv_mainflags("EverySETTIME","0") #Set the execution flag for the function back to 0
+            #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+    def EveryXX25(*args, **kwargs): # This code runs at every 25 minute mark of the hour
+        try:
+            #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
+            # Read value from sensor and write it out to excel
+            # Read value from sensor
+            ReadVal = feedread() # T RH SRH in order
+            # Write data out to excel file
+            excelout(ReadVal[0], ReadVal[1], ReadVal[2])
+
+            writecsv_mainflags("EveryXX25","0") #Set the execution flag for the function back to 0
+            #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+    def EveryXX35(*args, **kwargs): # Runs every 35 minute mark of the hour
+        try:
+            #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
+            picam_capture() # Take picture with pi camera
+
+            writecsv_mainflags("EveryXX35","0") #Set the execution flag for the function back to 0
+            #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+    def EverySUNRISE(*args, **kwargs): # This should run every sunrise time to turn on the light
+        try:
+            #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
+            growlighton()
+
+            writecsv_mainflags("EverySUNRISE","0") #Set the execution flag for the function back to 0
+            #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+    def EverySUNSET(*args, **kwargs): # This should run every sunset time to turn off light
+        try:
+            #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
+            growlightoff()
+
+            writecsv_mainflags("EverySUNSET","0") #Set the execution flag for the function back to 0
+            #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+##############################################
+################# THREADING ##################
+##############################################
+
+    @Slot()
+    def start_thread(self, fn):
+        worker = Thread(fn)
+        self.thread_manager.start(worker)
+
+
+        activethreads = self.thread_manager.activeThreadCount()
+        print(f"Current active threads:{activethreads}")
+
+#     @Slot()
+#     def start_thread(self, job_func):
+#         # worker = Thread(fn)
+#         # self.threadpool.start(worker)
+#         try:
+#             #First, define job_thread object as a threading class targeting job_func function passed in
+#             #while also setting the thread name to be the same as job_func using __name__ attribute
+#             #Also want daemon=True so it does not block main from quitting and will exits if main no longer runs
+#             job_thread = threading.Thread(target=job_func,name=str(job_func.__name__),daemon=True)
+
+#             runthread_flag = True #set the default value of flag use to signal if thread should be ran to True as default
+#             #Now must check if a thread with the same name is already running using enumerate logic
+#             for i in threading.enumerate(): #Use enumerate to list all currently running thread
+#                 if i.name == job_func.__name__:
+#                     runthread_flag = False #if the name of any running thread matched the name of job_func passed in, set the flag to false
+#                 else:
+#                     pass #Do nothing and keep running flag to true if name doesn't match
+            
+#             #Now check the flag and start the thread if the flag is True
+#             if runthread_flag == True:
+#                 job_thread.start() #If nothing match, start the thread as normal
+#             elif runthread_flag == False:
+#                 pass #Do not start the thread if the flag is false.
+#             else: #If there's an error
+#                 raise RuntimeError('THREAD FLAG NOT BOOLEAN')
+#         except Exception as errvar:
+#             subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+#             #LCD COLOUR HANDLING CODE (RED) HERE
+#             raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+    def schedule_routine(self):
+        while 1:
+            try: #Put the entire try block under while loop. VERY IMPORTANT while must be the top level or it won't loop properly all the time
+                settings = get_plant_settings() #Get plant settings so we have the proper set time to compare current time to
+
+                #Get current time and put its component in separate variables
+                currhour = datetime.now().hour
+                currminute = datetime.now().minute
+                currsecond = datetime.now().second
+                print(f"Current time: (h:{currhour} m:{currminute})")
+
+                #currtime = [datetime.now().hour, datetime.now().minute, datetime.now().second] #combine the variable together, not needed anymore
+
+                # Now write the code to set execution flag for the appropriate function in mainflags file to 1 if the appropriate time is
+                # reached such that the fuction will later be executed when mainflags is read back.
+                # The first case only match function for minutes
+                match currminute:
+                    case 15:
+                        writecsv_mainflags("EveryXX15","1")
+                    case 25:
+                        writecsv_mainflags("EveryXX25","1")
+                    case 35:
+                        self.start_thread(logtofile) #Write log immediately every 35 minutes
+                        writecsv_mainflags("EveryXX35","1")
+                    case _:
+                        pass
+                
+                print("Wrote mainflags for 15, 25, and 35 minute intervals")
+                
+                # This one requires matching both hour and minute
+                if currhour == settings['sunset'][0] and currminute == settings['sunset'][1]:
+                    writecsv_mainflags("EverySUNSET","1")
+                if currhour == settings['sunrise'][0] and currminute == settings['sunrise'][1]:
+                    writecsv_mainflags("EverySUNRISE","1")
+                if currhour == settings['checkTime'][0] and currminute == settings['checkTime'][1]:
+                    writecsv_mainflags("EverySETTIME","1")
+
+                print("Wrote mainflags for sunrise, sunset, and settime")
+
+                # Now, read the mainflags file and execute any function that has its execution value = 1.
+                # Make a list of functions. Need to use the actual function object such that they can be called later
+                funcexecnamelist = [self.EveryXX15, self.EverySETTIME, self.EveryXX25, self.EveryXX35, self.EverySUNRISE, self.EverySUNSET]
+                print("Func list defined")
+                for funcexecname in funcexecnamelist: #iterate through the list funcexecnamelist using variable funcexecname
+                    tempflagvalue = readcsv_mainflags(str(funcexecname.__name__)) #Read flag value for current function from csv
+                    print("Tempflagvalue defined")
+                    if tempflagvalue == '1': #Check if flag value corresponding to function name provided by funcexecname variable match 1, if it does start the thread
+                        print(f"Starting thread for {funcexecname.__name__}")
+                        self.start_thread(funcexecname)
+                    elif tempflagvalue == '0':
+                        print(f"No current schedule for {funcexecname.__name__}")
+                        pass
+                    else:
+                        raise RuntimeError('FUNCTION EXEC FLAG COMPARISON ERROR')
+
+                #Implement logic to sleep until next tick
+                currtickminute = datetime.now().minute
+                print("Sleeping until next schedule...")
+
+                if currtickminute == currminute: #If we are still in the same minute as initial time check, sleep until minute change
+                    currticksecond = datetime.now().second #get current second
+                    print("Datetime seconds defined")
+                    tsleep = 61 - currticksecond #subtract current second from 61 to get seconds to sleep until next min
+                    print(f"Sleeping for {tsleep} seconds...")
+                    time.sleep(tsleep)
+                elif currtickminute > currminute: #Immediately rerun loop if current tick is larger than initial time set during update
+                    print("Current tick is larger than initial. Rerunning loop")
+                    pass
+                else:
+                    raise RuntimeError('TIME EXCEPTION') #Time anomaly
+
+            except Exception as errvar: #Catch any while loop exception
+                subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+                #LCD COLOUR HANDLING CODE (RED) HERE
+                raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+class Thread(QRunnable):
+    def __init__(self, fn, *args, **kwargs):
+        super().__init__()
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+
+    @Slot()
+    def run(self):
+        self.fn(*self.args, **self.kwargs)
+
+# class WorkerSignals(QObject):
+#     """Signals from a running worker thread.
+
+#     finished
+#         No data
+
+#     error
+#         tuple (exctype, value, traceback.format_exc())
+
+#     result
+#         object data returned from processing, anything
+
+#     progress
+#         float indicating % progress
+#     """
+
+#     finished = Signal()
+#     error = Signal(tuple)
+#     result = Signal(object)
+#     progress = Signal(float)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

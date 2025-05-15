@@ -59,7 +59,7 @@ try:
     #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green on bootup
 
     # Start the LCD menu thread immediately
-    lcd_thread = threading.Thread(target=#LCD_DISP_FUNC_HERE)
+    lcd_thread = threading.Thread(target=LCD_DISP_HERE)
     lcd_thread.daemon = True #Set the thread as a daemon so main can exit without waiting for lcddisp to quit first, and lcddisp exits when main exits.
     lcd_thread.start()
 except Exception as errvar:
