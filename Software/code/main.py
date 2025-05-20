@@ -23,8 +23,6 @@ import updatefw
 import time
 import board
 import subprocess
-import adafruit_tca9548a    # Import the library for the Multiplexer board
-from adafruit_seesaw.seesaw import Seesaw   # Import the library for the SEESAW capacitive moisture sensor
 from PySide6.QtWidgets import *
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber
 from PySide6.QtCore import QDateTime, QTimer, Slot, Signal, QThreadPool, QRunnable, QObject
