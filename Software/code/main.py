@@ -23,6 +23,7 @@ import updatefw
 import time
 import board
 import subprocess
+import RPi.GPIO as GPIO ### MUST ADD TO DOCUMENTATION FOR LIBRARY INSTALL
 from PySide6.QtWidgets import *
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber
 from PySide6.QtCore import QDateTime, QTimer, Slot, Signal, QThreadPool, QRunnable, QObject
@@ -44,6 +45,7 @@ from fancontrol import fanmanon, fanoff, fanon
 from lightcontrol import growlightoff, growlighton
 from grobotpicam import picam_capture
 from dataout import excelout
+from diopinsetup import diopinset
 
 # config.py is for linux.
 import config
@@ -66,11 +68,15 @@ if os.environ.get('DISPLAY','') == '': # Handles raspberry pi environment variab
     os.environ.__setitem__('DISPLAY', ':0.0')
 
 print("Starting GUI...")
-grobotboot()
 
 try:
     #Suppress traceback for cleaner error log
     sys.tracebacklimit = 0
+
+    # Virutally the same function as grobotboo(), but manages the GPIO pins through a separate library;
+    # Whenever console commands attempted to start an instance of main.py through ssh, this error would occur
+    # This fixes the "GPIO Busy" Error during GUI developement
+    GPIO.cleanup
 
     #Runs BoardMostfetReset
     grobotboot() #This force all pin reset
@@ -120,8 +126,8 @@ except Exception as errvar:
 # "lambda:". Without this, any function placed inside the clicked.connect() method will be called on Grobot startup.
 
 class Widget(QWidget): # Creates a class containing attributes imported from ui_form.py
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, parent=None): 
+        super().__init__(parent) # Inherits class constructor from 'QWidget'
         self.resize(480, 640) # Sets resolution
         self.ui = Ui_Form() # defines UI
         self.ui.setupUi(self) # Imports setupUI from UI_Form which contains all objects such as QPushButtons, QSliders, QLabels, QCLD
@@ -133,6 +139,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         self.togglewater = False # Initial Toggle state for waterpump
         self.togglelight = False # Initial Toggle state for UV growlamp
         self.togglefan = False # Intital Toggle state for enclosure fan
+        self.togglecamera = False # Inital Toggle state for picamera
 
         self.thread_manager = QThreadPool() # Define QThreadPool
         thread_count = self.thread_manager.maxThreadCount() # Define Thread Count
@@ -169,10 +176,10 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         # Start
             # Buttons
         self.ui.continue_btn.clicked.connect(
-            lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
+            lambda: self.start_thread(self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page))
             ) # Button event when pressed: changes page to mainmenu_page
         self.ui.close_btn.clicked.connect(
-            self.close_program
+            lambda: self.start_thread(self.close_program)
             ) # Button event when pressed: closes program
 
             # Moisture Display ---------
@@ -245,6 +252,9 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         self.ui.datetime_page_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.datetime_page)
             ) # Button event when pressed: changes page to datetime_page
+        self.ui.cameratoggle_btn.clicked.connect(
+            lambda: self.start_thread(self.camera_toggle)
+            ) # Button event when pressed: toggles camera on
         self.ui.editsettings_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
             ) #Back
@@ -277,10 +287,10 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             lambda: self.start_thread(self.water_toggle)
             ) # Button event when pressed: Initiate watering
         self.ui.takepicture_btn.clicked.connect(
-            self.debug_press
+            lambda: self.start_thread(self.take_picture)
             ) # Button event when pressed: Debug press prints to console
         self.ui.recorddata_btn.clicked.connect(
-            self.debug_press
+            lambda: self.start_thread(self.record_data)
             ) # Button event when pressed: Debug press prints to console
         self.ui.manualcontrols_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(
@@ -386,7 +396,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         # Water Timing -------------
 
             # Hour Label
-        self.waterhour_label = self.findChild(
+        self.waterhours_label = self.findChild(
             QLabel, "waterhours_label"
             ) # Finds QLabel object "waterhours_label" in Ui_Form
             # Minute Label
@@ -397,35 +407,35 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             # Buttons
             # Hour Plus
         self.ui.hoursplus_btn.clicked.connect(
-            self.watertime_hourplus
+            lambda: self.watertime_hourinput('plus')
             ) # Button event when pressed: increments hour of selected config time by one
             # Hour Minus
         self.ui.hoursminus_btn.clicked.connect(
-            self.watertime_hourminus
+            lambda: self.watertime_hourinput('minus')
             ) # Button event when pressed: decrements hour of selected config time by one
             # Minute Plus
         self.ui.minutesplus_btn.clicked.connect(
-            self.debug_press
+            lambda: self.watertime_minuteinput('plus')
             ) # Button event when pressed: Debug press prints to console
             # Minute Minus
         self.ui.minutesminus_btn.clicked.connect(
-            self.debug_press
+            lambda: self.watertime_minuteinput('minus')
             ) # Button event when pressed: Debug press prints to console
             # Watertime Save
         self.ui.watertiming_save_btn.clicked.connect(
-            self.debug_press
+            lambda: self.watertime_save(currentwatersave)
             ) # Button event when pressed: Debug press prints to console
         
         self.ui.checktime_btn.clicked.connect(
-            self.debug_press
+            lambda: self.watertime_select('checkTime')
             ) # Button event when pressed: Debug press prints to console
 
         self.ui.sunrise_btn.clicked.connect(
-            self.debug_press
+            lambda: self.watertime_select('sunrise')
             ) # Button event when pressed: Debug press prints to console
         
         self.ui.sunset_btn.clicked.connect(
-            self.debug_press
+            lambda: self.watertime_select('sunset')
             ) # Button event when pressed: Debug press prints to console
         
         self.ui.watertiming_back_btn.clicked.connect(
@@ -442,17 +452,91 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
 ################# GUI FUNCTIONS ##################
 ##################################################
 
-    def watertime_hourplus(self): # Placeholder Function: Will add one to hour position of current selected config time
-        pass
-    
-    def watertime_hourminus(self): # Placeholder Function: Will subtract one to hour position of current selected config time
-        pass
+    def watertime_select(self, selection):
+        global currentwatersave
+        cfg = config.read_config()
+        currentwatersave = selection
+        try:
+            if selection == 'checkTime':
+                value = [int(x) for x in cfg['PLANTCFG']['checkTime'].split(",")]
+                hour, minutes = value
+                self.ui.waterhours_label.setText(str(hour))
+                self.ui.waterminutes_label.setText(str(minutes))
+                #self.debug_press
+            elif selection == 'sunset':
+                value = [int(x) for x in cfg['PLANTCFG']['sunset'].split(",")]
+                hour, minutes = value
+                self.ui.waterhours_label.setText(str(hour))
+                self.ui.waterminutes_label.setText(str(minutes))
+                #self.debug_press
+            elif selection == 'sunrise': 
+                value = [int(x) for x in cfg['PLANTCFG']['sunrise'].split(",")]
+                hour, minutes = value
+                self.ui.waterhours_label.setText(str(hour))
+                self.ui.waterminutes_label.setText(str(minutes))
+                #self.debug_press
+            else:
+                raise RuntimeError('UNKNOWN FAILURE') # If unknown option is selected
+            
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
-    def watertime_minutesplus(self): # Placeholder Function: Will add one to minute position of current selected config time
-        pass
+    def watertime_save(self, currentwatersave):
+        currenttime_str = f"{self.ui.waterhours_label.text()}, {self.ui.waterminutes_label.text()}"
+        try:
+            config.update_config('PLANTCFG', currentwatersave, currenttime_str)
+            self.ui.statusbar_label.setText("Water timing parameters saved!")
+            self.tasksleep(2)
+            self.welcome_message()
 
-    def watertime_minutesminus(self): # Placeholder Function: Will subtract one to minute position of current selected config time
-        pass
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+    def watertime_hourinput(self, increment): # Changes the hours in the watertime selection screen
+        value = int(self.ui.waterhours_label.text())
+        print(str(value))
+        print(str(increment))
+        if increment == 'plus':
+            value = (value + 1) % 24
+            print(str(value))
+            self.ui.waterhours_label.setText(str(value))
+        elif increment == 'minus':
+            value = (value - 1) % 24
+            print(str(value))
+            self.ui.waterhours_label.setText(str(value))
+
+    def watertime_minuteinput(self, increment): # Changes the minutes in the watertime selection screen
+        value = int(self.ui.waterminutes_label.text())
+        print(str(value))
+        print(str(increment))
+        if increment == 'plus':
+            value = (value + 1) % 60
+            print(str(value))
+            self.ui.waterminutes_label.setText(str(value))
+        elif increment == 'minus':
+            value = (value - 1) % 60
+            print(str(value))
+            self.ui.waterminutes_label.setText(str(value))
+
+    @Slot()
+    def camera_toggle(self):
+        if self.togglecamera: # self.togglefan is False by default
+            config.update_config('PICAMERA', 'CameraSet', '0')
+            print("Camera Off") # prints to console "off"
+            self.ui.statusbar_label.setText("Toggling Camera Off")
+            self.tasksleep(2)
+            self.ui.statusbar_label.setText(self.welcome_message())
+        else:
+            config.update_config('PICAMERA', 'CameraSet', '1')
+            print("Camera On") # prints to console "on"
+            self.ui.statusbar_label.setText("Toggling Camera On")
+            self.tasksleep(2)
+            self.ui.statusbar_label.setText(self.welcome_message())
+        self.togglecamera = not self.togglecamera # resets self.togglefan to opposite of previous bool
 
     @Slot() # Decorator for multithreading
     def fan_toggle(self): # Function that toggles fan 
@@ -518,7 +602,8 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
     def change_tempset(self): # This function changes the text of the tempset label to the value of the QSlider
         temp = str(self.tempset_changer.value()) # Defines variable as QSlider value
         self.tempset_label.setText(temp) # Sets text to QSlider value
-    
+
+    @Slot()
     def save_irr_settings(self): # Saves values of QSlider object(s) to PLANTCFG
         try:
             config.update_config('PLANTCFG', 'waterVol', str(self.watervolume_changer.value())) # updates config with new value of watervolume slider
@@ -537,8 +622,10 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         QApplication.processEvents() # Prompts the application to scan for events currently being processed
         time.sleep(duration) # Sleeps for a given duration
 
+    @Slot()
     def close_program(self): # Simple function to close the program
         exit()
+        GPIO.cleanup
 
     def adjust_system_time(self):
         pass
@@ -556,6 +643,9 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
 
     def debug_press(self): # Simple function that prints to console if a button was pressed
         print("button pressed")
+        self.ui.statusbar_label.setText("button pressed")
+        self.tasksleep(2)
+        self.ui.statusbar_label.setText(str(self.welcome_message()))
 
     def welcome_message(self): # Welcome message on status bar
         return str("Welcome!")
@@ -563,6 +653,42 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
 #######################################################
 ################# IMPORTED FUNCTIONS ##################
 #######################################################
+
+    @Slot()
+    def record_data(self):
+        try:
+            #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
+            # Read value from sensor and write it out to excel
+            # Read value from sensor
+            ReadVal = feedread() # T RH SRH in order
+            # Write data out to excel file
+            excelout(ReadVal[0], ReadVal[1], ReadVal[2])
+            print("Datapoint Taken!")
+            self.ui.statusbar_label.setText("Datapoint Taken!")
+            self.tasksleep(1)
+            self.ui.statusbar_label.setText(self.welcome_message())
+            
+        except Exception as e:
+            ###set_lcd_color("error")
+            self.ui.statusbar_label.setText(f"{readlocal('187')}\n{readlocal('188')}") # Error Recording \n data
+            self.tasksleep(2)
+            ###set_lcd_color("normal")
+
+    @Slot()
+    def take_picture(self):
+        try:
+            ###set_lcd_color("in_progress")
+            self.ui.statusbar_label.setText(f"{readlocal('141')}") # Taking Picture...
+            # Don't check buttons during picture capture
+            result = picam_capture()
+            ###set_lcd_color("normal")
+            self.ui.statusbar_label.setText(f"{readlocal('189')}" if result else f"{readlocal('190')}") # Picture Taken, Picture Failed
+            self.tasksleep(2)
+        except Exception as e:
+            ###set_lcd_color("error")
+            self.ui.statusbar_label.setText(f"{readlocal('140')} {e}") #Error:
+            self.tasksleep(2)
+            ###set_lcd_color("normal")
 
     def get_version_info(self):
         """Get formatted version information string"""
@@ -758,41 +884,10 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
     def start_thread(self, fn):
         worker = Thread(fn)
         self.thread_manager.start(worker)
-
-
         activethreads = self.thread_manager.activeThreadCount()
         print(f"Current active threads:{activethreads}")
 
-#     @Slot()
-#     def start_thread(self, job_func):
-#         # worker = Thread(fn)
-#         # self.threadpool.start(worker)
-#         try:
-#             #First, define job_thread object as a threading class targeting job_func function passed in
-#             #while also setting the thread name to be the same as job_func using __name__ attribute
-#             #Also want daemon=True so it does not block main from quitting and will exits if main no longer runs
-#             job_thread = threading.Thread(target=job_func,name=str(job_func.__name__),daemon=True)
-
-#             runthread_flag = True #set the default value of flag use to signal if thread should be ran to True as default
-#             #Now must check if a thread with the same name is already running using enumerate logic
-#             for i in threading.enumerate(): #Use enumerate to list all currently running thread
-#                 if i.name == job_func.__name__:
-#                     runthread_flag = False #if the name of any running thread matched the name of job_func passed in, set the flag to false
-#                 else:
-#                     pass #Do nothing and keep running flag to true if name doesn't match
-            
-#             #Now check the flag and start the thread if the flag is True
-#             if runthread_flag == True:
-#                 job_thread.start() #If nothing match, start the thread as normal
-#             elif runthread_flag == False:
-#                 pass #Do not start the thread if the flag is false.
-#             else: #If there's an error
-#                 raise RuntimeError('THREAD FLAG NOT BOOLEAN')
-#         except Exception as errvar:
-#             subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-#             #LCD COLOUR HANDLING CODE (RED) HERE
-#             raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-
+    @Slot()
     def schedule_routine(self):
         while 1:
             try: #Put the entire try block under while loop. VERY IMPORTANT while must be the top level or it won't loop properly all the time
@@ -820,7 +915,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
                     case _:
                         pass
                 
-                print("Wrote mainflags for 15, 25, and 35 minute intervals")
+                print("Wrote mainflags")
                 
                 # This one requires matching both hour and minute
                 if currhour == settings['sunset'][0] and currminute == settings['sunset'][1]:
@@ -830,15 +925,12 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
                 if currhour == settings['checkTime'][0] and currminute == settings['checkTime'][1]:
                     writecsv_mainflags("EverySETTIME","1")
 
-                print("Wrote mainflags for sunrise, sunset, and settime")
-
                 # Now, read the mainflags file and execute any function that has its execution value = 1.
                 # Make a list of functions. Need to use the actual function object such that they can be called later
                 funcexecnamelist = [self.EveryXX15, self.EverySETTIME, self.EveryXX25, self.EveryXX35, self.EverySUNRISE, self.EverySUNSET]
-                print("Func list defined")
                 for funcexecname in funcexecnamelist: #iterate through the list funcexecnamelist using variable funcexecname
                     tempflagvalue = readcsv_mainflags(str(funcexecname.__name__)) #Read flag value for current function from csv
-                    print("Tempflagvalue defined")
+                    print("---------------------------")
                     if tempflagvalue == '1': #Check if flag value corresponding to function name provided by funcexecname variable match 1, if it does start the thread
                         print(f"Starting thread for {funcexecname.__name__}")
                         self.start_thread(funcexecname)
@@ -850,7 +942,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
 
                 #Implement logic to sleep until next tick
                 currtickminute = datetime.now().minute
-                print("Sleeping until next schedule...")
+                print("---------------------------")
 
                 if currtickminute == currminute: #If we are still in the same minute as initial time check, sleep until minute change
                     currticksecond = datetime.now().second #get current second
@@ -869,9 +961,9 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
                 #LCD COLOUR HANDLING CODE (RED) HERE
                 raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
-class Thread(QRunnable):
-    def __init__(self, fn, *args, **kwargs):
-        super().__init__()
+class Thread(QRunnable): # Thread class for creating an instance of QRunnable within QThreadpool
+    def __init__(self, fn, *args, **kwargs): # Specifies an arbitrary number of positional and conditional arguments
+        super().__init__() # Invokes constructor of the parent class
         self.fn = fn
         self.args = args
         self.kwargs = kwargs
@@ -879,27 +971,6 @@ class Thread(QRunnable):
     @Slot()
     def run(self):
         self.fn(*self.args, **self.kwargs)
-
-# class WorkerSignals(QObject):
-#     """Signals from a running worker thread.
-
-#     finished
-#         No data
-
-#     error
-#         tuple (exctype, value, traceback.format_exc())
-
-#     result
-#         object data returned from processing, anything
-
-#     progress
-#         float indicating % progress
-#     """
-
-#     finished = Signal()
-#     error = Signal(tuple)
-#     result = Signal(object)
-#     progress = Signal(float)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
