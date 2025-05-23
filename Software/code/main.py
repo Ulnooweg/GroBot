@@ -136,29 +136,22 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
 
 # Startup parameters
 
+        # togg
         self.togglewater = False # Initial Toggle state for waterpump
         self.togglelight = False # Initial Toggle state for UV growlamp
         self.togglefan = False # Intital Toggle state for enclosure fan
         self.togglecamera = False # Inital Toggle state for picamera
 
+        # Start Threading
         self.thread_manager = QThreadPool() # Define QThreadPool
         thread_count = self.thread_manager.maxThreadCount() # Define Thread Count
         activethread_count = self.thread_manager.activeThreadCount()
         print(f"Multithreading with maximum {thread_count} threads") # Print Thread Count
-        self.start_thread(self.schedule_routine)
+        self.start_thread(self.schedule_routine) #Opens a new thread to begin scheduling
         print("Routine Running")
         print(f"Now running with {thread_count-activethread_count} threads") # Print Thread Count
 
         cfg = config.read_config()
-
-    # Moisture Data Logic ------ Currently disabled
-
-        #i2c_bus = board.I2C()  # uses board.SCL and board.SDA
-        #i2c_bus = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
-
-        #tca = adafruit_tca9548a.TCA9548A(i2c_bus)   # Initalizes Muxer board as the I2C Bus
-        #self.ss1 = Seesaw(tca[0], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (TCA9548a), on channel 0
-        #self.ss2 = Seesaw(tca[1], addr=0x36) # Sets the first seesaw sensor address through the I2C Bus (TCA9548a), on channel 1
 
 ### Button Functions & Label Logic ###
 
@@ -182,13 +175,9 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             lambda: self.start_thread(self.close_program)
             ) # Button event when pressed: closes program
 
-            # Moisture Display ---------
-        #self.sensor1 = self.findChild(QLCDNumber, "sensordisplay_1") # Finds QLCDNumber object "sensordisplay_1" in Ui_Form
-        #self.sensor1.setDigitCount(12) # Sets digit count to 12
-        #self.sensor2 = self.findChild(QLCDNumber, "sensordisplay_2") # Finds QLCDNumber object "sensordisplay_2" in Ui_Form
-        #self.sensor2.setDigitCount(12) # Sets digit count to 12
+        #### Clock Logic ---------------
 
-            # Clock Logic --------------
+            # Clock Display ------------
         self.clockdisplay = self.findChild(
             QLabel, "clockdisplay"
             ) # Finds QLCDNumber object "clockdisplay" in Ui_Form
@@ -196,16 +185,25 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             "Loading..."
             )
         
+            # Date Display -------------
+        self.datedisplay = self.findChild(
+            QLabel, "Datedisplay"
+        ) # Finds QLabel object "Datedisplay" in Ui_Form
+        self.datedisplay.setText("Loading...")
+        
             # Timer --------------------
         self.timer = QTimer() # Defines QTimer
         self.timer.timeout.connect(
             self.display_time
             ) # Connects QTimer output to function display_time
+        self.timer.timeout.connect(
+            self.current_date
+            ) # Connects QTimer output to function current_date
         #self.timer.timeout.connect(self.moisture_display) # Connects QTimer output to function moisture_display
         self.timer.start(
             1000
             )
-
+        
         # Main Menu ----------------
             # Buttons
         self.ui.systeminfo_page_btn.clicked.connect(
@@ -222,7 +220,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             ) # Button event when pressed: changes page to monitordata_page
         self.ui.mainmenu_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.start_page)
-            ) #Back
+            ) # Back Button 
 
         # System Info --------------
             # System Version Label
@@ -242,7 +240,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             ) # Button event when pressed: exports log
         self.ui.systeminfo_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
-            ) #Back
+            ) # Back Button
 
         # Edit Settings ------------
             # Buttons
@@ -250,14 +248,14 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.irrigation_page)
             ) # Button event when pressed: changes page to irrigation_page
         self.ui.datetime_page_btn.clicked.connect(
-            lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.datetime_page)
+            self.update_datetime_page
             ) # Button event when pressed: changes page to datetime_page
         self.ui.cameratoggle_btn.clicked.connect(
             lambda: self.start_thread(self.camera_toggle)
             ) # Button event when pressed: toggles camera on
         self.ui.editsettings_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
-            ) #Back
+            ) # Back Button
 
             # Sliders
         self.brightnesschanger = self.findChild(
@@ -287,7 +285,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             lambda: self.start_thread(self.water_toggle)
             ) # Button event when pressed: Initiate watering
         self.ui.takepicture_btn.clicked.connect(
-            lambda: self.start_thread(self.take_picture)
+            lambda: self.take_picture
             ) # Button event when pressed: Debug press prints to console
         self.ui.recorddata_btn.clicked.connect(
             lambda: self.start_thread(self.record_data)
@@ -295,13 +293,13 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         self.ui.manualcontrols_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(
                 self.ui.mainmenu_page)
-            ) #Back
+            ) # Back Button
 
         # Monitor Data -------------
             # Buttons
         self.ui.monitordata_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
-            ) # Button event when pressed: changes page to mainmenu_page
+            ) # Back Button
 
         # Irrigation ---------------
             # Buttons
@@ -313,9 +311,8 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             ) # Saves options set by QSlider objects
         self.ui.irrigation_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)
-            ) #Back
+            ) # Back Button
 
-            # Sliders
             # Water Volume Slider
         self.watervolume_changer = self.findChild(
             QSlider, "watervol_slider"
@@ -360,7 +357,6 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             self.change_humidset
             ) # On a changed value from QSlider, calls function that writes to cfg
 
-            # Labels
             # Water Volume Label
         self.watervolume_label = self.findChild(
             QLabel, "watervol_indicator"
@@ -408,72 +404,140 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             # Hour Plus
         self.ui.hoursplus_btn.clicked.connect(
             lambda: self.watertime_hourinput('plus')
-            ) # Button event when pressed: increments hour of selected config time by one
+            ) # increments hour of selected config time by one
             # Hour Minus
         self.ui.hoursminus_btn.clicked.connect(
             lambda: self.watertime_hourinput('minus')
-            ) # Button event when pressed: decrements hour of selected config time by one
+            ) # increments hour of selected config time by one
             # Minute Plus
         self.ui.minutesplus_btn.clicked.connect(
             lambda: self.watertime_minuteinput('plus')
-            ) # Button event when pressed: Debug press prints to console
+            ) # increments minute of selected config time by one
             # Minute Minus
         self.ui.minutesminus_btn.clicked.connect(
             lambda: self.watertime_minuteinput('minus')
-            ) # Button event when pressed: Debug press prints to console
+            ) # increments minute of selected config time by one
             # Watertime Save
         self.ui.watertiming_save_btn.clicked.connect(
             lambda: self.watertime_save(currentwatersave)
-            ) # Button event when pressed: Debug press prints to console
-        
+            ) # Saves current time to config
+            # Check Time Select
         self.ui.checktime_btn.clicked.connect(
             lambda: self.watertime_select('checkTime')
-            ) # Button event when pressed: Debug press prints to console
+            ) # Selects 'checkTime' for changing 
 
         self.ui.sunrise_btn.clicked.connect(
             lambda: self.watertime_select('sunrise')
-            ) # Button event when pressed: Debug press prints to console
+            ) # Selects 'sunrise' for changing 
         
         self.ui.sunset_btn.clicked.connect(
             lambda: self.watertime_select('sunset')
-            ) # Button event when pressed: Debug press prints to console
+            ) # Selects 'sunset' for changing 
         
         self.ui.watertiming_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.irrigation_page)
-            ) # Back
+            ) # Back Button
 
         # Date/Time ----------------
+
+            # Labels
+        self.systemminutes_label = self.findChild(
+            QLabel, "systemminutes_label"
+        )
+
+        self.systemhours_label = self.findChild(
+            QLabel, "systemhours_label"
+        )
+
+        self.systemyear_label = self.findChild(
+            QLabel, "systemyear_label"
+        )
+
+        self.systemmonth_label = self.findChild(
+            QLabel, "systemmonth_label"
+        )
+
+        self.systemday_label = self.findChild(
+            QLabel, "systemday_label"
+        )
+
+
             # Buttons
+        self.ui.systemhoursplus_btn.clicked.connect(
+            lambda: self.systemtime_hourinput('plus')
+            )
+        
+        self.ui.systemhoursminus_btn.clicked.connect(
+            lambda: self.systemtime_hourinput('minus')
+            )
+        
+        self.ui.systemminutesplus_btn.clicked.connect(
+            lambda: self.systemtime_minuteinput('plus')
+            )
+        
+        self.ui.systemminutesminus_btn.clicked.connect(
+            lambda: self.systemtime_minuteinput('minus')
+            )
+        
+        self.ui.systemyearplus_btn.clicked.connect(
+            lambda: self.systemtime_yearinput('plus')
+            )
+
+        self.ui.systemyearminus_btn.clicked.connect(
+            lambda: self.systemtime_yearinput('minus')
+            )
+        
+        self.ui.systemmonthplus_btn.clicked.connect(
+            lambda: self.systemtime_monthinput('plus')
+            )
+        
+        self.ui.systemmonthminus_btn.clicked.connect(
+            lambda: self.systemtime_monthinput('minus')
+            )
+        
+        self.ui.systemdayplus_btn.clicked.connect(
+            lambda: self.systemtime_dayinput('plus')
+            )
+        
+        self.ui.systemdayminus_btn.clicked.connect(
+            lambda: self.systemtime_dayinput('minus')
+            )
+        
+        self.ui.systemtiming_save_btn.clicked.connect(
+            lambda: self.save_system_time
+            )
+
         self.ui.datetime_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)
-            ) #Back
+            ) # Back Button
+        
 
 ##################################################
 ################# GUI FUNCTIONS ##################
 ##################################################
 
-    def watertime_select(self, selection):
-        global currentwatersave
-        cfg = config.read_config()
-        currentwatersave = selection
+    def watertime_select(self, selection): # When a given time selection is requested for edit by the user, the corresponding label text changes
+        global currentwatersave # Variable for interaction with watertime_save; whatever time is selected will be saved in that function
+        cfg = config.read_config() # defines read_config
+        currentwatersave = selection # Global variable is defined as the selection desired by the user
         try:
             if selection == 'checkTime':
-                value = [int(x) for x in cfg['PLANTCFG']['checkTime'].split(",")]
-                hour, minutes = value
-                self.ui.waterhours_label.setText(str(hour))
-                self.ui.waterminutes_label.setText(str(minutes))
+                value = [int(x) for x in cfg['PLANTCFG']['checkTime'].split(",")] # Checks current value in PLANTCFG
+                hour, minutes = value 
+                self.ui.waterhours_label.setText(str(hour)) # Sets waterhours_label to hour found in config
+                self.ui.waterminutes_label.setText(str(minutes)) # Sets waterminutes_label to hour found in config
                 #self.debug_press
             elif selection == 'sunset':
-                value = [int(x) for x in cfg['PLANTCFG']['sunset'].split(",")]
+                value = [int(x) for x in cfg['PLANTCFG']['sunset'].split(",")] # Checks current value in PLANTCFG
                 hour, minutes = value
-                self.ui.waterhours_label.setText(str(hour))
-                self.ui.waterminutes_label.setText(str(minutes))
+                self.ui.waterhours_label.setText(str(hour)) # Sets waterhours_label to hour found in config
+                self.ui.waterminutes_label.setText(str(minutes)) # Sets waterminutes_label to hour found in config
                 #self.debug_press
             elif selection == 'sunrise': 
-                value = [int(x) for x in cfg['PLANTCFG']['sunrise'].split(",")]
+                value = [int(x) for x in cfg['PLANTCFG']['sunrise'].split(",")] # Checks current value in PLANTCFG
                 hour, minutes = value
-                self.ui.waterhours_label.setText(str(hour))
-                self.ui.waterminutes_label.setText(str(minutes))
+                self.ui.waterhours_label.setText(str(hour)) # Sets waterhours_label to hour found in config
+                self.ui.waterminutes_label.setText(str(minutes)) # Sets waterminutes_label to hour found in config
                 #self.debug_press
             else:
                 raise RuntimeError('UNKNOWN FAILURE') # If unknown option is selected
@@ -483,7 +547,9 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             #LCD COLOUR HANDLING CODE (RED) HERE
             raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
-    def watertime_save(self, currentwatersave):
+    ### Water Timing
+
+    def watertime_save(self, currentwatersave): # Saves the current time 
         currenttime_str = f"{self.ui.waterhours_label.text()}, {self.ui.waterminutes_label.text()}"
         try:
             config.update_config('PLANTCFG', currentwatersave, currenttime_str)
@@ -521,6 +587,98 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             value = (value - 1) % 60
             print(str(value))
             self.ui.waterminutes_label.setText(str(value))
+
+    ### System Time
+
+    def update_datetime_page(self):
+        self.ui.pagelayoutwidget.setCurrentWidget(self.ui.datetime_page)
+        now = datetime.now()
+        self.systemminutes_label.setText(str(now.minute))
+        self.systemhours_label.setText(str(now.hour))
+        self.systemyear_label.setText(str(now.year))
+        self.systemmonth_label.setText(str(now.month))
+        self.systemday_label.setText(str(now.day))
+        pass
+
+
+    def systemtime_hourinput(self, increment): # Changes the hours in the watertime selection screen
+        value = int(self.ui.systemhours_label.text())
+        print(str(value))
+        print(str(increment))
+        if increment == 'plus':
+            value = (value + 1) % 24
+            print(str(value))
+            self.ui.systemhours_label.setText(str(value))
+        elif increment == 'minus':
+            value = (value - 1) % 24
+            print(str(value))
+            self.ui.systemhours_label.setText(str(value))
+
+    def systemtime_minuteinput(self, increment): # Changes the hours in the watertime selection screen
+        value = int(self.ui.systemminutes_label.text())
+        print(str(value))
+        print(str(increment))
+        if increment == 'plus':
+            value = (value + 1) % 60
+            print(str(value))
+            self.ui.systemminutes_label.setText(str(value))
+        elif increment == 'minus':
+            value = (value - 1) % 60
+            print(str(value))
+            self.ui.systemminutes_label.setText(str(value))
+
+    def systemtime_yearinput(self, increment): # Changes the hours in the watertime selection screen
+        value = int(self.ui.systemyear_label.text())
+        print(str(value))
+        print(str(increment))
+        if increment == 'plus':
+            value = min(value + 1, 2999)
+            print(str(value))
+            self.ui.systemyear_label.setText(str(value))
+        elif increment == 'minus':
+            value = max(value - 1, 2000) 
+            print(str(value))
+            self.ui.systemyear_label.setText(str(value))
+
+    def systemtime_monthinput(self, increment): # Changes the hours in the watertime selection screen
+        value = int(self.ui.systemmonth_label.text())
+        print(str(value))
+        print(str(increment))
+        if increment == 'plus':
+            value = min(value + 1, 12)
+            print(str(value))
+            self.ui.systemmonth_label.setText(str(value))
+        elif increment == 'minus':
+            value = max(value - 1, 1) 
+            print(str(value))
+            self.ui.systemmonth_label.setText(str(value))
+
+    def systemtime_dayinput(self, increment): # Changes the hours in the watertime selection screen
+        value = int(self.ui.systemday_label.text())
+        print(str(value))
+        print(str(increment))
+        if increment == 'plus':
+            value = min(value + 1, 31)
+            print(str(value))
+            self.ui.systemday_label.setText(str(value))
+        elif increment == 'minus':
+            value = max(value - 1, 1)
+            print(str(value))
+            self.ui.systemday_label.setText(str(value))
+
+    def save_system_time(self):
+        try:
+            date_str = f"{self.ui.systemyear_label.text()}-{self.ui.systemmonth_label.text()}-{self.ui.systemday_label.text()}"
+            time_str = f"{self.ui.systemhours_label.text()},{self.ui.systemminutes_label.text()}"
+            subprocess.run(f"echo grobot | sudo -S date -s \"{date_str} {time_str}\"", shell=True, check=True) #Needs \ to escape " as date and time string needs to be wrapped by "" for date -s
+            subprocess.run("echo grobot | sudo -S hwclock -w", shell=True, check=True) #Write system date to RTC
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+    ### Togglables        
 
     @Slot()
     def camera_toggle(self):
@@ -570,10 +728,19 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             startwater() # turns on waterpump indefinetly
         self.togglewater = not self.togglewater # resets self.togglewater to opposite of previous bool
 
+    ### Time Display    
+
     def display_time(self): # Sets time from library datetime, and alters QLCD clock for time
         time = datetime.now() # time variable equal to a set datetime
         formatted_time = time.strftime("%H:%M:%S") # format of desired time
         self.clockdisplay.setText(str(formatted_time)) # changes QLCD to format of desired time
+
+    def current_date(self):
+        time = datetime.now()
+        formatted_time = time.strftime("%m/%d/%Y")
+        self.datedisplay.setText(str(formatted_time))
+
+    ### Brightness Change    
 
     def change_brightness(self): # When called, changes brightness value of the touchscreen
         lumos_maxima = str(self.brightnesschanger.value()) # Defines "lumos_maxima" as string of QSlider value
@@ -626,9 +793,6 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
     def close_program(self): # Simple function to close the program
         exit()
         GPIO.cleanup
-
-    def adjust_system_time(self):
-        pass
 
 ####################################################
 ################# DEBUG FUNCTIONS ##################
