@@ -11,8 +11,9 @@
 #Version: 2.0
 #Description: This function takes picture using pi camera
 #Function: picam_capture(), capture image using rpi-still the using imagemagic convert to add annotations (timestamps)
+#          checks if camera exists and if not, return 1 and do not take picture
 #Input: NONE
-#Output: Timestamped image from Pi Camera to fixed location or fallback directory.
+#Output: Timestamped image from Pi Camera to fixed location
 #Error Handling: Standard UEC Error Handling V1
 #
 ########################################
@@ -20,23 +21,27 @@
 import subprocess
 import datetime
 import os
-import configparser
-
-config = configparser.ConfigParser()
 
 #define function to take picture
 #Note that we are using subprocess to allow python code to run command line command
 def picam_capture():
     try:
-        #First check if the camera is configured to be on:
-        config.read("/mnt/grobotextdat/userdata/grobot_cfg.ini") #Read the grobot config file
-        match config['PICAMERA']['CameraSet']: #Configparser always parse as strings
-            case '0': #0 is no camera attached
-                return 1 #Ends function and returns now, sending 1 as it successfully do not execute per config
-            case '1':
+        #First check if the camera exists or not
+        gbpcresult = subprocess.run(['rpicam-still', 'list-cameras', '-v', '0'], capture_output=True) #run list-cameras to check if camera exists or not and use capture_output = True to capture output into gbpcresult for processing
+        #-v specify verbosity to be none to not make the log file clutter, on error it will still return an output
+        match gbpcresult.returncode: #match the return code with expected value
+            case 0: #return code = 0 means successful execution
                 pass
-            case _:
-                raise RuntimeError('PICAM CONFIG ERROR') #If there is no proper match, raise an error
+            case 255:  #Return code 255 is associated with no cameras detected for rpicam-still
+                #gbpcstdout = gbpcresult.stdout.decode().strip() #Not used, no std output returned in this case
+                gbpcerrout = gbpcresult.stderr.decode().strip() #decode the captured error and strip them of start/end empty space
+                if "no cameras available" in gbpcerrout: #check if the error message actual contains there is no camera as expected
+                    return 1 #Ends function and returns now, sending 1 as it successfully do not execute per config
+                else:
+                    raise RuntimeError('PICAM ERROR - ERROR MESSAGE DO NOT MATCH RETURN CODE')
+            case _: #Any other case should raise an error
+                raise RuntimeError('PICAM ERROR - NON STANDARD RETURN CODE') #If there is no proper match, raise an error
+
         #This part takes an image    
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") #get current date and time
         humantimestamp = datetime.datetime.now().strftime("%H:%M:%S %Y-%m-%d") #Timestamp for image
