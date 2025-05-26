@@ -35,7 +35,8 @@ def logtofile():
         #We use shell=True to specify using system shell so the wildcard >| can be used
         #Here the -r flag is used so most recent is on top as in terminal recent on bottom is more convenient but a file open top down
         #while terminal stops at bottom so when writing to file makes the top the most recent entry
-        subprocess.run('journalctl -u grobot.service -n 1000 -r --no-pager >| /mnt/grobotextdat/userdata/logfile.log', shell=True)
+        subprocess.run('journalctl --vacuum-time=30d', shell=True) #Added a vacuum code to make sure that logs older than 30 days are vacuum as they are so old they are useless
+        subprocess.run('journalctl -u grobot.service -n 1000000000 -r --no-pager >| /mnt/grobotextdat/userdata/logfile.log', shell=True)
         
         return 1
     except Exception as errvar:
