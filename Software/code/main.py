@@ -35,6 +35,7 @@ from sensorfeed import feedread
 from BoardMOSFETReset import grobotboot
 from logoutput import logtofile
 try:
+    print('writing log to file')
     logtofile() #Write log to file immediately after boot in case needed for debugging
 except Exception as errvar:
     #Note: There is no force reboot yet here as logoutput should be the first thing imported and done
@@ -71,7 +72,7 @@ print("Starting GUI...")
 
 try:
     #Suppress traceback for cleaner error log
-    sys.tracebacklimit = 0
+    #sys.tracebacklimit = 0
 
     # Virutally the same function as grobotboo(), but manages the GPIO pins through a separate library;
     # Whenever console commands attempted to start an instance of main.py through ssh, this error would occur
@@ -504,7 +505,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             )
         
         self.ui.systemtiming_save_btn.clicked.connect(
-            lambda: self.save_system_time
+            self.save_system_time
             )
 
         self.ui.datetime_back_btn.clicked.connect(
@@ -669,7 +670,7 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
     def save_system_time(self):
         try:
             date_str = f"{self.ui.systemyear_label.text()}-{self.ui.systemmonth_label.text()}-{self.ui.systemday_label.text()}"
-            time_str = f"{self.ui.systemhours_label.text()},{self.ui.systemminutes_label.text()}"
+            time_str = f"{self.ui.systemhours_label.text()}:{self.ui.systemminutes_label.text()}"
             subprocess.run(f"echo grobot | sudo -S date -s \"{date_str} {time_str}\"", shell=True, check=True) #Needs \ to escape " as date and time string needs to be wrapped by "" for date -s
             subprocess.run("echo grobot | sudo -S hwclock -w", shell=True, check=True) #Write system date to RTC
 
