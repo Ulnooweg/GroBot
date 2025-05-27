@@ -27,7 +27,7 @@ def feedread():  # define feedread function
         diop = diopinset()
 
         if isinstance(diop, tuple):
-            s1, s2, s3, s4, s5, s6, b1, ths, sms = diop
+            s1, s2, s3, s4, s5, s6, b1, ths, sms, ina = diop
         else:
             raise RuntimeError('Failed to initialize pins and sensors')
 

@@ -40,6 +40,7 @@ grobotdict_lock = threading.Lock() #Define a thread lock class
 csv_ulnoodat_lock = threading.Lock() #Define a thread lock class
 csv_softver_lock = threading.Lock() #Define a thread lock class
 csv_mainflags_lock = threading.Lock() #Define a thread lock class as csv_mainflags_lock
+csv_waterparam_lock = threading.Lock() #Define a thread lock class as csv_waterparam_lock
 
 def read_config():
     try:
@@ -255,6 +256,25 @@ def writecsv_mainflags(csventryname,csventryvalue): #define a function to write 
                 writer.writerows(csvdata)
 
             return 1 #return the csv data in list form
+    except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        #LCD COLOUR HANDLING CODE (RED) HERE
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
+def readcsv_waterparam(csventryname): #define a function to read csv file and return the value corresponding to entry
+    #csv entry name must be a string
+    try:
+        csvdata = [] #define an empty list
+        with csv_waterparam_lock: #Acquire thread lock before operation using csv_mainflags_lock. Any subsequent attempt to access will wait for with statement to release the lock
+            with open('/mnt/grobotextdat/code/waterlogicparam', 'r') as csvfile: #open the csv file as csvfile object
+                csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+                for row in csvraw: #iterate through each row in cswraw
+                    if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                        csventryvalue = row[1]  #read the value for row that matched the desired entry
+                        return csventryvalue
+                    else:
+                        pass
+            raise RuntimeError('CSV ENTRY NOT FOUND')
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
         #LCD COLOUR HANDLING CODE (RED) HERE
