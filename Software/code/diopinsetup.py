@@ -25,6 +25,7 @@ import digitalio
 #ADDITIONAL BLINKA
 import adafruit_ahtx0
 from adafruit_seesaw.seesaw import Seesaw
+from adafruit_ina219 import INA219
 
 import subprocess
 
@@ -71,7 +72,20 @@ def diopinset(): #define diopinset function that takes no arguments
         ths = adafruit_ahtx0.AHTx0(qwiic) # Temperature & Humidity Sensor
         sms = Seesaw(qwiic, addr=0x36) # Soil Moisture Sensor
 
-        return s1, s2, s3, s4, s5, s6, b1, ths, sms #return the pins and sensors as tuple of objects
+        #Now because the current sensor may not be present, check if it is. if it is not don't initialize it but set it as a dummy value
+        currsenspresent = False #Set the flag current sensor present default to false
+        # First check if the INA219 high side current sensor exists and is plugged in, if not skip the water level check
+        gbcsresult = subprocess.run(['i2cget', '-y', '1', '0x40'], capture_output=True) #run i2cget to check if current sensor exists or not and use capture_output = True to capture output into gbcsresult for processing
+        #i2cget -y skips interactive mode, using the i2c bus "1" reads value from device at 0x40 address (current sensor), errors on not exists
+        match gbcsresult.returncode: #match the return code with expected value
+            case 0: #return code = 0 means successful execution
+                ina = INA219(qwiic) #There is a current sensor
+            case 2:  #Return code 2 is associated with Error: Read failed
+                ina = 'NaN' #There is no current sensor
+            case _: #Any other case should raise an error
+                raise RuntimeError('CURRENT SENSOR CHECK ERROR - NON STANDARD RETURN CODE') #If there is no proper match, raise an error
+
+        return s1, s2, s3, s4, s5, s6, b1, ths, sms, ina #return the pins and sensors as tuple of objects
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
         #LCD COLOUR HANDLING CODE (RED) HERE

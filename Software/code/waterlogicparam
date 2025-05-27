@@ -1,0 +1,9 @@
+name,value
+pumpTime,10
+settleTime,1
+sampleRate,50
+filterWindowSize,10
+filterStartVal,0
+P_dry_1,0.5
+P_dry_2,4
+t_rampUp,2.0

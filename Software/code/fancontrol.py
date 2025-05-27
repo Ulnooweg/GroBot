@@ -26,7 +26,7 @@ import subprocess
 ##############################################
 # Handle the pins definition and sensor definition
 diop = diopinset()
-s1, s2, s3, s4, s5, s6, b1, ths, sms = diop[0], diop[1], diop[2], diop[3], diop[4], diop[5], diop[6], diop[7], diop[8]
+s1, s2, s3, s4, s5, s6, b1, ths, sms, ina = diop[0], diop[1], diop[2], diop[3], diop[4], diop[5], diop[6], diop[7], diop[8], diop[9]
 
 # Note, fan circuit usually s3
 
