@@ -94,9 +94,9 @@ def autorain(mmrain):  # define autorain func with mm of water input as mm
 
         mmrate = 2.11  # rate of watering in seconds/mm_Water
         t = mmrain*mmrate  # time required to water in seconds
-        if currsenspresent = True: #If current sensor is present hand over watering to wateringwithlogic to integrate run-dry detection with watering
+        if currsenspresent == True: #If current sensor is present hand over watering to wateringwithlogic to integrate run-dry detection with watering
             wateringwithlogic(t) #Hand off time to water variable
-        elif currsenspresent = False: #If no current sensor present use the standard logic and don't check water level, simply turns pump on or off
+        elif currsenspresent == False: #If no current sensor present use the standard logic and don't check water level, simply turns pump on or off
             s1.value = True  # turns on pump
             time.sleep(t)  # sleep for t seconds while pump is on
             s1.value = False  # turns off pump
