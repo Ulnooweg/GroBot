@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formLTAbuY.ui'
+## Form generated from reading UI file 'formXBBsBl.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -22,7 +22,7 @@ class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(476, 632)
+        Form.resize(480, 640)
         font = QFont()
         font.setFamilies([u"Segoe UI"])
         Form.setFont(font)
@@ -160,11 +160,6 @@ class Ui_Form(object):
         self.datetime_page_btn.setObjectName(u"datetime_page_btn")
         self.datetime_page_btn.setGeometry(QRect(10, 10, 201, 151))
         self.datetime_page_btn.setFont(font2)
-        self.cameratoggle_btn = QPushButton(self.editsettings_page)
-        self.cameratoggle_btn.setObjectName(u"cameratoggle_btn")
-        self.cameratoggle_btn.setGeometry(QRect(10, 160, 201, 151))
-        self.cameratoggle_btn.setFont(font2)
-        self.cameratoggle_btn.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.brightness_slider = QSlider(self.editsettings_page)
         self.brightness_slider.setObjectName(u"brightness_slider")
         self.brightness_slider.setGeometry(QRect(20, 330, 441, 68))
@@ -579,7 +574,8 @@ class Ui_Form(object):
         self.editsettings_page_btn.setText(QCoreApplication.translate("Form", u"Edit Settings", None))
         self.mainmenu_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.manualcontrols_page_btn.setText(QCoreApplication.translate("Form", u"Manual Controls", None))
-        self.monitordata_page_btn.setText(QCoreApplication.translate("Form", u"Monitor Data", None))
+        self.monitordata_page_btn.setText(QCoreApplication.translate("Form", u"Monitor Data\n"
+"(WIP)", None))
         self.monitordata_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.waternow_btn.setText(QCoreApplication.translate("Form", u"Water\n"
 "Toggle", None))
@@ -595,7 +591,6 @@ class Ui_Form(object):
         self.irrigation_page_btn.setText(QCoreApplication.translate("Form", u"Irrigation", None))
         self.editsettings_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.datetime_page_btn.setText(QCoreApplication.translate("Form", u"Date/Time", None))
-        self.cameratoggle_btn.setText(QCoreApplication.translate("Form", u"Camera Toggle", None))
         self.brightness_label.setText(QCoreApplication.translate("Form", u"<<Brightness>>", None))
         self.datetime_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.systemhours_label.setText(QCoreApplication.translate("Form", u"9", None))

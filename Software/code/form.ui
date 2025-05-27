@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>476</width>
-    <height>632</height>
+    <width>480</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="font">
@@ -239,7 +239,8 @@
       </font>
      </property>
      <property name="text">
-      <string>Monitor Data</string>
+      <string>Monitor Data
+(WIP)</string>
      </property>
     </widget>
    </widget>
@@ -529,29 +530,6 @@ Toggle</string>
      </property>
      <property name="text">
       <string>Date/Time</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="cameratoggle_btn">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>160</y>
-       <width>201</width>
-       <height>151</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>18</pointsize>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LayoutDirection::LeftToRight</enum>
-     </property>
-     <property name="text">
-      <string>Camera Toggle</string>
      </property>
     </widget>
     <widget class="QSlider" name="brightness_slider">

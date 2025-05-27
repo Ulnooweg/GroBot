@@ -25,7 +25,7 @@ import board
 import subprocess
 import RPi.GPIO as GPIO ### MUST ADD TO DOCUMENTATION FOR LIBRARY INSTALL
 from PySide6.QtWidgets import *
-from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber
+from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber, QMainWindow
 from PySide6.QtCore import QDateTime, QTimer, Slot, Signal, QThreadPool, QRunnable, QObject
 from PySide6.QtGui import *
 from datetime import datetime, time as time2
@@ -35,7 +35,7 @@ from sensorfeed import feedread
 from BoardMOSFETReset import grobotboot
 from logoutput import logtofile
 try:
-    print('writing log to file')
+    print('Writing log to file')
     logtofile() #Write log to file immediately after boot in case needed for debugging
 except Exception as errvar:
     #Note: There is no force reboot yet here as logoutput should be the first thing imported and done
@@ -63,8 +63,6 @@ from config import (
 ################# ON BOOTUP ##################
 ##############################################
 
-# sys.tracebacklimit = 0 # Imported from main.py | cleans up the console of unessecary error messages
-
 if os.environ.get('DISPLAY','') == '': # Handles raspberry pi environment variable, for launching a python program on a display
     os.environ.__setitem__('DISPLAY', ':0.0')
 
@@ -72,7 +70,7 @@ print("Starting GUI...")
 
 try:
     #Suppress traceback for cleaner error log
-    #sys.tracebacklimit = 0
+    sys.tracebacklimit = 0 # Imported from main.py | cleans up the console of unessecary error messages
 
     # Virutally the same function as grobotboo(), but manages the GPIO pins through a separate library;
     # Whenever console commands attempted to start an instance of main.py through ssh, this error would occur
@@ -126,22 +124,21 @@ except Exception as errvar:
 # Important notes for GUI buttons: when connecting a function to a QPushButton object, the function must be preceeded by
 # "lambda:". Without this, any function placed inside the clicked.connect() method will be called on Grobot startup.
 
-class Widget(QWidget): # Creates a class containing attributes imported from ui_form.py
+class Widget(QMainWindow): # Creates a class containing attributes imported from ui_form.py
     def __init__(self, parent=None): 
         super().__init__(parent) # Inherits class constructor from 'QWidget'
         self.resize(480, 640) # Sets resolution
         self.ui = Ui_Form() # defines UI
         self.ui.setupUi(self) # Imports setupUI from UI_Form which contains all objects such as QPushButtons, QSliders, QLabels, QCLD
-        # self.setWindowFlag(Qt.FramelessWindowHint)
+        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
         # self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
 
 # Startup parameters
 
-        # togg
+        # Toggle parameters
         self.togglewater = False # Initial Toggle state for waterpump
         self.togglelight = False # Initial Toggle state for UV growlamp
         self.togglefan = False # Intital Toggle state for enclosure fan
-        self.togglecamera = False # Inital Toggle state for picamera
 
         # Start Threading
         self.thread_manager = QThreadPool() # Define QThreadPool
@@ -251,9 +248,6 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
         self.ui.datetime_page_btn.clicked.connect(
             self.update_datetime_page
             ) # Button event when pressed: changes page to datetime_page
-        self.ui.cameratoggle_btn.clicked.connect(
-            lambda: self.start_thread(self.camera_toggle)
-            ) # Button event when pressed: toggles camera on
         self.ui.editsettings_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
             ) # Back Button
@@ -444,69 +438,69 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
             # Labels
         self.systemminutes_label = self.findChild(
             QLabel, "systemminutes_label"
-        )
+        ) # System minutes label for current time
 
         self.systemhours_label = self.findChild(
             QLabel, "systemhours_label"
-        )
+        ) # System hours label for current time
 
         self.systemyear_label = self.findChild(
             QLabel, "systemyear_label"
-        )
+        ) # System year for current time
 
         self.systemmonth_label = self.findChild(
             QLabel, "systemmonth_label"
-        )
+        ) # System month for current time
 
         self.systemday_label = self.findChild(
             QLabel, "systemday_label"
-        )
+        ) # System day for current time
 
 
             # Buttons
         self.ui.systemhoursplus_btn.clicked.connect(
             lambda: self.systemtime_hourinput('plus')
-            )
+            ) # Increments the system hour by one
         
         self.ui.systemhoursminus_btn.clicked.connect(
             lambda: self.systemtime_hourinput('minus')
-            )
+            ) # Decrememnts the system hour by one
         
         self.ui.systemminutesplus_btn.clicked.connect(
             lambda: self.systemtime_minuteinput('plus')
-            )
+            ) # Increments the system minutes by one
         
         self.ui.systemminutesminus_btn.clicked.connect(
             lambda: self.systemtime_minuteinput('minus')
-            )
+            ) # Decrements the system minutes by one
         
         self.ui.systemyearplus_btn.clicked.connect(
             lambda: self.systemtime_yearinput('plus')
-            )
+            ) # Increments the system year by one 
 
         self.ui.systemyearminus_btn.clicked.connect(
             lambda: self.systemtime_yearinput('minus')
-            )
+            ) # Decrements the system year by one
         
         self.ui.systemmonthplus_btn.clicked.connect(
             lambda: self.systemtime_monthinput('plus')
-            )
+            ) # Increments the system month by one
         
         self.ui.systemmonthminus_btn.clicked.connect(
             lambda: self.systemtime_monthinput('minus')
-            )
+            ) # Decrements the system month by one
         
         self.ui.systemdayplus_btn.clicked.connect(
             lambda: self.systemtime_dayinput('plus')
-            )
+            ) # Increments the system day by one
         
         self.ui.systemdayminus_btn.clicked.connect(
             lambda: self.systemtime_dayinput('minus')
-            )
+            ) # Decrements the system day by one
         
         self.ui.systemtiming_save_btn.clicked.connect(
             self.save_system_time
-            )
+            ) # Saves the current system time displayed to config
 
         self.ui.datetime_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)
@@ -681,21 +675,22 @@ class Widget(QWidget): # Creates a class containing attributes imported from ui_
 
     ### Togglables        
 
-    @Slot()
-    def camera_toggle(self):
-        if self.togglecamera: # self.togglefan is False by default
-            config.update_config('PICAMERA', 'CameraSet', '0')
-            print("Camera Off") # prints to console "off"
-            self.ui.statusbar_label.setText("Toggling Camera Off")
-            self.tasksleep(2)
-            self.ui.statusbar_label.setText(self.welcome_message())
-        else:
-            config.update_config('PICAMERA', 'CameraSet', '1')
-            print("Camera On") # prints to console "on"
-            self.ui.statusbar_label.setText("Toggling Camera On")
-            self.tasksleep(2)
-            self.ui.statusbar_label.setText(self.welcome_message())
-        self.togglecamera = not self.togglecamera # resets self.togglefan to opposite of previous bool
+    # Depreciated Toggle Script
+    # @Slot()
+    # def camera_toggle(self):
+    #     if self.togglecamera: # self.togglefan is False by default
+    #         config.update_config('PICAMERA', 'CameraSet', '0')
+    #         print("Camera Off") # prints to console "off"
+    #         self.ui.statusbar_label.setText("Toggling Camera Off")
+    #         self.tasksleep(2)
+    #         self.ui.statusbar_label.setText(self.welcome_message())
+    #     else:
+    #         config.update_config('PICAMERA', 'CameraSet', '1')
+    #         print("Camera On") # prints to console "on"
+    #         self.ui.statusbar_label.setText("Toggling Camera On")
+    #         self.tasksleep(2)
+    #         self.ui.statusbar_label.setText(self.welcome_message())
+    #     self.togglecamera = not self.togglecamera # resets self.togglefan to opposite of previous bool
 
     @Slot() # Decorator for multithreading
     def fan_toggle(self): # Function that toggles fan 
