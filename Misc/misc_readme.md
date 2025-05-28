@@ -1,0 +1,1 @@
+Waveshare-Brightness contains additional files/scripts required to change waveshare touch lcd brightness, downloaded from https://files.waveshare.com/upload/f/f4/Brightness.zip
