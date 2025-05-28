@@ -595,7 +595,7 @@ Toggle</string>
     <widget class="QLabel" name="brightness_label">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>170</x>
        <y>380</y>
        <width>201</width>
        <height>61</height>
@@ -610,6 +610,26 @@ Toggle</string>
      </property>
      <property name="text">
       <string>&lt;&lt;Brightness&gt;&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="brightness_label_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>380</y>
+       <width>201</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>20</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Brightness:</string>
      </property>
     </widget>
    </widget>
@@ -1006,7 +1026,7 @@ Toggle</string>
      <property name="font">
       <font>
        <family>Segoe UI</family>
-       <pointsize>25</pointsize>
+       <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
      </property>
@@ -1047,7 +1067,7 @@ Parameters</string>
      <property name="font">
       <font>
        <family>Segoe UI</family>
-       <pointsize>25</pointsize>
+       <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
      </property>
@@ -1715,28 +1735,7 @@ Humid Set: (%) </string>
     </widget>
    </widget>
    <widget class="QWidget" name="humidtempset_page"/>
-   <widget class="QWidget" name="humidset_page">
-    <widget class="QPushButton" name="humidset_back_btn">
-     <property name="geometry">
-      <rect>
-       <x>250</x>
-       <y>360</y>
-       <width>201</width>
-       <height>151</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>25</pointsize>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Back</string>
-     </property>
-    </widget>
-   </widget>
+   <widget class="QWidget" name="humidset_page"/>
   </widget>
   <widget class="QWidget" name="statusbar" native="true">
    <property name="geometry">

@@ -130,8 +130,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.resize(480, 640) # Sets resolution
         self.ui = Ui_Form() # defines UI
         self.ui.setupUi(self) # Imports setupUI from UI_Form which contains all objects such as QPushButtons, QSliders, QLabels, QCLD
-        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
-        # self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
+        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint) # Removes Title bar for a seamless window application
 
 # Startup parameters
 
@@ -280,7 +279,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             lambda: self.start_thread(self.water_toggle)
             ) # Button event when pressed: Initiate watering
         self.ui.takepicture_btn.clicked.connect(
-            lambda: self.take_picture
+            lambda: self.start_thread(self.take_picture)
             ) # Button event when pressed: Debug press prints to console
         self.ui.recorddata_btn.clicked.connect(
             lambda: self.start_thread(self.record_data)
@@ -414,7 +413,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             ) # increments minute of selected config time by one
             # Watertime Save
         self.ui.watertiming_save_btn.clicked.connect(
-            lambda: self.watertime_save(currentwatersave)
+            lambda: self.start_thread(self.watertime_save(currentwatersave))
             ) # Saves current time to config
             # Check Time Select
         self.ui.checktime_btn.clicked.connect(
@@ -544,14 +543,14 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     ### Water Timing
 
+    @Slot()
     def watertime_save(self, currentwatersave): # Saves the current time 
-        currenttime_str = f"{self.ui.waterhours_label.text()}, {self.ui.waterminutes_label.text()}"
+        currenttime_str = f"{self.ui.waterhours_label.text()}, {self.ui.waterminutes_label.text()}" # Defines
         try:
             config.update_config('PLANTCFG', currentwatersave, currenttime_str)
             self.ui.statusbar_label.setText("Water timing parameters saved!")
             self.tasksleep(2)
-            self.welcome_message()
-
+            self.statusbar.setText(self.welcome_message())
         except Exception as errvar:
             subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
             #LCD COLOUR HANDLING CODE (RED) HERE
@@ -667,6 +666,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             time_str = f"{self.ui.systemhours_label.text()}:{self.ui.systemminutes_label.text()}"
             subprocess.run(f"echo grobot | sudo -S date -s \"{date_str} {time_str}\"", shell=True, check=True) #Needs \ to escape " as date and time string needs to be wrapped by "" for date -s
             subprocess.run("echo grobot | sudo -S hwclock -w", shell=True, check=True) #Write system date to RTC
+            self.ui.statusbar_label.setText("System Time Saved!")
+            self.tasksleep(2)
+            self.statusbar.setText(self.welcome_message())
 
         except Exception as errvar:
             subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
@@ -838,16 +840,19 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     def take_picture(self):
         try:
             ###set_lcd_color("in_progress")
-            self.ui.statusbar_label.setText(f"{readlocal('141')}") # Taking Picture...
+            self.ui.statusbar_label.setText("Taking Picture") # Taking Picture...
             # Don't check buttons during picture capture
             result = picam_capture()
             ###set_lcd_color("normal")
-            self.ui.statusbar_label.setText(f"{readlocal('189')}" if result else f"{readlocal('190')}") # Picture Taken, Picture Failed
             self.tasksleep(2)
+            self.ui.statusbar_label.setText("Picture Taken!" if result else "Picture Failed") # Picture Taken, Picture Failed
+            self.tasksleep(2)
+            self.ui.statusbar_label.setText(self.welcome_message())
         except Exception as e:
             ###set_lcd_color("error")
-            self.ui.statusbar_label.setText(f"{readlocal('140')} {e}") #Error:
+            self.ui.statusbar_label.setText(f"Error: {e}") #Error:
             self.tasksleep(2)
+            self.ui.statusbar_label.setText(self.welcome_message())
             ###set_lcd_color("normal")
 
     def get_version_info(self):
@@ -1042,10 +1047,15 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     @Slot()
     def start_thread(self, fn):
-        worker = Thread(fn)
-        self.thread_manager.start(worker)
-        activethreads = self.thread_manager.activeThreadCount()
-        print(f"Current active threads:{activethreads}")
+        try:
+            worker = Thread(fn)
+            self.thread_manager.start(worker)
+            activethreads = self.thread_manager.activeThreadCount()
+            print(f"Current active threads:{activethreads}")
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
     @Slot()
     def schedule_routine(self):
@@ -1124,13 +1134,14 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 class Thread(QRunnable): # Thread class for creating an instance of QRunnable within QThreadpool
     def __init__(self, fn, *args, **kwargs): # Specifies an arbitrary number of positional and conditional arguments
         super().__init__() # Invokes constructor of the parent class
-        self.fn = fn
-        self.args = args
-        self.kwargs = kwargs
+        self.fn = fn # Defines desired function to be run
+        self.args = args # Defines arbitary positional arguments
+        self.kwargs = kwargs # Defines arbitary named arguements
+        # Listing arbitray number of arguments makes it easier for managing functions in the long term
 
-    @Slot()
-    def run(self):
-        self.fn(*self.args, **self.kwargs)
+    @Slot() # Decorator for multithreading
+    def run(self): # Runs the aquired function from start_thread
+        self.fn(*self.args, **self.kwargs) # Calls the function within the QRunnable instance
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
