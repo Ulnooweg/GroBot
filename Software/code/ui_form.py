@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formTyguLt.ui'
+## Form generated from reading UI file 'formayQYAV.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -37,7 +37,7 @@ class Ui_Form(object):
         self.start_page.setObjectName(u"start_page")
         self.continue_btn = QPushButton(self.start_page)
         self.continue_btn.setObjectName(u"continue_btn")
-        self.continue_btn.setGeometry(QRect(10, 380, 221, 170))
+        self.continue_btn.setGeometry(QRect(130, 380, 221, 170))
         font2 = QFont()
         font2.setFamilies([u"Segoe UI"])
         font2.setPointSize(18)
@@ -52,10 +52,6 @@ class Ui_Form(object):
         font3.setBold(True)
         self.clockdisplay.setFont(font3)
         self.clockdisplay.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.close_btn = QPushButton(self.start_page)
-        self.close_btn.setObjectName(u"close_btn")
-        self.close_btn.setGeometry(QRect(240, 380, 221, 170))
-        self.close_btn.setFont(font2)
         self.label = QLabel(self.start_page)
         self.label.setObjectName(u"label")
         self.label.setGeometry(QRect(170, 176, 151, 31))
@@ -563,7 +559,6 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.continue_btn.setText(QCoreApplication.translate("Form", u"Continue", None))
         self.clockdisplay.setText(QCoreApplication.translate("Form", u"<<Clock>>", None))
-        self.close_btn.setText(QCoreApplication.translate("Form", u"Close", None))
         self.label.setText(QCoreApplication.translate("Form", u"Current Date:", None))
         self.Datedisplay.setText(QCoreApplication.translate("Form", u"<<Date>>", None))
         self.systeminfo_page_btn.setText(QCoreApplication.translate("Form", u"System Info", None))

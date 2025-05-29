@@ -168,9 +168,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.ui.continue_btn.clicked.connect(
             lambda: self.start_thread(self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page))
             ) # Button event when pressed: changes page to mainmenu_page
-        self.ui.close_btn.clicked.connect(
-            lambda: self.start_thread(self.close_program)
-            ) # Button event when pressed: closes program
 
         #### Clock Logic ---------------
 
@@ -786,11 +783,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     def tasksleep(self, duration): # Adds pause to a given process
         QApplication.processEvents() # Prompts the application to scan for events currently being processed
         time.sleep(duration) # Sleeps for a given duration
-
-    @Slot()
-    def close_program(self): # Simple function to close the program
-        exit()
-        GPIO.cleanup
 
 ####################################################
 ################# DEBUG FUNCTIONS ##################

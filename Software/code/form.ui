@@ -37,7 +37,7 @@
     <widget class="QPushButton" name="continue_btn">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>130</x>
        <y>380</y>
        <width>221</width>
        <height>170</height>
@@ -75,26 +75,6 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="close_btn">
-     <property name="geometry">
-      <rect>
-       <x>240</x>
-       <y>380</y>
-       <width>221</width>
-       <height>170</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Segoe UI</family>
-       <pointsize>18</pointsize>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Close</string>
      </property>
     </widget>
     <widget class="QLabel" name="label">
