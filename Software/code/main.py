@@ -75,7 +75,7 @@ try:
     # Virutally the same function as grobotboo(), but manages the GPIO pins through a separate library;
     # Whenever console commands attempted to start an instance of main.py through ssh, this error would occur
     # This fixes the "GPIO Busy" Error during GUI developement
-    GPIO.cleanup
+    # GPIO.cleanup
 
     #Runs BoardMostfetReset
     grobotboot() #This force all pin reset
