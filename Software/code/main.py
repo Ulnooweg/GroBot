@@ -41,7 +41,7 @@ except Exception as errvar:
     #Note: There is no force reboot yet here as logoutput should be the first thing imported and done
     #It's also already handled in the logoutput file itself.
     raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-from watercontrol import autorain, stopwater, startwater, pumprefillcycle
+from watercontrol import autorain, pumprefillcycle
 from fancontrol import fanmanon, fanoff, fanon
 from lightcontrol import growlightoff, growlighton
 from grobotpicam import picam_capture
