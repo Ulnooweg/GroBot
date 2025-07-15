@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>640</height>
+    <height>639</height>
    </rect>
   </property>
   <property name="font">
@@ -24,7 +24,7 @@
      <x>0</x>
      <y>70</y>
      <width>480</width>
-     <height>560</height>
+     <height>570</height>
     </rect>
    </property>
    <property name="font">
@@ -32,6 +32,15 @@
      <family>Segoe UI</family>
      <bold>false</bold>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QStackedWidget{
+	background-color: rgb(226, 255, 229);
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
    </property>
    <widget class="QWidget" name="start_page">
     <widget class="QPushButton" name="continue_btn">
@@ -49,6 +58,17 @@
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}
+
+QPushButton:pressed{
+    background-color: white;
+}</string>
      </property>
      <property name="text">
       <string>Continue</string>
@@ -138,6 +158,13 @@
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>System Info</string>
      </property>
@@ -145,7 +172,7 @@
     <widget class="QPushButton" name="editsettings_page_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>260</x>
        <y>10</y>
        <width>201</width>
        <height>151</height>
@@ -158,6 +185,13 @@
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Edit Settings</string>
      </property>
@@ -166,7 +200,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>310</y>
+       <y>330</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -177,6 +211,13 @@
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Back</string>
@@ -186,7 +227,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>160</y>
+       <y>170</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -197,6 +238,13 @@
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Manual Controls</string>
@@ -205,8 +253,8 @@
     <widget class="QPushButton" name="monitordata_page_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>160</y>
+       <x>260</x>
+       <y>170</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -217,6 +265,13 @@
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Monitor Data
@@ -241,6 +296,13 @@
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Back</string>
      </property>
@@ -252,7 +314,7 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>201</width>
+       <width>141</width>
        <height>151</height>
       </rect>
      </property>
@@ -262,6 +324,13 @@
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 rgb(170, 255, 255));
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Water
@@ -271,9 +340,9 @@ Toggle</string>
     <widget class="QPushButton" name="lightswitch_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>320</x>
        <y>10</y>
-       <width>201</width>
+       <width>141</width>
        <height>151</height>
       </rect>
      </property>
@@ -284,15 +353,23 @@ Toggle</string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 #f7b329);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
-      <string>Light Switch</string>
+      <string>Light
+Switch</string>
      </property>
     </widget>
     <widget class="QPushButton" name="fanon_btn">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>160</y>
+       <y>170</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -303,6 +380,13 @@ Toggle</string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Fan Toggle</string>
@@ -311,8 +395,8 @@ Toggle</string>
     <widget class="QPushButton" name="takepicture_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>160</y>
+       <x>260</x>
+       <y>170</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -323,6 +407,13 @@ Toggle</string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Take Picture</string>
@@ -332,7 +423,7 @@ Toggle</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>310</y>
+       <y>330</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -343,6 +434,13 @@ Toggle</string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Record Data</string>
@@ -351,8 +449,8 @@ Toggle</string>
     <widget class="QPushButton" name="manualcontrols_back_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>310</y>
+       <x>260</x>
+       <y>330</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -364,8 +462,43 @@ Toggle</string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Back</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="watercycle_btn">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>10</y>
+       <width>151</width>
+       <height>151</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>18</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
+     <property name="text">
+      <string>Cycle
+Pump</string>
      </property>
     </widget>
    </widget>
@@ -386,6 +519,13 @@ Toggle</string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Update Firmware</string>
      </property>
@@ -393,7 +533,7 @@ Toggle</string>
     <widget class="QPushButton" name="logexport_page_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>260</x>
        <y>10</y>
        <width>201</width>
        <height>151</height>
@@ -406,6 +546,13 @@ Toggle</string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Log Export</string>
      </property>
@@ -414,7 +561,7 @@ Toggle</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>160</y>
+       <y>170</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -426,6 +573,13 @@ Toggle</string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Back</string>
      </property>
@@ -434,7 +588,7 @@ Toggle</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>320</y>
+       <y>330</y>
        <width>451</width>
        <height>61</height>
       </rect>
@@ -455,7 +609,7 @@ Toggle</string>
     <widget class="QPushButton" name="irrigation_page_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>260</x>
        <y>10</y>
        <width>201</width>
        <height>151</height>
@@ -468,6 +622,13 @@ Toggle</string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Irrigation</string>
      </property>
@@ -475,8 +636,8 @@ Toggle</string>
     <widget class="QPushButton" name="editsettings_back_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>160</y>
+       <x>260</x>
+       <y>170</y>
        <width>201</width>
        <height>151</height>
       </rect>
@@ -488,8 +649,22 @@ Toggle</string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}
+
+QPushButton:pressed{
+    background-color: white;
+}</string>
+     </property>
      <property name="text">
       <string>Back</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="datetime_page_btn">
@@ -507,6 +682,13 @@ Toggle</string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Date/Time</string>
@@ -541,13 +723,15 @@ Toggle</string>
 }
 
 .QSlider::groove:horizontal {
-    border: 1px solid #262626;
+	border-radius: 5px;
+    border: 3px solid #262626;
     height: 5px;
     margin: 0 12px;
 }
 
 .QSlider::handle:horizontal {
     background: Grey;
+	border-radius: 10px;
     width: 46px;
     height: 100px;
 	margin: -24px -12px
@@ -614,13 +798,16 @@ Toggle</string>
     </widget>
    </widget>
    <widget class="QWidget" name="datetime_page">
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <widget class="QPushButton" name="datetime_back_btn">
      <property name="geometry">
       <rect>
        <x>260</x>
        <y>450</y>
        <width>201</width>
-       <height>111</height>
+       <height>91</height>
       </rect>
      </property>
      <property name="font">
@@ -629,6 +816,13 @@ Toggle</string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Back</string>
@@ -719,6 +913,13 @@ Toggle</string>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>+</string>
      </property>
@@ -738,6 +939,13 @@ Toggle</string>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>-</string>
@@ -759,6 +967,13 @@ Toggle</string>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>-</string>
      </property>
@@ -779,6 +994,13 @@ Toggle</string>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>+</string>
      </property>
@@ -789,7 +1011,7 @@ Toggle</string>
        <x>10</x>
        <y>450</y>
        <width>201</width>
-       <height>111</height>
+       <height>91</height>
       </rect>
      </property>
      <property name="font">
@@ -798,6 +1020,13 @@ Toggle</string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Save</string>
@@ -842,6 +1071,13 @@ Toggle</string>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Month+</string>
      </property>
@@ -861,6 +1097,13 @@ Toggle</string>
        <pointsize>18</pointsize>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Month-</string>
@@ -882,6 +1125,13 @@ Toggle</string>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Day+</string>
      </property>
@@ -901,6 +1151,13 @@ Toggle</string>
        <pointsize>18</pointsize>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Day-</string>
@@ -922,6 +1179,13 @@ Toggle</string>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Year-</string>
      </property>
@@ -941,6 +1205,13 @@ Toggle</string>
        <pointsize>18</pointsize>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Year+</string>
@@ -998,9 +1269,9 @@ Toggle</string>
      <property name="geometry">
       <rect>
        <x>270</x>
-       <y>430</y>
-       <width>201</width>
-       <height>131</height>
+       <y>440</y>
+       <width>191</width>
+       <height>111</height>
       </rect>
      </property>
      <property name="font">
@@ -1010,6 +1281,13 @@ Toggle</string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Back</string>
      </property>
@@ -1018,9 +1296,9 @@ Toggle</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>10</y>
+       <y>20</y>
        <width>191</width>
-       <height>151</height>
+       <height>131</height>
       </rect>
      </property>
      <property name="font">
@@ -1029,6 +1307,13 @@ Toggle</string>
        <pointsize>20</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Time
@@ -1039,9 +1324,9 @@ Parameters</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>430</y>
+       <y>440</y>
        <width>201</width>
-       <height>131</height>
+       <height>111</height>
       </rect>
      </property>
      <property name="font">
@@ -1050,6 +1335,13 @@ Parameters</string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Save</string>
@@ -1077,13 +1369,15 @@ Parameters</string>
 }
 
 .QSlider::groove:horizontal {
-    border: 1px solid #262626;
+	border-radius: 5px;
+    border: 3px solid #262626;
     height: 5px;
     margin: 0 12px;
 }
 
 .QSlider::handle:horizontal {
     background: Grey;
+	border-radius: 10px;
     width: 46px;
     height: 100px;
 	margin: -24px -12px
@@ -1105,7 +1399,7 @@ Parameters</string>
     <widget class="QLabel" name="watervol_label">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>30</x>
        <y>190</y>
        <width>71</width>
        <height>16</height>
@@ -1128,7 +1422,7 @@ Parameters</string>
     <widget class="QLabel" name="moistthresh_label">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>30</x>
        <y>250</y>
        <width>71</width>
        <height>16</height>
@@ -1164,13 +1458,15 @@ Parameters</string>
 }
 
 .QSlider::groove:horizontal {
-    border: 1px solid #262626;
+	border-radius: 5px;
+    border: 3px solid #262626;
     height: 5px;
     margin: 0 12px;
 }
 
 .QSlider::handle:horizontal {
     background: Grey;
+	border-radius: 10px;
     width: 46px;
     height: 100px;
 	margin: -24px -12px
@@ -1202,13 +1498,15 @@ Parameters</string>
 }
 
 .QSlider::groove:horizontal {
-    border: 1px solid #262626;
+	border-radius: 5px;
+    border: 3px solid #262626;
     height: 5px;
     margin: 0 12px;
 }
 
 .QSlider::handle:horizontal {
     background: Grey;
+	border-radius: 10px;
     width: 46px;
     height: 100px;
 	margin: -24px -12px
@@ -1240,13 +1538,15 @@ Parameters</string>
 }
 
 .QSlider::groove:horizontal {
-    border: 1px solid #262626;
+	border-radius: 5px;
+    border: 3px solid #262626;
     height: 5px;
     margin: 0 12px;
 }
 
 .QSlider::handle:horizontal {
     background: Grey;
+	border-radius: 10px;
     width: 46px;
     height: 100px;
 	margin: -24px -12px
@@ -1265,7 +1565,7 @@ Parameters</string>
     <widget class="QLabel" name="tempset_label">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>20</x>
        <y>310</y>
        <width>91</width>
        <height>16</height>
@@ -1288,7 +1588,7 @@ Parameters</string>
     <widget class="QLabel" name="humidset_label">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>30</x>
        <y>370</y>
        <width>71</width>
        <height>16</height>
@@ -1462,6 +1762,44 @@ Humid Set: (%) </string>
       <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>451</width>
+       <height>271</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+    </widget>
+    <zorder>groupBox</zorder>
+    <zorder>irrigation_back_btn</zorder>
+    <zorder>wateringtime_page_btn</zorder>
+    <zorder>irrigation_save_btn</zorder>
+    <zorder>watervol_slider</zorder>
+    <zorder>watervol_label</zorder>
+    <zorder>moistthresh_label</zorder>
+    <zorder>moistthresh_slider</zorder>
+    <zorder>tempset_slider</zorder>
+    <zorder>humidset_slider</zorder>
+    <zorder>tempset_label</zorder>
+    <zorder>humidset_label</zorder>
+    <zorder>irrigation_description_label</zorder>
+    <zorder>irrigation_description_label_2</zorder>
+    <zorder>watervol_indicator</zorder>
+    <zorder>moistthresh_idicator</zorder>
+    <zorder>tempset_indicator</zorder>
+    <zorder>humidset_indicator</zorder>
    </widget>
    <widget class="QWidget" name="watertiming_page">
     <widget class="QLabel" name="waterhours_label">
@@ -1549,6 +1887,13 @@ Humid Set: (%) </string>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>+</string>
      </property>
@@ -1568,6 +1913,13 @@ Humid Set: (%) </string>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>+</string>
@@ -1589,6 +1941,13 @@ Humid Set: (%) </string>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>-</string>
      </property>
@@ -1609,6 +1968,13 @@ Humid Set: (%) </string>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 10px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>-</string>
      </property>
@@ -1616,10 +1982,10 @@ Humid Set: (%) </string>
     <widget class="QPushButton" name="watertiming_back_btn">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>260</x>
        <y>430</y>
        <width>201</width>
-       <height>131</height>
+       <height>121</height>
       </rect>
      </property>
      <property name="font">
@@ -1629,8 +1995,18 @@ Humid Set: (%) </string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Back</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="watertiming_save_btn">
@@ -1639,7 +2015,7 @@ Humid Set: (%) </string>
        <x>10</x>
        <y>430</y>
        <width>201</width>
-       <height>131</height>
+       <height>121</height>
       </rect>
      </property>
      <property name="font">
@@ -1648,6 +2024,13 @@ Humid Set: (%) </string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Save</string>
@@ -1658,7 +2041,7 @@ Humid Set: (%) </string>
       <rect>
        <x>10</x>
        <y>290</y>
-       <width>151</width>
+       <width>141</width>
        <height>131</height>
       </rect>
      </property>
@@ -1668,6 +2051,13 @@ Humid Set: (%) </string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Check Time</string>
@@ -1689,6 +2079,13 @@ Humid Set: (%) </string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
+     </property>
      <property name="text">
       <string>Sunrise</string>
      </property>
@@ -1696,9 +2093,9 @@ Humid Set: (%) </string>
     <widget class="QPushButton" name="sunset_btn">
      <property name="geometry">
       <rect>
-       <x>310</x>
+       <x>320</x>
        <y>290</y>
-       <width>151</width>
+       <width>141</width>
        <height>131</height>
       </rect>
      </property>
@@ -1708,6 +2105,13 @@ Humid Set: (%) </string>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
+	border-radius: 25px;
+	border: 5px solid rgb(120, 120, 120);
+}</string>
      </property>
      <property name="text">
       <string>Sunset</string>
@@ -1727,7 +2131,7 @@ Humid Set: (%) </string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: gray
+    <string notr="true">background-color: rgb(120, 120, 120)
 </string>
    </property>
    <widget class="QLabel" name="statusbar_label">
@@ -1735,7 +2139,7 @@ Humid Set: (%) </string>
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>441</width>
+      <width>361</width>
       <height>61</height>
      </rect>
     </property>
@@ -1747,6 +2151,63 @@ Humid Set: (%) </string>
     </property>
     <property name="text">
      <string>&lt;&lt;Status Bar&gt;&gt; </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="water_status_label">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>10</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Water Status</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="water_status_label_2">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>30</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>------</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="water_status_label_3">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>50</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>------</string>
     </property>
    </widget>
   </widget>
