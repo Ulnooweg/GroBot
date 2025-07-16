@@ -840,7 +840,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     def debug_press(self): # Simple function that prints to console if a button was pressed
         print("button pressed")
         self.ui.statusbar_label.setText("button pressed")
-        # diopinset()
+        diopinset()
         self.tasksleep(2)
         self.ui.statusbar_label.setText(str(self.welcome_message()))
 
