@@ -39,26 +39,57 @@ def diopinset(): #define diopinset function that takes no arguments
             'S1' : board.D13, #This is MOSFET control pin 1 (System 1). Other S pin controls n MOSFET.
             'S2' : board.D16, #DXX Corresponds to GPIO pins XX
             'S3' : board.D19,
-            'S4' : board.D20,
-            'S5' : board.D26,
-            'S6' : board.D21,
-            'B1' : board.D10, #GPIO 10 = pin 19, MOSI for floatswitch
             'QWIIC_SCL' : board.SCL, #Define I2C pin CLOCK, use board.SCL in pi
             'QWIIC_SDA' : board.SDA #Define I2C pin DATA, use board.SDA in pi
             }
         
+        #Define a function to capture current pin state from system using subprocess and pinctrl
+        #Step 1: Capture the result
+        pinctrlresult_s1 = subprocess.run(['pinctrl', 'get', '13'], capture_output=True)
+        pinctrlresult_s2 = subprocess.run(['pinctrl', 'get', '16'], capture_output=True)
+        pinctrlresult_s3 = subprocess.run(['pinctrl', 'get', '19'], capture_output=True)
+        #Step 2: Decode the result stdout and strip them of extra star/end empty space
+        s1_stdout = pinctrlresult_s1.stdout.decode().strip()
+        s2_stdout = pinctrlresult_s2.stdout.decode().strip()
+        s3_stdout = pinctrlresult_s3.stdout.decode().strip()
+        #Check, for each pin stdout, the current value and assign original value accordingly
+        if "lo" in s1_stdout: 
+            s1_ori_val = False #If lo = False
+        elif "hi" in s1_stdout:
+            s1_ori_val = True #If hi = True
+        else:
+            raise RuntimeError('DIOPIN Match failed')
+        
+        if "lo" in s2_stdout: 
+            s2_ori_val = False #If lo = False
+        elif "hi" in s2_stdout:
+            s2_ori_val = True #If hi = True
+        else:
+            raise RuntimeError('DIOPIN Match failed')
+        
+        if "lo" in s3_stdout: 
+            s3_ori_val = False #If lo = False
+        elif "hi" in s3_stdout:
+            s3_ori_val = True #If hi = True
+        else:
+            raise RuntimeError('DIOPIN Match failed')
+
         #Setup Actuator circuts
         s1 = digitalio.DigitalInOut(pins['S1'])
         s2 = digitalio.DigitalInOut(pins['S2'])
         s3 = digitalio.DigitalInOut(pins['S3'])
-        s4 = digitalio.DigitalInOut(pins['S4'])
-        s5 = digitalio.DigitalInOut(pins['S5'])
-        s6 = digitalio.DigitalInOut(pins['S6'])
-        b1 = digitalio.DigitalInOut(pins['B1'])
+        s4 = 'NaN' #For compat
+        s5 = 'NaN' #For compat
+        s6 = 'NaN' #For compat
+        b1 = 'NaN' #For compat
 
-        for s in [s1, s2, s3, s4, s5, s6]:
-            original_val = s.value #Reads current value the pin is defined as
-            s.switch_to_output(original_val,digitalio.DriveMode.PUSH_PULL) #This instead use switch to output to switch to output while keeping the MOSFEt status as-is and doing push-pull all in one step
+        s1.switch_to_output(s1_ori_val,digitalio.DriveMode.PUSH_PULL) #This instead use switch to output to switch to output while keeping the MOSFEt status as-is and doing push-pull all in one step
+        s2.switch_to_output(s2_ori_val,digitalio.DriveMode.PUSH_PULL) #This instead use switch to output to switch to output while keeping the MOSFEt status as-is and doing push-pull all in one step
+        s3.switch_to_output(s3_ori_val,digitalio.DriveMode.PUSH_PULL) #This instead use switch to output to switch to output while keeping the MOSFEt status as-is and doing push-pull all in one step
+        
+        #for s in [s1, s2, s3]:
+        #    #original_val = s.value #Reads current value the pin is defined as. DOESN'T WORK ANYMORE AS digitalio.DigitalInOut reset pin state
+        #    s.switch_to_output(original_val,digitalio.DriveMode.PUSH_PULL) #This instead use switch to output to switch to output while keeping the MOSFEt status as-is and doing push-pull all in one step
 
         #B1 by default of digitalIO is set up as an input to the code (read from pin)
         #so we do not need to set it up further
