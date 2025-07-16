@@ -250,6 +250,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.ui.systeminfo_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
             ) # Back Button
+        self.ui.grand_debugger_btn.clicked.connect(
+            lambda: self.start_thread(self.debug_press)
+            ) # Back Button
 
         # Edit Settings ------------
             # Buttons
@@ -837,6 +840,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     def debug_press(self): # Simple function that prints to console if a button was pressed
         print("button pressed")
         self.ui.statusbar_label.setText("button pressed")
+        # diopinset()
         self.tasksleep(2)
         self.ui.statusbar_label.setText(str(self.welcome_message()))
 
@@ -939,6 +943,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Call logtofile function
             from logoutput import logtofile
             result = logtofile()
+            feedread() # JUXTAPOSITION #### THIS IS A DEBUG CODE LINE
             
             # Show result
             if result == 1:
