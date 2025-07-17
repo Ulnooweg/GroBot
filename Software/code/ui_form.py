@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formQPsIFA.ui'
+## Form generated from reading UI file 'formatHgtO.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -851,7 +851,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.pagelayoutwidget.setCurrentIndex(4)
+        self.pagelayoutwidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Form)
