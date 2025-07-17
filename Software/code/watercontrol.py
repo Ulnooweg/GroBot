@@ -125,6 +125,7 @@ def pumprefillcycle():
 
             if A_filtered < 350: # if the filtered current is greater than 350 mA
 
+                #print(f"{A_filtered}, {Amps}") # DEBUGGERLINE
                 sleep(samplerate) # Sleep for the specified sample rate
 
             elif A_filtered >= 350: # if the filtered current is less than 350 mA
