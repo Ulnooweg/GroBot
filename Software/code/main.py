@@ -41,7 +41,7 @@ except Exception as errvar:
     #Note: There is no force reboot yet here as logoutput should be the first thing imported and done
     #It's also already handled in the logoutput file itself.
     raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-from watercontrol import autorain, stopwater, startwater
+from watercontrol import autorain, pumprefillcycle
 from fancontrol import fanmanon, fanoff, fanon
 from lightcontrol import growlightoff, growlighton
 from grobotpicam import picam_capture
@@ -56,7 +56,8 @@ from config import (
     readlocal,
     readcsv_softver,
     readcsv_mainflags,
-    writecsv_mainflags
+    writecsv_mainflags,
+    readcsv_waterparam
 )
 
 ##############################################
@@ -70,7 +71,7 @@ print("Starting GUI...")
 
 try:
     #Suppress traceback for cleaner error log
-    sys.tracebacklimit = 0 # Imported from main.py | cleans up the console of unessecary error messages
+    #sys.tracebacklimit = 0 # Imported from main.py | cleans up the console of unessecary error messages
 
     # Virutally the same function as grobotboo(), but manages the GPIO pins through a separate library;
     # Whenever console commands attempted to start an instance of main.py through ssh, this error would occur
@@ -160,6 +161,20 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.statusbar.setText(
             self.welcome_message()
             ) # Sets text of "statusbar_label" to welcome_message function
+        
+        # Indicators
+        self.waterstatuslabel = self.findChild(
+            QLabel, "water_status_label"
+        )
+       
+        # Set Text of Indicators
+        PumpRunDry = (readcsv_mainflags("PumpRunDry"))
+        if int(PumpRunDry) == 1:
+            self.waterstatuslabel.setText("Pump Dry")
+            self.waterstatuslabel.setStyleSheet("color: red;")
+        else:
+            self.waterstatuslabel.setText("Water Det.")
+            self.waterstatuslabel.setStyleSheet("color: navy;")
 
     # Primary Menus --------------------------------------------------------------------------------------------------------------
 
@@ -195,7 +210,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             ) # Connects QTimer output to function current_date
         #self.timer.timeout.connect(self.moisture_display) # Connects QTimer output to function moisture_display
         self.timer.start(
-            1000
+            (1000)
             )
         
         # Main Menu ----------------
@@ -234,6 +249,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             ) # Button event when pressed: exports log
         self.ui.systeminfo_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
+            ) # Back Button
+        self.ui.grand_debugger_btn.clicked.connect(
+            lambda: self.start_thread(self.debug_press)
             ) # Back Button
 
         # Edit Settings ------------
@@ -274,6 +292,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             ) # Button event when pressed: Debug press prints to console
         self.ui.waternow_btn.clicked.connect(
             lambda: self.start_thread(self.water_toggle)
+            ) # Button event when pressed: Initiate watering
+        self.ui.watercycle_btn.clicked.connect(
+            lambda: self.start_thread(self.water_cycle)
             ) # Button event when pressed: Initiate watering
         self.ui.takepicture_btn.clicked.connect(
             lambda: self.start_thread(self.take_picture)
@@ -713,15 +734,36 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     @Slot() # Decorator for multithreading
     def water_toggle(self): # Toggles whether the water pump is on indefinetly, or off
-        if self.togglewater: # self.toggle 
-            stopwater() # turns off waterpump
-            self.statusbar.setText("Stopped Watering") # changes text of statusbar to "Stopped Watering"
-            self.tasksleep(2) # sleeps for 2 seconds
-            self.statusbar.setText(self.welcome_message()) # resets statubsbar to default statusbar message
+        self.statusbar.setText("Watering in Progress...") # changes text of statusbar to "Watering in Progress..."
+        settings = get_plant_settings()
+        mmrain = int(settings['waterVol'])
+        autorain(mmrain)
+        self.statusbar.setText("Stopped Watering!") # changes text of statusbar to "Stopped Watering"
+        PumpRunDry = (readcsv_mainflags("PumpRunDry"))
+        if int(PumpRunDry) == 1:
+            self.waterstatuslabel.setText("Pump Dry")
+            self.waterstatuslabel.setStyleSheet("color: red;")
         else:
-            self.statusbar.setText("Watering in Progress...") # changes text of statusbar to "Watering in Progress..."
-            startwater() # turns on waterpump indefinetly
-        self.togglewater = not self.togglewater # resets self.togglewater to opposite of previous bool
+            self.waterstatuslabel.setText("Water Det.")
+            self.waterstatuslabel.setStyleSheet("color: navy;")
+        self.tasksleep(2) # sleeps for 2 seconds
+        self.statusbar.setText(self.welcome_message()) # resets statubsbar to default statusbar message
+
+    @Slot() # Decorator for multithreading
+    def water_cycle(self):
+        self.statusbar.setText("Cycling Pump...")
+        pumprefillcycle()
+        self.statusbar.setText("Pump cycled!")
+        PumpRunDry = (readcsv_mainflags("PumpRunDry"))
+        if int(PumpRunDry) == 1:
+            self.waterstatuslabel.setText("Pump Dry")
+            self.waterstatuslabel.setStyleSheet("color: red;")
+        else:
+            self.waterstatuslabel.setText("Water Det.")
+            self.waterstatuslabel.setStyleSheet("color: navy;")
+        self.tasksleep(2)
+        self.statusbar.setText(self.welcome_message())
+        pass
 
     ### Time Display    
 
@@ -798,6 +840,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     def debug_press(self): # Simple function that prints to console if a button was pressed
         print("button pressed")
         self.ui.statusbar_label.setText("button pressed")
+        diopinset()
         self.tasksleep(2)
         self.ui.statusbar_label.setText(str(self.welcome_message()))
 
@@ -900,6 +943,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Call logtofile function
             from logoutput import logtofile
             result = logtofile()
+            feedread() # JUXTAPOSITION #### THIS IS A DEBUG CODE LINE
             
             # Show result
             if result == 1:
