@@ -23,10 +23,10 @@ import updatefw
 import time
 import board
 import subprocess
-import RPi.GPIO as GPIO ### MUST ADD TO DOCUMENTATION FOR LIBRARY INSTALL
+import RPi.GPIO as GPIO
 from PySide6.QtWidgets import *
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber, QMainWindow
-from PySide6.QtCore import QDateTime, QTimer, Slot, Signal, QThreadPool, QRunnable, QObject
+from PySide6.QtCore import QDateTime, QTimer, Slot, Signal, QThreadPool, QRunnable, QObject, QTranslator, QCoreApplication
 from PySide6.QtGui import *
 from datetime import datetime, time as time2
 from ui_form import Ui_Form
@@ -76,7 +76,6 @@ try:
     # Virutally the same function as grobotboo(), but manages the GPIO pins through a separate library;
     # Whenever console commands attempted to start an instance of main.py through ssh, this error would occur
     # This fixes the "GPIO Busy" Error during GUI developement
-    # GPIO.cleanup
 
     #Runs BoardMostfetReset
     grobotboot() #This force all pin reset
@@ -191,14 +190,16 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             QLabel, "clockdisplay"
             ) # Finds QLCDNumber object "clockdisplay" in Ui_Form
         self.clockdisplay.setText(
-            "Loading..."
+            QCoreApplication.tr("Loading...")
             )
         
             # Date Display -------------
         self.datedisplay = self.findChild(
             QLabel, "Datedisplay"
-        ) # Finds QLabel object "Datedisplay" in Ui_Form
-        self.datedisplay.setText("Loading...")
+            ) # Finds QLabel object "Datedisplay" in Ui_Form
+        self.datedisplay.setText(
+            QCoreApplication.tr("Loading...")
+            )
         
             # Timer --------------------
         self.timer = QTimer() # Defines QTimer
@@ -566,7 +567,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         currenttime_str = f"{self.ui.waterhours_label.text()}, {self.ui.waterminutes_label.text()}" # Defines
         try:
             config.update_config('PLANTCFG', currentwatersave, currenttime_str)
-            self.ui.statusbar_label.setText("Water timing parameters saved!")
+            self.ui.statusbar_label.setText(
+                QCoreApplication.tr("Water timing parameters saved!")
+            )
             self.tasksleep(2)
             self.statusbar.setText(self.welcome_message())
         except Exception as errvar:
@@ -610,81 +613,61 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.systemyear_label.setText(str(now.year))
         self.systemmonth_label.setText(str(now.month))
         self.systemday_label.setText(str(now.day))
-        pass
-
 
     def systemtime_hourinput(self, increment): # Changes the hours in the watertime selection screen
         value = int(self.ui.systemhours_label.text())
-        print(str(value))
-        print(str(increment))
         if increment == 'plus':
             value = (value + 1) % 24
-            print(str(value))
             self.ui.systemhours_label.setText(str(value))
         elif increment == 'minus':
             value = (value - 1) % 24
-            print(str(value))
             self.ui.systemhours_label.setText(str(value))
 
     def systemtime_minuteinput(self, increment): # Changes the hours in the watertime selection screen
         value = int(self.ui.systemminutes_label.text())
-        print(str(value))
-        print(str(increment))
         if increment == 'plus':
             value = (value + 1) % 60
-            print(str(value))
             self.ui.systemminutes_label.setText(str(value))
         elif increment == 'minus':
             value = (value - 1) % 60
-            print(str(value))
             self.ui.systemminutes_label.setText(str(value))
 
     def systemtime_yearinput(self, increment): # Changes the hours in the watertime selection screen
         value = int(self.ui.systemyear_label.text())
-        print(str(value))
-        print(str(increment))
         if increment == 'plus':
             value = min(value + 1, 2999)
-            print(str(value))
             self.ui.systemyear_label.setText(str(value))
         elif increment == 'minus':
             value = max(value - 1, 2000) 
-            print(str(value))
             self.ui.systemyear_label.setText(str(value))
 
     def systemtime_monthinput(self, increment): # Changes the hours in the watertime selection screen
         value = int(self.ui.systemmonth_label.text())
-        print(str(value))
-        print(str(increment))
         if increment == 'plus':
             value = min(value + 1, 12)
-            print(str(value))
             self.ui.systemmonth_label.setText(str(value))
         elif increment == 'minus':
             value = max(value - 1, 1) 
-            print(str(value))
             self.ui.systemmonth_label.setText(str(value))
 
     def systemtime_dayinput(self, increment): # Changes the hours in the watertime selection screen
         value = int(self.ui.systemday_label.text())
-        print(str(value))
-        print(str(increment))
         if increment == 'plus':
             value = min(value + 1, 31)
-            print(str(value))
             self.ui.systemday_label.setText(str(value))
         elif increment == 'minus':
             value = max(value - 1, 1)
-            print(str(value))
             self.ui.systemday_label.setText(str(value))
 
     def save_system_time(self):
         try:
             date_str = f"{self.ui.systemyear_label.text()}-{self.ui.systemmonth_label.text()}-{self.ui.systemday_label.text()}"
             time_str = f"{self.ui.systemhours_label.text()}:{self.ui.systemminutes_label.text()}"
-            subprocess.run(f"echo grobot | sudo -S date -s \"{date_str} {time_str}\"", shell=True, check=True) #Needs \ to escape " as date and time string needs to be wrapped by "" for date -s
+            subprocess.run(f"echo grobot | sudo -S date -pyside6-lupdate main.py -ts example_de.tss \"{date_str} {time_str}\"", shell=True, check=True) #Needs \ to escape " as date and time string needs to be wrapped by "" for date -s
             subprocess.run("echo grobot | sudo -S hwclock -w", shell=True, check=True) #Write system date to RTC
-            self.ui.statusbar_label.setText("System Time Saved!")
+            self.ui.statusbar_label.setText(
+                QCoreApplication.tr("System Time Saved!")
+            )
             self.tasksleep(2)
             self.statusbar.setText(self.welcome_message())
 
@@ -692,25 +675,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
             #LCD COLOUR HANDLING CODE (RED) HERE
             raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-
-    ### Togglables        
-
-    # Depreciated Toggle Script
-    # @Slot()
-    # def camera_toggle(self):
-    #     if self.togglecamera: # self.togglefan is False by default
-    #         config.update_config('PICAMERA', 'CameraSet', '0')
-    #         print("Camera Off") # prints to console "off"
-    #         self.ui.statusbar_label.setText("Toggling Camera Off")
-    #         self.tasksleep(2)
-    #         self.ui.statusbar_label.setText(self.welcome_message())
-    #     else:
-    #         config.update_config('PICAMERA', 'CameraSet', '1')
-    #         print("Camera On") # prints to console "on"
-    #         self.ui.statusbar_label.setText("Toggling Camera On")
-    #         self.tasksleep(2)
-    #         self.ui.statusbar_label.setText(self.welcome_message())
-    #     self.togglecamera = not self.togglecamera # resets self.togglefan to opposite of previous bool
 
     @Slot() # Decorator for multithreading
     def fan_toggle(self): # Function that toggles fan 
@@ -758,12 +722,24 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         if int(PumpRunDry) == 1:
             self.waterstatuslabel.setText("Pump Dry")
             self.waterstatuslabel.setStyleSheet("color: red;")
+        if self.togglewater: # self.toggle 
+            stopwater() # turns off waterpump
+            self.statusbar.setText(
+                QCoreApplication.tr("Stopped Watering")
+             ) # changes text of statusbar to "Stopped Watering"
+            self.tasksleep(2) # sleeps for 2 seconds
+            self.statusbar.setText(self.welcome_message()) # resets statubsbar to default statusbar message
         else:
             self.waterstatuslabel.setText("Water Det.")
             self.waterstatuslabel.setStyleSheet("color: navy;")
         self.tasksleep(2)
         self.statusbar.setText(self.welcome_message())
         pass
+            self.statusbar.setText(
+                QCoreApplication.tr("Watering in Progress...")
+             ) # changes text of statusbar to "Watering in Progress..."
+            startwater() # turns on waterpump indefinetly
+        self.togglewater = not self.togglewater # resets self.togglewater to opposite of previous bool
 
     ### Time Display    
 
@@ -774,7 +750,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     def current_date(self):
         time = datetime.now()
-        formatted_time = time.strftime("%m/%d/%Y")
+        formatted_time = time.strftime("%Y/%m/%d")
         self.datedisplay.setText(str(formatted_time))
 
     ### Brightness Change    
@@ -814,7 +790,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             config.update_config('PLANTCFG', 'dryValue', str(self.moistthresh_changer.value())) # updates config with new value of moisture threshold slider
             config.update_config('PLANTCFG', 'maxHumid', str(self.humidset_changer.value())) # updates config with new value of humid set slider
             config.update_config('PLANTCFG', 'maxTemp', str(self.tempset_changer.value())) # updates config with new value of temperature set slider
-            self.statusbar.setText("New Config Parameters Saved!") # changes text of statubs bar to "New Config Parameters Saved!"
+            self.statusbar.setText(
+                QCoreApplication.tr("New Config Parameters Saved!")
+             ) # changes text of statubs bar to "New Config Parameters Saved!"
             self.tasksleep(2) # sleeps for 2 seconds
             self.statusbar.setText(self.welcome_message()) # resets statubsbar to default statusbar message
         except Exception as errvar:
@@ -841,11 +819,15 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         print("button pressed")
         self.ui.statusbar_label.setText("button pressed")
         diopinset()
+        self.ui.statusbar_label.setText(
+            QCoreApplication.tr("Button Pressed!")
+        )
         self.tasksleep(2)
         self.ui.statusbar_label.setText(str(self.welcome_message()))
 
     def welcome_message(self): # Welcome message on status bar
-        return str("Welcome!")
+        welcome_text = QCoreApplication.tr("Welcome!")
+        return welcome_text
 
 #######################################################
 ################# IMPORTED FUNCTIONS ##################
@@ -860,14 +842,17 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             ReadVal = feedread() # T RH SRH in order
             # Write data out to excel file
             excelout(ReadVal[0], ReadVal[1], ReadVal[2])
-            print("Datapoint Taken!")
-            self.ui.statusbar_label.setText("Datapoint Taken!")
+            self.ui.statusbar_label.setText(
+                QCoreApplication.tr("Datapoint Taken!")
+            )
             self.tasksleep(1)
             self.ui.statusbar_label.setText(self.welcome_message())
             
         except Exception as e:
             ###set_lcd_color("error")
-            self.ui.statusbar_label.setText(f"{readlocal('187')}\n{readlocal('188')}") # Error Recording \n data
+            self.ui.statusbar_label.setText(
+                QCoreApplication.tr("Error Reading Data")
+            ) # Error Recording \n data
             self.tasksleep(2)
             ###set_lcd_color("normal")
 
@@ -875,12 +860,21 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     def take_picture(self):
         try:
             ###set_lcd_color("in_progress")
-            self.ui.statusbar_label.setText("Taking Picture") # Taking Picture...
+            self.ui.statusbar_label.setText(
+                QCoreApplication.tr("Taking Picture")
+            ) # Taking Picture...
             # Don't check buttons during picture capture
             result = picam_capture()
             ###set_lcd_color("normal")
             self.tasksleep(2)
-            self.ui.statusbar_label.setText("Picture Taken!" if result else "Picture Failed") # Picture Taken, Picture Failed
+            if result:
+                self.ui.statusbar_label.setText(
+                    QCoreApplication.tr("Picture Taken!")
+                )
+            else:
+                self.ui.statusbar_label.setText(
+                    QCoreApplication.tr("Picture Failed")
+                ) # Picture Taken, Picture Failed
             self.tasksleep(2)
             self.ui.statusbar_label.setText(self.welcome_message())
         except Exception as e:
@@ -898,13 +892,15 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             fw_version = readcsv('fw_version')  # From Software/userdata/ulnoowegdat
             return f"SW Ver: {sw_version}\nFW Ver: {fw_version}"
         except Exception as e:
-            return f"{readlocal('149')}\n{readlocal('160')}" # Error reading \n version info
+            return f"Error reading version info" # Error reading \n version info
    
     def update_firmware(self):
         """Handle firmware update process"""
         try:
             ###set_lcd_color("in_progress")  # Blue while updating
-            self.statusbar.setText("Updating Firmware") # Updating Firmware \n Please wait...
+            self.statusbar.setText(
+                QCoreApplication.tr("Updating Firmware")
+            ) # Updating Firmware \n Please wait...
             print("Updating Firmware")
             self.tasksleep(2)
             # Call the firmware update function
@@ -912,25 +908,27 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Show result
             if result == 1:
                 ###set_lcd_color("normal")  # Green for success
-                self.statusbar.setText(f"{readlocal('175')}\n{readlocal('176')}") # Update success! \n Restart needed
-                print("Updating Success!")
+                self.statusbar.setText(
+                    QCoreApplication.tr("Update Success! Restart Needed")
+                ) # Update success! \n Restart needed
                 self.tasksleep(2)
                 while True:
                     ###set_lcd_color("error")
-                    print("Restarting")
                     subprocess.run("echo grobot | sudo -S shutdown -r now", shell=True)
                     self.tasksleep(2)
                     pass
             else:
                 ###set_lcd_color("error")  # Red for error
-                self.statusbar.setText(f"{readlocal('179')}\n{readlocal('180')}") # Update failed! \n Press SELECT
-                print("Update Failed")
+                self.statusbar.setText(
+                    QCoreApplication.tr("Update Failed!")
+                ) # Update failed! \n Press SELECT
                 self.tasksleep(2)
                     
         except Exception as e:
             ###set_lcd_color("error")
-            self.statusbar.setText(f"{readlocal('181')}\n{readlocal('182')}") # Error updating \n firmware
-            print("Error Updating")
+            self.statusbar.setText(
+                QCoreApplication.tr("Error Updating Firmware")
+            ) # Error updating \n firmware
             self.tasksleep(2)
             ###set_lcd_color("normal")
 
@@ -938,7 +936,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         """Handle log export process"""
         try:
             ###set_lcd_color("in_progress")  # Blue while exporting
-            self.statusbar.setText(f"{readlocal('165')}\n{readlocal('166')}") # Exporting Log... \n Please Wait
+            self.statusbar.setText(
+                QCoreApplication.tr("Exporting Log...")
+            ) # Exporting Log... \n Please Wait
             self.tasksleep(2)
             # Call logtofile function
             from logoutput import logtofile
@@ -1028,7 +1028,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Read value from sensor
             ReadVal = feedread() # T RH SRH in order
             # Write data out to excel file
-            excelout(ReadVal[0], ReadVal[1], ReadVal[2])
+            excelout(ReadVal[0], ReadVal[1], ReadVal[2]) 
 
             writecsv_mainflags("EveryXX25","0") #Set the execution flag for the function back to 0
             #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
@@ -1181,6 +1181,12 @@ class Thread(QRunnable): # Thread class for creating an instance of QRunnable wi
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
+    path = "/mnt/grobotextdat/code/fr.qm"
+    translator = QTranslator(app)
+    translator.load(path)
+    app.installTranslator(translator)
+
     widget = Widget()
     widget.show()
     sys.exit(app.exec())
