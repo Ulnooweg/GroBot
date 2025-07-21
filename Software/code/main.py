@@ -722,24 +722,13 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         if int(PumpRunDry) == 1:
             self.waterstatuslabel.setText("Pump Dry")
             self.waterstatuslabel.setStyleSheet("color: red;")
-        if self.togglewater: # self.toggle 
-            stopwater() # turns off waterpump
-            self.statusbar.setText(
-                QCoreApplication.tr("Stopped Watering")
-             ) # changes text of statusbar to "Stopped Watering"
-            self.tasksleep(2) # sleeps for 2 seconds
-            self.statusbar.setText(self.welcome_message()) # resets statubsbar to default statusbar message
         else:
             self.waterstatuslabel.setText("Water Det.")
             self.waterstatuslabel.setStyleSheet("color: navy;")
         self.tasksleep(2)
         self.statusbar.setText(self.welcome_message())
         pass
-            self.statusbar.setText(
-                QCoreApplication.tr("Watering in Progress...")
-             ) # changes text of statusbar to "Watering in Progress..."
-            startwater() # turns on waterpump indefinetly
-        self.togglewater = not self.togglewater # resets self.togglewater to opposite of previous bool
+
 
     ### Time Display    
 
