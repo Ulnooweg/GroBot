@@ -76,6 +76,7 @@ try:
     # Virutally the same function as grobotboo(), but manages the GPIO pins through a separate library;
     # Whenever console commands attempted to start an instance of main.py through ssh, this error would occur
     # This fixes the "GPIO Busy" Error during GUI developement
+    # GPIO.cleanup
 
     #Runs BoardMostfetReset
     grobotboot() #This force all pin reset
@@ -663,7 +664,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         try:
             date_str = f"{self.ui.systemyear_label.text()}-{self.ui.systemmonth_label.text()}-{self.ui.systemday_label.text()}"
             time_str = f"{self.ui.systemhours_label.text()}:{self.ui.systemminutes_label.text()}"
-            subprocess.run(f"echo grobot | sudo -S date -pyside6-lupdate main.py -ts example_de.tss \"{date_str} {time_str}\"", shell=True, check=True) #Needs \ to escape " as date and time string needs to be wrapped by "" for date -s
+            subprocess.run(f"echo grobot | sudo -S date -s \"{date_str} {time_str}\"", shell=True, check=True) #Needs \ to escape " as date and time string needs to be wrapped by "" for date -s
             subprocess.run("echo grobot | sudo -S hwclock -w", shell=True, check=True) #Write system date to RTC
             self.ui.statusbar_label.setText(
                 QCoreApplication.tr("System Time Saved!")
@@ -675,6 +676,25 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
             #LCD COLOUR HANDLING CODE (RED) HERE
             raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+
+    ### Togglables        
+
+    # Depreciated Toggle Script
+    # @Slot()
+    # def camera_toggle(self):
+    #     if self.togglecamera: # self.togglefan is False by default
+    #         config.update_config('PICAMERA', 'CameraSet', '0')
+    #         print("Camera Off") # prints to console "off"
+    #         self.ui.statusbar_label.setText("Toggling Camera Off")
+    #         self.tasksleep(2)
+    #         self.ui.statusbar_label.setText(self.welcome_message())
+    #     else:
+    #         config.update_config('PICAMERA', 'CameraSet', '1')
+    #         print("Camera On") # prints to console "on"
+    #         self.ui.statusbar_label.setText("Toggling Camera On")
+    #         self.tasksleep(2)
+    #         self.ui.statusbar_label.setText(self.welcome_message())
+    #     self.togglecamera = not self.togglecamera # resets self.togglefan to opposite of previous bool
 
     @Slot() # Decorator for multithreading
     def fan_toggle(self): # Function that toggles fan 
@@ -728,7 +748,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.tasksleep(2)
         self.statusbar.setText(self.welcome_message())
         pass
-
 
     ### Time Display    
 
@@ -903,6 +922,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                 self.tasksleep(2)
                 while True:
                     ###set_lcd_color("error")
+                    print("Restarting")
                     subprocess.run("echo grobot | sudo -S shutdown -r now", shell=True)
                     self.tasksleep(2)
                     pass
@@ -932,7 +952,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Call logtofile function
             from logoutput import logtofile
             result = logtofile()
-            feedread() # JUXTAPOSITION #### THIS IS A DEBUG CODE LINE
             
             # Show result
             if result == 1:
@@ -1017,7 +1036,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Read value from sensor
             ReadVal = feedread() # T RH SRH in order
             # Write data out to excel file
-            excelout(ReadVal[0], ReadVal[1], ReadVal[2]) 
+            excelout(ReadVal[0], ReadVal[1], ReadVal[2])
 
             writecsv_mainflags("EveryXX25","0") #Set the execution flag for the function back to 0
             #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
