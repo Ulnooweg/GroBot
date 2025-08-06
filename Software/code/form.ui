@@ -12,7 +12,7 @@
   </property>
   <property name="font">
    <font>
-    <family>Segoe UI</family>
+    <family>TikTok Sans 28pt</family>
    </font>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>TikTok Sans 28pt</family>
      <bold>false</bold>
     </font>
    </property>
@@ -54,7 +54,7 @@
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -85,7 +85,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Myriad Pro</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>47</pointsize>
        <bold>true</bold>
       </font>
@@ -108,7 +108,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -153,7 +153,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -180,7 +180,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -207,7 +207,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -234,7 +234,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -261,7 +261,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -291,7 +291,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -320,7 +320,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -348,7 +348,7 @@ Toggle</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -376,7 +376,7 @@ Switch</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -403,7 +403,7 @@ Switch</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -430,7 +430,7 @@ Switch</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -457,7 +457,7 @@ Switch</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -484,7 +484,7 @@ Switch</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -514,7 +514,7 @@ Pump</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -541,7 +541,7 @@ Pump</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -568,7 +568,7 @@ Pump</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -595,7 +595,7 @@ Pump</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>17</pointsize>
        <bold>false</bold>
       </font>
@@ -615,7 +615,7 @@ Pump</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -644,7 +644,7 @@ Pump</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -671,7 +671,7 @@ Pump</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -705,7 +705,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -738,7 +738,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>10</pointsize>
        <bold>false</bold>
       </font>
@@ -794,7 +794,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>false</bold>
       </font>
@@ -814,7 +814,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>false</bold>
       </font>
@@ -839,7 +839,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -935,7 +935,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
@@ -962,7 +962,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
@@ -989,7 +989,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
@@ -1016,7 +1016,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
@@ -1043,7 +1043,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -1093,7 +1093,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>true</bold>
       </font>
@@ -1120,7 +1120,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>true</bold>
       </font>
@@ -1147,7 +1147,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>true</bold>
       </font>
@@ -1174,7 +1174,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>true</bold>
       </font>
@@ -1201,7 +1201,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>true</bold>
       </font>
@@ -1228,7 +1228,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>true</bold>
       </font>
@@ -1303,7 +1303,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -1330,7 +1330,7 @@ QPushButton:pressed{
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>false</bold>
       </font>
@@ -1358,7 +1358,7 @@ Parameters</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -1434,7 +1434,7 @@ Parameters</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <bold>false</bold>
        <underline>true</underline>
       </font>
@@ -1457,7 +1457,7 @@ Parameters</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <bold>false</bold>
        <underline>true</underline>
       </font>
@@ -1600,7 +1600,7 @@ Parameters</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <bold>false</bold>
        <underline>true</underline>
       </font>
@@ -1623,7 +1623,7 @@ Parameters</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <bold>false</bold>
        <underline>true</underline>
       </font>
@@ -1646,7 +1646,7 @@ Parameters</string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>12</pointsize>
        <bold>true</bold>
       </font>
@@ -1676,7 +1676,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>12</pointsize>
        <bold>true</bold>
       </font>
@@ -1707,7 +1707,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>13</pointsize>
        <bold>false</bold>
        <underline>false</underline>
@@ -1731,7 +1731,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>13</pointsize>
        <bold>false</bold>
       </font>
@@ -1754,7 +1754,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>13</pointsize>
        <bold>false</bold>
       </font>
@@ -1777,7 +1777,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>13</pointsize>
        <bold>false</bold>
       </font>
@@ -1909,7 +1909,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
@@ -1936,7 +1936,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
@@ -1963,7 +1963,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
@@ -1990,7 +1990,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>20</pointsize>
        <bold>true</bold>
       </font>
@@ -2017,7 +2017,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -2047,7 +2047,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -2074,7 +2074,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -2101,7 +2101,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -2128,7 +2128,7 @@ Humid Set: (%) </string>
      </property>
      <property name="font">
       <font>
-       <family>Segoe UI</family>
+       <family>TikTok Sans 28pt</family>
        <pointsize>18</pointsize>
        <bold>false</bold>
       </font>
@@ -2191,7 +2191,7 @@ Humid Set: (%) </string>
     </property>
     <property name="font">
      <font>
-      <family>Segoe UI</family>
+      <family>TikTok Sans 28pt</family>
       <bold>true</bold>
      </font>
     </property>
@@ -2210,7 +2210,7 @@ Humid Set: (%) </string>
     </property>
     <property name="font">
      <font>
-      <family>Segoe UI</family>
+      <family>TikTok Sans 28pt</family>
       <bold>true</bold>
      </font>
     </property>
@@ -2229,7 +2229,7 @@ Humid Set: (%) </string>
     </property>
     <property name="font">
      <font>
-      <family>Segoe UI</family>
+      <family>TikTok Sans 28pt</family>
       <bold>true</bold>
      </font>
     </property>

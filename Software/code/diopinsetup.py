@@ -32,6 +32,7 @@ import subprocess
 ##############################################
 
 def diopinset(): #define diopinset function that takes no arguments
+    print("diopinset called")
     try: #set up try except so it it successful return 1, if not return 0
         #Begin by defining pins
         #For Blinka, the pins are defined as DXX
