@@ -718,11 +718,15 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     @Slot() # Decorator for multithreading
     def water_toggle(self): # Toggles whether the water pump is on indefinetly, or off
-        self.statusbar.setText("Watering in Progress...") # changes text of statusbar to "Watering in Progress..."
+        self.statusbar.setText(
+            QCoreApplication.tr("Watering in Progress...")
+        ) # changes text of statusbar to "Watering in Progress..."
         settings = get_plant_settings()
         mmrain = int(settings['waterVol'])
         autorain(mmrain)
-        self.statusbar.setText("Stopped Watering!") # changes text of statusbar to "Stopped Watering"
+        self.statusbar.setText(
+            QCoreApplication.tr("Stopped Watering!")
+        ) # changes text of statusbar to "Stopped Watering"
         PumpRunDry = (readcsv_mainflags("PumpRunDry"))
         if int(PumpRunDry) == 1:
             self.waterstatuslabel.setText("Pump Dry")
@@ -735,9 +739,13 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     @Slot() # Decorator for multithreading
     def water_cycle(self):
-        self.statusbar.setText("Cycling Pump...")
+        self.statusbar.setText(
+            QCoreApplication.tr("Cycling Pump...")
+        )
         pumprefillcycle()
-        self.statusbar.setText("Pump cycled!")
+        self.statusbar.setText(
+            QCoreApplication.tr("Pump cycled!")
+        )
         PumpRunDry = (readcsv_mainflags("PumpRunDry"))
         if int(PumpRunDry) == 1:
             self.waterstatuslabel.setText("Pump Dry")
@@ -746,7 +754,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             self.waterstatuslabel.setText("Water Det.")
             self.waterstatuslabel.setStyleSheet("color: navy;")
         self.tasksleep(2)
-        self.statusbar.setText(self.welcome_message())
+        self.statusbar.setText(
+            QCoreApplication.tr(self.welcome_message())
+        )
         pass
 
     ### Time Display    
@@ -825,7 +835,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     def debug_press(self): # Simple function that prints to console if a button was pressed
         print("button pressed")
-        self.ui.statusbar_label.setText("button pressed")
+        self.ui.statusbar_label.setText(
+            QCoreApplication.tr("button pressed")
+        )
         diopinset()
         self.ui.statusbar_label.setText(
             QCoreApplication.tr("Button Pressed!")
@@ -956,12 +968,16 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Show result
             if result == 1:
                 ###set_lcd_color("normal")  # Green for success
-                self.statusbar.setText(f"{readlocal('167')}\n{readlocal('168')}") # Log Exported \n successfully!
+                self.statusbar.setText(
+                    QCoreApplication.tr("Log Exported Successfully!")
+                ) # Log Exported \n successfully!
                 self.tasksleep(2)
                 self.statusbar.setText(self.welcome_message())
             else:
                 ###set_lcd_color("error")  # Red for error
-                self.statusbar.setText(f"{readlocal('169')}\n{readlocal('170')}") # Export failed! \n Try again
+                self.statusbar.setText(
+                    QCoreApplication.tr("Export Failed, Try Again")
+                ) # Export failed! \n Try again
                 self.tasksleep(2)
                 self.statusbar.setText(self.welcome_message())
                 
@@ -970,7 +986,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             
         except Exception:
             ###set_lcd_color("error")
-            self.statusbar.setText(f"{readlocal('171')}\n{readlocal('172')}") # Error exporting \n log file
+            self.statusbar.setText(
+                QCoreApplication.tr("Error Exporting Log File")
+            ) # Error exporting \n log file
             self.tasksleep(2)
             self.statusbar.setText(self.welcome_message())
             ###set_lcd_color("normal")
