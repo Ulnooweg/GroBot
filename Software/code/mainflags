@@ -1,4 +1,5 @@
 name,data
+grobot_lang,en
 EveryXX15,0
 EverySETTIME,0
 EveryXX25,0
@@ -7,3 +8,4 @@ EverySUNRISE,0
 EverySUNSET,0
 PumpRunDry,0
 PumpACTIVE,0
+DebugState,0

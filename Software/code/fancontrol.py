@@ -22,6 +22,7 @@
 import time  # need time for sleep function
 from diopinsetup import diopinset
 import subprocess
+from multiprocessing import shared_memory
 
 ##############################################
 # Handle the pins definition and sensor definition
@@ -32,9 +33,24 @@ s1, s2, s3, s4, s5, s6, b1, ths, sms, ina = diop[0], diop[1], diop[2], diop[3], 
 
 def fanon(t):  # define function to turn on fan for t seconds as input
     try:
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('fancontrol-fanon: Turning fan on') if debugstate == 1 or debugstate == 2 else None
+
         s3.value = True  # turns on fan
         time.sleep(t)  # sleep for t seconds while fan is on
+
+        #Debug message
+        print('fancontrol-fanon: Turning fan off') if debugstate == 1 or debugstate == 2 else None
+
         s3.value = False  # turns off fan
+
+        #Debug message
+        print('fancontrol-fanon: Fan off completed') if debugstate == 1 or debugstate == 2 else None
+
         return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
@@ -43,7 +59,18 @@ def fanon(t):  # define function to turn on fan for t seconds as input
     
 def fanmanon():  # define function to turn on fan indefinitely for manual control. MUST BE USED WITH fanoff at the end always
     try:
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('fancontrol-fanmanon: Turning fan on') if debugstate == 1 or debugstate == 2 else None
+
         s3.value = True  # turns on fan
+
+        #Debug message
+        print('fancontrol-fanmanon: Fan on completed') if debugstate == 1 or debugstate == 2 else None
+
         return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
@@ -52,7 +79,18 @@ def fanmanon():  # define function to turn on fan indefinitely for manual contro
 
 def fanoff():  # define function to turn off fan
     try:
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('fancontrol-fanoff: Turning fan off') if debugstate == 1 or debugstate == 2 else None
+
         s3.value = False  # turns off fan
+
+        #Debug message
+        print('fancontrol-fanoff: Fan off completed') if debugstate == 1 or debugstate == 2 else None
+
         return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)

@@ -24,14 +24,11 @@
 #
 ########################################
 # MODULE IMPORTS
-import time  # need time for sleep function
+from multiprocessing import shared_memory
 from time import sleep
 from diopinsetup import diopinset
 import subprocess
 from config import readcsv_waterparam, writecsv_mainflags, readcsv_mainflags
-from datetime import datetime
-import csv
-import os
 
 ##############################################
 # Handle the pins definition and sensor definition
@@ -63,44 +60,50 @@ currentFilter = MovingMax(10)
 
 def wateringwithlogic(timetowater): #Define a func that handles the run-dry detection logic
     try:
-        ##### FOR CHIRS - TO DO #####
-        #Should take timetowater as an input time to turn pump on in seconds
-        #if there is no water skips watering and returns 2, if there is water water for timetowater seconds and return 1
-        ##### FOR CHIRS - TO DO #####
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('watercontrol-wateringwithlogic: Defining parameters') if debugstate == 1 or debugstate == 2 else None
+
         # Define parameters used in logical calculation
-        print("Watering with logic")
         samplerate = (1/32) # Seconds
         counter = 0 # Seconds
-        # Amps = ina.current # Measured in milliamps
-        # A_filtered = currentFilter.update(Amps)
-        #writecsv_mainflags("PumpRunDry","0") # Case for new mainflag: 0 means pump resevoir is full, 1 means resevoir is dry
+
+        #Debug message
+        print('watercontrol-wateringwithlogic: Starting watering routine') if debugstate == 1 or debugstate == 2 else None
+
         s1.value = True # Enables Pump MOSFET   
         while s1.value == True: # If MOSFET S1 is enabled
             if counter < timetowater: # If the counter is less than the user specified time
                 Amps = ina.current # Measured in milliamps
                 A_filtered = currentFilter.update(Amps) # Filtered Current measured in milliamps
-                #print(Amps, A_filtered) # Print the filtered and unfiltered current
+                #Debug message
+                print(f"watercontrol-wateringwithlogic: At time {counter} of {timetowater} Amps = {Amps} mA, A_filtered ={A_filtered} mA") if debugstate == 1 or debugstate == 2 else None
                 if counter > 0 and counter % 2 == 0: # if counter is divisible by 2 and leaves a remainder of 0
-                    # print("Counter is divisible by 2")
-                    # print(str(counter))
+                    #Debug message
+                    print(f"watercontrol-wateringwithlogic: Counter of {counter} is divisible by 2") if debugstate == 1 or debugstate == 2 else None
                     if A_filtered >= 350: # if the filtered current is greater than 350 mA
-                        # print("Current is greater than 350 mA")
+                        #Debug message
+                        print(f"watercontrol-wateringwithlogic: A_filtered of {A_filtered} >= 350 mA, water level OK, continuing") if debugstate == 1 or debugstate == 2 else None
                         pass # Current is at normal levels for normal 
                     elif A_filtered < 350: # if the filtered current is less than 350 mA
+                        #Debug message
+                        print(f"watercontrol-wateringwithlogic: A_filtered of {A_filtered} < 350 mA, pump dry, stopping") if debugstate == 1 or debugstate == 2 else None
                         s1.value = False # Turn off pump MOSFET
                         writecsv_mainflags("PumpRunDry","1") # Raise RunDry Flag
-                        print("Pump is dry")
-                        # print("MOSFET disabled due to dry resevoir")
                     else:
                         raise RuntimeError('CURRENT VALUE IS INVALID') # Current should be a logical value
                 else:
-                    # print("Counter is not divisible by 2")
-                    # print(str(counter))
+                    #Debug message
+                    print(f"watercontrol-wateringwithlogic: Counter of {counter} is not divisible by 2") if debugstate == 1 or debugstate == 2 else None
                     pass
                 sleep(samplerate) # Sleep for the specified sample rate
                 counter = counter + (samplerate) # Increment counter by one samplerate 
             else:
-                print("Watering has ended") # 
+                #Debug message
+                print(f"watercontrol-wateringwithlogic: At time {counter} of {timetowater} watering completed") if debugstate == 1 or debugstate == 2 else None
                 s1.value = False # Disable MOSFET
                 break
     except Exception as errvar:
@@ -112,31 +115,45 @@ def wateringwithlogic(timetowater): #Define a func that handles the run-dry dete
 
 def pumprefillcycle():
     try:
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
 
-        print("Cycling water through pump")
+        #Debug message
+        print('watercontrol-pumprefillcycle: Defining variables') if debugstate == 1 or debugstate == 2 else None
+
         samplerate = (1/32) # Seconds
         s1.value = True
         sleep(2)
 
         while s1.value == True: # If MOSFET S1 is enabled
 
+            #Debug message
+            print('watercontrol-pumprefillcycle: Engaging current measurements') if debugstate == 1 or debugstate == 2 else None
+
             Amps = ina.current # Measured in milliamps
             A_filtered = currentFilter.update(Amps) # Filtered Current measured in milliamps
 
             if A_filtered < 350: # if the filtered current is greater than 350 mA
+                #Debug message
+                print(f"watercontrol-pumprefillcycle: Amps = {Amps} mA, A_filtered = {A_filtered} mA") if debugstate == 1 or debugstate == 2 else None
+                print(f"watercontrol-pumprefillcycle: Current value too low, sleeping for {samplerate} seconds") if debugstate == 1 or debugstate == 2 else None
 
-                #print(f"{A_filtered}, {Amps}") # DEBUGGERLINE
                 sleep(samplerate) # Sleep for the specified sample rate
 
             elif A_filtered >= 350: # if the filtered current is less than 350 mA
+                #Debug message
+                print('watercontrol-pumprefillcycle: Current OK, turning off pump') if debugstate == 1 or debugstate == 2 else None
 
                 s1.value = False # Turn off pump MOSFET
-                writecsv_mainflags("PumpRunDry","0") # Raise RunDry Flag
-                print("Pump has cycled")
+                writecsv_mainflags("PumpRunDry","0") # Write RunDry Flag back to 0
 
             else:
 
                 raise RuntimeError('CURRENT VALUE IS INVALID') # Current should be a logical value
+            
+        #Debug message
+        print('watercontrol-pumprefillcycle: Pump cycling completed') if debugstate == 1 or debugstate == 2 else None
    
     except Exception as errvar:
         #LCD COLOUR HANDLING CODE (RED) HERE
@@ -145,17 +162,33 @@ def pumprefillcycle():
 
 def autorain(mmrain):  # define autorain func with mm of water input as mm
     try:  # check water level
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('watercontrol-autorain: Processing autorain parameters') if debugstate == 1 or debugstate == 2 else None
+
         # Calculations based on 28.5 mL/s of water through the squid yielding 60.0 mL of water delivered per millilitre of rain
         #Based on current growing area X-sec area and related calcs
 
         mmrate = 2.11  # rate of watering in seconds/mm_Water
         t = mmrain*mmrate  # time required to water in seconds
+
+        #Debug message
+        print('watercontrol-autorain: Reading current pump dryness status') if debugstate == 1 or debugstate == 2 else None
+
         PumpRunDry = int(readcsv_mainflags("PumpRunDry"))
 
         if PumpRunDry == 0:
+            #Debug message
+            print('watercontrol-autorain: Engaging logic-controlled watering') if debugstate == 1 or debugstate == 2 else None
+
             wateringwithlogic(t) #Hand off time to water variable
 
         elif PumpRunDry == 1:
+            #Debug message
+            print('watercontrol-autorain: Pump dry - skipping') if debugstate == 1 or debugstate == 2 else None
             pass
         else:
             raise RuntimeError('INVALID RUNDRY FLAG')

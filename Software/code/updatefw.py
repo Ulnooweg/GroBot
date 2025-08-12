@@ -19,10 +19,15 @@
 #MODULE IMPORTS
 import subprocess
 from config import readcsv, writecsvnote
+from multiprocessing import shared_memory
 
 #Define a function to update the firmware
 def grobotfwupdate():
     try:
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
         #Check individually for each step of the firmware update process
 
         ###############################################################################
@@ -33,18 +38,26 @@ def grobotfwupdate():
         #                   fw_update_version ... #Define what version this is
         #                   Anything inside #### FW UPDATE CODE ####
         ###############################################################################
-        
+
         #Read current firmware version as string as defined by readcsv
         fw_version = readcsv('fw_version')
 
         fw_update_version = 1.1 #Define what version this is
 
+        #Debug message
+        print(f"updatefw-grobotfwupdate: Read versions. Fw ver: {fw_update_version} , sys ver: {fw_version}") if debugstate == 1 or debugstate == 2 else None
+
         if float(fw_version) >= fw_update_version: #Checks, if current fw version already up to date or newer do nothing
+            #Debug message
+            print(f"updatefw-grobotfwupdate: Update for fw ver: {fw_update_version} skipped due to sys ver: {fw_version}") if debugstate == 1 or debugstate == 2 else None
             pass
         elif float(fw_version) < fw_update_version: #If version is less do the update
             #If needs to run as sudo, we need to echo the password as standrd input and use -S flag to have sudo use password from standard input
             #If command contains #, wrap it all in "COMMAND_HERE" to ensure it is not processed as comment
             #Source command is echo $PSSWD | sudo -S command 
+
+            #Debug message
+            print(f"updatefw-grobotfwupdate: Engaging firmware update. Fw ver: {fw_update_version} , sys ver: {fw_version}") if debugstate == 1 or debugstate == 2 else None
 
             #### FW UPDATE CODE ####
 
@@ -66,6 +79,9 @@ def grobotfwupdate():
             subprocess.run("echo grobot | sudo -S cp /mnt/grobotextdat/code/grobot.service /lib/systemd/system/grobot.service", shell=True)
 
             #### FW UPDATE CODE END ####
+
+            #Debug message
+            print(f"updatefw-grobotfwupdate: Firmware update completed. Fw ver: {fw_update_version} , sys ver: {fw_version}") if debugstate == 1 or debugstate == 2 else None
 
             #Write the updated firmware version
             writecsvnote('fw_version',str(fw_update_version),f"#Firmware Version: {fw_update_version}")            
@@ -93,12 +109,20 @@ def grobotfwupdate():
 
         fw_update_version = 1.2 #Define what version this is
 
+        #Debug message
+        print(f"updatefw-grobotfwupdate: Read versions. Fw ver: {fw_update_version} , sys ver: {fw_version}") if debugstate == 1 or debugstate == 2 else None
+
         if float(fw_version) >= fw_update_version: #Checks, if current fw version already up to date or newer do nothing
+            #Debug message
+            print(f"updatefw-grobotfwupdate: Update for fw ver: {fw_update_version} skipped due to sys ver: {fw_version}") if debugstate == 1 or debugstate == 2 else None
             pass
         elif float(fw_version) < fw_update_version: #If version is less do the update
             #If needs to run as sudo, we need to echo the password as standrd input and use -S flag to have sudo use password from standard input
             #If command contains #, wrap it all in "COMMAND_HERE" to ensure it is not processed as comment
             #Source command is echo $PSSWD | sudo -S command 
+
+            #Debug message
+            print(f"updatefw-grobotfwupdate: Engaging firmware update. Fw ver: {fw_update_version} , sys ver: {fw_version}") if debugstate == 1 or debugstate == 2 else None
 
             #### FW UPDATE CODE ####
 
@@ -115,6 +139,9 @@ def grobotfwupdate():
             subprocess.run("echo grobot | sudo -S timedatectl set-timezone UTC", shell=True)
 
             #### FW UPDATE CODE END ####
+
+            #Debug message
+            print(f"updatefw-grobotfwupdate: Firmware update completed. Fw ver: {fw_update_version} , sys ver: {fw_version}") if debugstate == 1 or debugstate == 2 else None
 
             #Write the updated firmware version
             writecsvnote('fw_version',str(fw_update_version),f"#Firmware Version: {fw_update_version}")            

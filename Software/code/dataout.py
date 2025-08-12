@@ -22,6 +22,7 @@ import datetime
 import threading
 import subprocess
 import csv
+from multiprocessing import shared_memory
 
 ##############################################
 
@@ -29,6 +30,13 @@ dataoutcsv_lock = threading.Lock() #Define a thread lock class
 
 def excelout(T,RH,SRH):
     try:
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('dataout-excelout: Checking if output path exists') if debugstate == 1 or debugstate == 2 else None
+
         #First, check if the required path exists
         directory = "/mnt/grobotextdat/data" #This is the main external directory associated with USB
         if os.path.isdir(directory) == True: #check if exist
@@ -36,12 +44,17 @@ def excelout(T,RH,SRH):
         else: #if not return error to force a code restart
             raise RuntimeError('FILE IO FAIL')
 
+        #Debug message
+        print('dataout-excelout: Checking if file already exist') if debugstate == 1 or debugstate == 2 else None
+
         #Now check if the output excel file exist, if it does not create it.
         filename = f"{directory}/datalog.csv"
 
         if os.path.isfile(filename) == True:
             pass
         else: #create the excel file
+            #Debug message
+            print('dataout-excelout: Creating datalog.csv') if debugstate == 1 or debugstate == 2 else None
             #All info must be strings
             csvinitdata = ['Time','Temp','%RH','Soil RH'] #define the row list
             with dataoutcsv_lock: #Acquire thread lock before operation
@@ -49,17 +62,28 @@ def excelout(T,RH,SRH):
                     writer = csv.writer(csvfile, delimiter=',')
                     writer.writerow(csvinitdata) #Use writerow not writerows as we only want to write a single row
 
+
+        #Debug message
+        print('dataout-excelout: Creating dataset to append') if debugstate == 1 or debugstate == 2 else None
+
         #Now we will append the data
         humantimestamp = datetime.datetime.now().strftime("%H:%M:%S %Y-%m-%d") #Current timestamp Canadian standard (ISO 8081 ref)
         #See: https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/enabling-interoperability/gc-enterprise-data-reference-standards/data-reference-standard-date-time-format.html
 
         csvdata = [str(humantimestamp), str(T), str(RH), str(SRH)] #data to write to csv, convert to string to make sure they are string
 
+
+        #Debug message
+        print('dataout-excelout: Writing data to file') if debugstate == 1 or debugstate == 2 else None
+
         #Now write the data back to file in line append mode
         with dataoutcsv_lock: #Acquire thread lock before operation
             with open('/mnt/grobotextdat/data/datalog.csv', 'a', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerow(csvdata) #Use writerow not writerows as we only want to write a single row
+
+            #Debug message
+            print('dataout-excelout: Data written to file') if debugstate == 1 or debugstate == 2 else None
 
             return 1
         

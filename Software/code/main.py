@@ -7,10 +7,10 @@
 ########################################
 #
 #GroBot
-#Code: lcddispfunc
+#Code: main
 #Version: 2.0
-#Description: LCD Module control code
-#Function: Controls the workings of the LCD display and human interaction. Consult Info.md for more information
+#Description: main code
+#Function: The primary code controlling all aspect of the GroBot including input, output, etc.
 #Input: consult Info.md
 #Output: consult Info.md
 #Error Handling: consult Info.md
@@ -21,12 +21,10 @@ import sys
 import os
 import updatefw
 import time
-import board
 import subprocess
-import RPi.GPIO as GPIO
 from PySide6.QtWidgets import *
-from PySide6.QtWidgets import QApplication, QWidget, QLabel, QLCDNumber, QMainWindow
-from PySide6.QtCore import QDateTime, QTimer, Slot, Signal, QThreadPool, QRunnable, QObject, QTranslator, QCoreApplication
+from PySide6.QtWidgets import QApplication, QLabel, QMainWindow
+from PySide6.QtCore import QTimer, Slot, QThreadPool, QRunnable, QTranslator, QCoreApplication
 from PySide6.QtGui import *
 from datetime import datetime, time as time2
 from ui_form import Ui_Form
@@ -34,8 +32,26 @@ from timecheck import checktimebetween
 from sensorfeed import feedread
 from BoardMOSFETReset import grobotboot
 from logoutput import logtofile
+from multiprocessing import shared_memory
+#Import the config submodules here to be used by shared memory rcreation
+from config import (
+    get_plant_settings, 
+    readcsv,
+    readcsv_softver,
+    readcsv_mainflags,
+    writecsv_mainflags,
+)
 try:
-    print('Writing log to file')
+    #Create a shared memory for the groBot process that depends on main
+    shr_mem = shared_memory.SharedMemory(name='grobot_shared_mem', create=True, size=10)
+
+    #Read verbosity flag and put it into location 0 on shared mem
+    debugstate = int(readcsv_mainflags("DebugState"))
+    shr_mem.buf[0] = debugstate
+
+    #Debug message
+    print('main: Writing log to file on start') if debugstate == 1 or debugstate == 2 else None
+
     logtofile() #Write log to file immediately after boot in case needed for debugging
 except Exception as errvar:
     #Note: There is no force reboot yet here as logoutput should be the first thing imported and done
@@ -50,33 +66,37 @@ from diopinsetup import diopinset
 
 # config.py is for linux.
 import config
-from config import (
-    get_plant_settings, 
-    readcsv,
-    readlocal,
-    readcsv_softver,
-    readcsv_mainflags,
-    writecsv_mainflags,
-    readcsv_waterparam
-)
 
 ##############################################
 ################# ON BOOTUP ##################
 ##############################################
 
+#Debug message
+print('main: Starting display output') if debugstate == 1 or debugstate == 2 else None
+
 if os.environ.get('DISPLAY','') == '': # Handles raspberry pi environment variable, for launching a python program on a display
     os.environ.__setitem__('DISPLAY', ':0.0')
 
-print("Starting GUI...")
+#Debug message
+print('main: Initializing initial bootup sequence') if debugstate == 1 or debugstate == 2 else None
 
 try:
-    #Suppress traceback for cleaner error log
-    #sys.tracebacklimit = 0 # Imported from main.py | cleans up the console of unessecary error messages
+    #Debug message
+    print('main: Engaging traceback suppression logic') if debugstate == 1 or debugstate == 2 else None
 
-    # Virutally the same function as grobotboo(), but manages the GPIO pins through a separate library;
-    # Whenever console commands attempted to start an instance of main.py through ssh, this error would occur
-    # This fixes the "GPIO Busy" Error during GUI developement
-    # GPIO.cleanup
+    #Suppress traceback for cleaner error log only if debugstate is 2
+    if debugstate == 1 or debugstate == 0:
+        #Debug message
+        print('main: Suppressing traceback') if debugstate == 1 or debugstate == 2 else None
+        sys.tracebacklimit = 0 # Imported from main.py | cleans up the console of unessecary error messages
+    elif debugstate == 2:
+        #Debug message
+        print('main: Skipping traceback suppression') if debugstate == 1 or debugstate == 2 else None
+        pass
+    else:
+        raise RuntimeError('debugstate value not valid')
+    #Debug message
+    print('main: Starting grobotboot protocol') if debugstate == 1 or debugstate == 2 else None
 
     #Runs BoardMostfetReset
     grobotboot() #This force all pin reset
@@ -84,7 +104,9 @@ try:
     # This only initialize once on bootup
     #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green on bootup
 
-    # Start the LCD menu thread immediately
+    #Debug message
+    print('main: Initial bootup sequence completed') if debugstate == 1 or debugstate == 2 else None
+
 except Exception as errvar:
     subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
     #LCD COLOUR HANDLING CODE (RED) HERE
@@ -92,26 +114,52 @@ except Exception as errvar:
 
 # Starts with reading values from sensor
 try:
+    #Debug message
+    print('main: Reading value from sensor on startup') if debugstate == 1 or debugstate == 2 else None
+
     ReadVal = feedread() # T RH SRH in order
+
+    #Debug message
+    print('main: Reading configuration value on startup') if debugstate == 1 or debugstate == 2 else None
     
     # Now do an initial read of the configuration value
     settings = get_plant_settings()
 
+    #Debug message
+    print('main: Checking current time on startup') if debugstate == 1 or debugstate == 2 else None
+
     # Now check if light needs to be on or off
     if checktimebetween(time2(settings['sunrise'][0], settings['sunrise'][1]), time2(settings['sunset'][0], settings['sunset'][1])) == True:
+        #Debug message
+        print('main: Current time within set time, turning growlight on on startup') if debugstate == 1 or debugstate == 2 else None
         growlighton()
+        initgrowlightcond = True
     elif checktimebetween(time2(settings['sunrise'][0], settings['sunrise'][1]), time2(settings['sunset'][0], settings['sunset'][1])) == False:
+        #Debug message
+        print('main: Current time not within set time, turning growlight off on startup') if debugstate == 1 or debugstate == 2 else None
         growlightoff()
+        initgrowlightcond = False
     else:
         raise RuntimeError('UNKNOWN FAILURE')
 
+    #Debug message
+    print('main: Checking humidity value on startup') if debugstate == 1 or debugstate == 2 else None
+
     # Check if internal humidity or temperature is too high and the fan needs to be on
     if ReadVal[0] > settings['maxTemp'] or ReadVal[1] > settings['maxHumid']:
+        #Debug message
+        print('main: Humidity value too high, turning fan on on startup') if debugstate == 1 or debugstate == 2 else None
         fanon(settings['fanTime'])
     elif ReadVal[0] <= settings['maxTemp'] and ReadVal[1] <= settings['maxHumid']:
+        #Debug message
+        print('main: Humidity value normal, skiiping fan on startup') if debugstate == 1 or debugstate == 2 else None
         pass
     else:
         raise RuntimeError('UNKNOWN FAILURE')
+
+    #Debug message
+    print('main: Sensors protocol on startup completed') if debugstate == 1 or debugstate == 2 else None
+
 
 except Exception as errvar:
     subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
@@ -137,17 +185,17 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
         # Toggle parameters
         self.togglewater = False # Initial Toggle state for waterpump
-        self.togglelight = False # Initial Toggle state for UV growlamp
+        self.togglelight = initgrowlightcond # Initial Toggle state for UV growlamp
         self.togglefan = False # Intital Toggle state for enclosure fan
 
         # Start Threading
         self.thread_manager = QThreadPool() # Define QThreadPool
         thread_count = self.thread_manager.maxThreadCount() # Define Thread Count
         activethread_count = self.thread_manager.activeThreadCount()
-        print(f"Multithreading with maximum {thread_count} threads") # Print Thread Count
+        print(f"main: Multithreading with maximum {thread_count} threads") if debugstate == 1 or debugstate == 2 else None
         self.start_thread(self.schedule_routine) #Opens a new thread to begin scheduling
-        print("Routine Running")
-        print(f"Now running with {thread_count-activethread_count} threads") # Print Thread Count
+        print('main: Multithreading routine running') if debugstate == 1 or debugstate == 2 else None
+        print(f"main: Now running with {thread_count-activethread_count} threads") if debugstate == 1 or debugstate == 2 else None
 
         cfg = config.read_config()
 
@@ -580,28 +628,32 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     def watertime_hourinput(self, increment): # Changes the hours in the watertime selection screen
         value = int(self.ui.waterhours_label.text())
-        print(str(value))
-        print(str(increment))
+        #Debug message
+        print(f"main-watertime_hourinput: Incremented hours to: {value} with increment {increment}") if debugstate == 1 or debugstate == 2 else None
         if increment == 'plus':
             value = (value + 1) % 24
-            print(str(value))
+            #Debug message
+            print(f"main-watertime_hourinput: Incremented hours to: {value}") if debugstate == 1 or debugstate == 2 else None
             self.ui.waterhours_label.setText(str(value))
         elif increment == 'minus':
             value = (value - 1) % 24
-            print(str(value))
+            #Debug message
+            print(f"main-watertime_hourinput: Incremented hours to: {value}") if debugstate == 1 or debugstate == 2 else None
             self.ui.waterhours_label.setText(str(value))
 
     def watertime_minuteinput(self, increment): # Changes the minutes in the watertime selection screen
         value = int(self.ui.waterminutes_label.text())
-        print(str(value))
-        print(str(increment))
+        #Debug message
+        print(f"main-watertime_minuteinput: Incremented minutes to: {value} with increment {increment}") if debugstate == 1 or debugstate == 2 else None
         if increment == 'plus':
             value = (value + 1) % 60
-            print(str(value))
+            #Debug message
+            print(f"main-watertime_minuteinput: Incremented minutes to: {value}") if debugstate == 1 or debugstate == 2 else None
             self.ui.waterminutes_label.setText(str(value))
         elif increment == 'minus':
             value = (value - 1) % 60
-            print(str(value))
+            #Debug message
+            print(f"main-watertime_minuteinput: Incremented minutes to: {value}") if debugstate == 1 or debugstate == 2 else None
             self.ui.waterminutes_label.setText(str(value))
 
     ### System Time
@@ -700,20 +752,24 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     def fan_toggle(self): # Function that toggles fan 
         if self.togglefan: # self.togglefan is False by default
             fanoff() # turns fan off
-            print("Fan off") # prints to console
+            #Debug message
+            print(f"main-fan_toggle: Turned fan off") if debugstate == 1 or debugstate == 2 else None
         else:
             fanmanon() # turns fan on (this is the manual variant, meaning it will stay on indefinetly)
-            print("Fan on") # prints to console
+            #Debug message
+            print(f"main-fan_toggle: Turned fan on (fanmanon)") if debugstate == 1 or debugstate == 2 else None
         self.togglefan = not self.togglefan # resets self.togglefan to opposite of previous bool
 
     @Slot() # Decorator for multithreading
     def light_toggle(self): # Function that toggles growlight
         if self.togglelight: # self.togglefan is False by default
             growlightoff() # turns off growlight
-            print("light off") # prints to console
+            #Debug message
+            print(f"main-light_toggle: Turned light off") if debugstate == 1 or debugstate == 2 else None
         else:
             growlighton() # turns on fan
-            print("Light on") # prints to console
+            #Debug message
+            print(f"main-light_toggle: Turned light on") if debugstate == 1 or debugstate == 2 else None
         self.togglelight = not self.togglelight # resets self.togglelight to opposite of previous bool
 
     @Slot() # Decorator for multithreading
@@ -834,11 +890,11 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     #     self.sensor2.display(data2) # Sets value of "sensordisplay_1" to moisture value from channel [1]
 
     def debug_press(self): # Simple function that prints to console if a button was pressed
-        print("button pressed")
+        print(f"main-debug_press: Button pressed") #As this is a debug function, it should always be on
         self.ui.statusbar_label.setText(
             QCoreApplication.tr("button pressed")
         )
-        diopinset()
+        #diopinset() #Run diopinset to debug error in state acquisition
         self.ui.statusbar_label.setText(
             QCoreApplication.tr("Button Pressed!")
         )
@@ -921,7 +977,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             self.statusbar.setText(
                 QCoreApplication.tr("Updating Firmware")
             ) # Updating Firmware \n Please wait...
-            print("Updating Firmware")
+            #Debug message
+            print(f"main-update_firmware: Updating firmware") if debugstate == 1 or debugstate == 2 else None
             self.tasksleep(2)
             # Call the firmware update function
             result = updatefw.grobotfwupdate()
@@ -934,7 +991,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                 self.tasksleep(2)
                 while True:
                     ###set_lcd_color("error")
-                    print("Restarting")
+                    #Debug message
+                    print(f"main-update_firmware: Restarting after firmware update") if debugstate == 1 or debugstate == 2 else None
                     subprocess.run("echo grobot | sudo -S shutdown -r now", shell=True)
                     self.tasksleep(2)
                     pass
@@ -943,6 +1001,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                 self.statusbar.setText(
                     QCoreApplication.tr("Update Failed!")
                 ) # Update failed! \n Press SELECT
+                #Debug message
+                print(f"main-update_firmware: Firmware update failed") if debugstate == 1 or debugstate == 2 else None
                 self.tasksleep(2)
                     
         except Exception as e:
@@ -950,6 +1010,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             self.statusbar.setText(
                 QCoreApplication.tr("Error Updating Firmware")
             ) # Error updating \n firmware
+            #Debug message
+            print(f"main-update_firmware: Error updating firmware") if debugstate == 1 or debugstate == 2 else None
             self.tasksleep(2)
             ###set_lcd_color("normal")
 
@@ -962,7 +1024,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             ) # Exporting Log... \n Please Wait
             self.tasksleep(2)
             # Call logtofile function
-            from logoutput import logtofile
             result = logtofile()
             
             # Show result
@@ -1113,7 +1174,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             worker = Thread(fn)
             self.thread_manager.start(worker)
             activethreads = self.thread_manager.activeThreadCount()
-            print(f"Current active threads:{activethreads}")
+            #Debug message
+            print(f"main-start_thread: Current active threads: {activethreads} threads") if debugstate == 1 or debugstate == 2 else None
         except Exception as errvar:
             subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
             #LCD COLOUR HANDLING CODE (RED) HERE
@@ -1127,11 +1189,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
                 #Get current time and put its component in separate variables
                 currhour = datetime.now().hour
-                currminute = datetime.now().minute
-                currsecond = datetime.now().second
-                print(f"Current time: (h:{currhour} m:{currminute})")
-
-                #currtime = [datetime.now().hour, datetime.now().minute, datetime.now().second] #combine the variable together, not needed anymore
+                currminute = datetime.now().minute #Can also do seconds with currsecond = datetime.now().second
+                #Debug message
+                print(f"main-schedule_routine: Current time: (h:{currhour} m:{currminute})") if debugstate == 1 or debugstate == 2 else None
 
                 # Now write the code to set execution flag for the appropriate function in mainflags file to 1 if the appropriate time is
                 # reached such that the fuction will later be executed when mainflags is read back.
@@ -1147,7 +1207,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                     case _:
                         pass
                 
-                print("Wrote mainflags")
+                #Debug message
+                print(f"main-schedule_routine: Wrote mainflags") if debugstate == 1 or debugstate == 2 else None
                 
                 # This one requires matching both hour and minute
                 if currhour == settings['sunset'][0] and currminute == settings['sunset'][1]:
@@ -1162,28 +1223,35 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                 funcexecnamelist = [self.EveryXX15, self.EverySETTIME, self.EveryXX25, self.EveryXX35, self.EverySUNRISE, self.EverySUNSET]
                 for funcexecname in funcexecnamelist: #iterate through the list funcexecnamelist using variable funcexecname
                     tempflagvalue = readcsv_mainflags(str(funcexecname.__name__)) #Read flag value for current function from csv
-                    print("---------------------------")
+                    #Debug message
+                    print(f"---------------------------") if debugstate == 1 or debugstate == 2 else None
                     if tempflagvalue == '1': #Check if flag value corresponding to function name provided by funcexecname variable match 1, if it does start the thread
-                        print(f"Starting thread for {funcexecname.__name__}")
+                        #Debug message
+                        print(f"main-schedule_routine: Starting thread for {funcexecname.__name__} at {currhour}:{currminute}") if debugstate == 1 or debugstate == 2 else None
                         self.start_thread(funcexecname)
                     elif tempflagvalue == '0':
-                        print(f"No current schedule for {funcexecname.__name__}")
+                        #Debug message
+                        print(f"main-schedule_routine: No scheduled exec for {funcexecname.__name__} at {currhour}:{currminute}") if debugstate == 1 or debugstate == 2 else None
                         pass
                     else:
                         raise RuntimeError('FUNCTION EXEC FLAG COMPARISON ERROR')
 
                 #Implement logic to sleep until next tick
                 currtickminute = datetime.now().minute
-                print("---------------------------")
+                #Debug message
+                print(f"---------------------------") if debugstate == 1 or debugstate == 2 else None
 
                 if currtickminute == currminute: #If we are still in the same minute as initial time check, sleep until minute change
                     currticksecond = datetime.now().second #get current second
-                    print("Datetime seconds defined")
+                    #Debug message
+                    print(f"main-schedule_routine: Within current minute tick, datetime seconds acquired as {currticksecond}") if debugstate == 1 or debugstate == 2 else None
                     tsleep = 61 - currticksecond #subtract current second from 61 to get seconds to sleep until next min
-                    print(f"Sleeping for {tsleep} seconds...")
+                    #Debug message
+                    print(f"main-schedule_routine: Sleeping for {tsleep} seconds") if debugstate == 1 or debugstate == 2 else None
                     time.sleep(tsleep)
                 elif currtickminute > currminute: #Immediately rerun loop if current tick is larger than initial time set during update
-                    print("Current tick is larger than initial. Rerunning loop")
+                    #Debug message
+                    print(f"main-schedule_routine: Current minute tick is larger than initial. Rerunning loop") if debugstate == 1 or debugstate == 2 else None
                     pass
                 else:
                     raise RuntimeError('TIME EXCEPTION') #Time anomaly
@@ -1208,10 +1276,25 @@ class Thread(QRunnable): # Thread class for creating an instance of QRunnable wi
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    path = "/mnt/grobotextdat/code/fr.qm"
-    translator = QTranslator(app)
-    translator.load(path)
-    app.installTranslator(translator)
+    #Specify that translation only used if mainflags switched to fr
+    #Read current language value as string
+    lang_state = readcsv_mainflags("grobot_lang")
+    #Run check logic using match-case
+    match lang_state:
+        case 'en':
+            #Debug message
+            print(f"main-langselect: langstate = en, skipping translation") if debugstate == 1 or debugstate == 2 else None
+            pass
+        case 'fr':
+            #Debug message
+            print(f"main-langselect: langstate = fr, loading french translation") if debugstate == 1 or debugstate == 2 else None
+            path = "/mnt/grobotextdat/code/fr.qm"
+            translator = QTranslator(app)
+            translator.load(path)
+            app.installTranslator(translator)
+        case _:
+            #Debug message
+            print(f"main-langselect: language match error") if debugstate == 1 or debugstate == 2 else None
 
     widget = Widget()
     widget.show()

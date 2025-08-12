@@ -13,7 +13,7 @@
 #Function: get_plant _settings(), read config and return plant settings as a tuple of data
 #          read_config(), read config.ini and return a dictionary value of all data
 #          update_config(section, parameter, value), write "value" to config file under "parameter" parameter in "section" section
-#          readcsv(csventryname), read data from ulnoowegdat and return value for entry csventryname
+#          readcsv(csventryname), read data from ulnoowegdat and return value (in string) for entry csventryname
 #          writecsv(csventryname,csventryvalue), take strings entry name and entry value and write it to the appropriate entry columns in ulnoowegdat csv
 #          writecsvnote(csventryname,csventryvalue,csventrynote) same as writecsv except also takes entry note and write that string also to the note column of the appropriate entry in ulnoowegdat csv
 #          readcsv_softver(csventryname), same as readcsv except it reads the file/code/softver instead of /userdata/ulnoowegdat
@@ -96,33 +96,6 @@ def readcsv(csventryname): #define a function to read csv file and return the va
                     if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
                         csventryvalue = row[1]  #read the value for row that matched the desired entry
                         return csventryvalue
-                    else:
-                        pass
-            raise RuntimeError('CSV ENTRY NOT FOUND')
-    except Exception as errvar:
-        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        #LCD COLOUR HANDLING CODE (RED) HERE
-        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-    
-def readlocal(csventryname): #define a function to read csv file and return the value corresponding to entry
-    #csv entry name must be a string
-    try:
-        csvdata = [] #define an empty list
-        with grobotdict_lock: #Acquire thread lock before operation
-            with open('/mnt/grobotextdat/code/dictionary', 'r') as csvfile: #open the csv file as csvfile object
-                csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
-                for row in csvraw: #iterate through each row in cswraw
-                    if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
-                        csventryvalue = row[1]  #read the value for row that matched the desired entry
-                        editedcsventryvalue = csventryvalue.replace('é','\x00')
-                        editedcsventryvalue = editedcsventryvalue.replace('à','\x01')
-                        editedcsventryvalue = editedcsventryvalue.replace('è','\x02')
-                        editedcsventryvalue = editedcsventryvalue.replace('ê','\x03')
-                        editedcsventryvalue = editedcsventryvalue.replace('ô','\x04')
-                        editedcsventryvalue = editedcsventryvalue.replace('û','\x05')
-                        editedcsventryvalue = editedcsventryvalue.replace('â','\x06')
-                        editedcsventryvalue = editedcsventryvalue.replace('ɨ','\x07')
-                        return editedcsventryvalue
                     else:
                         pass
             raise RuntimeError('CSV ENTRY NOT FOUND')

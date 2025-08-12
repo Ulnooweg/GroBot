@@ -21,11 +21,19 @@
 import subprocess
 import datetime
 import os
+from multiprocessing import shared_memory
 
 #define function to take picture
 #Note that we are using subprocess to allow python code to run command line command
 def picam_capture():
     try:
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('grobotpicam-picam_capture: Checking existence of camera') if debugstate == 1 or debugstate == 2 else None
+
         #First check if the camera exists or not
         gbpcresult = subprocess.run(['rpicam-still', 'list-cameras', '-v', '0'], capture_output=True) #run list-cameras to check if camera exists or not and use capture_output = True to capture output into gbpcresult for processing
         #-v specify verbosity to be none to not make the log file clutter, on error it will still return an output
@@ -42,9 +50,15 @@ def picam_capture():
             case _: #Any other case should raise an error
                 raise RuntimeError('PICAM ERROR - NON STANDARD RETURN CODE') #If there is no proper match, raise an error
 
+        #Debug message
+        print('grobotpicam-picam_capture: Constructing timestamp') if debugstate == 1 or debugstate == 2 else None
+
         #This part takes an image    
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") #get current date and time
         humantimestamp = datetime.datetime.now().strftime("%H:%M:%S %Y-%m-%d") #Timestamp for image
+
+        #Debug message
+        print('grobotpicam-picam_capture: Checking existence of image output directory') if debugstate == 1 or debugstate == 2 else None
 
         #Now this part will determine what directory to use
         directory = "/mnt/grobotextdat/pictures" #This is the main external directory associated with USB
@@ -53,9 +67,15 @@ def picam_capture():
         else: #if not return error to force a code restart
             raise RuntimeError('FILE IO FAIL')
 
+        #Debug message
+        print('grobotpicam-picam_capture: Raking image') if debugstate == 1 or debugstate == 2 else None
+
         filename = f"{directory}/grobot-camera-image-{timestamp}.jpeg" #construct filename structure using f-string
         subprocess.run(['rpicam-still', '-o', filename, '-v', '0']) #capture to filename which already have directory specified using libcamera command line tool
         #-o specify output filename, -v specify verbosity to be none to not make the log file clutter
+
+        #Debug message
+        print('grobotpicam-picam_capture: Post-processing image') if debugstate == 1 or debugstate == 2 else None
 
         #Now this part adds the timestamp text
         fontsize = '150' #Set timestamp font size in points
@@ -65,6 +85,9 @@ def picam_capture():
         #Not put it all together in a convert command
         #Note The command is 'convert filename -pointsize 150 -fill "#DEC035" -annotate +100+2500 'TIMESTAMP' filename'
         subprocess.run(['convert', filename, '-pointsize', fontsize, '-define', outputsize, '-fill', fontcolour, '-annotate', XYpos, humantimestamp, filename])
+
+        #Debug message
+        print('grobotpicam-picam_capture: Image capture completed') if debugstate == 1 or debugstate == 2 else None
 
         return 1
     except Exception as errvar:

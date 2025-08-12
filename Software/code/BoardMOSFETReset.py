@@ -22,27 +22,29 @@
 import board
 import digitalio
 import subprocess
+from multiprocessing import shared_memory
 
 def grobotboot(): #Define a callable function by main
     try:
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('BoardMOSFETReset-grobotboot: Defining pins') if debugstate == 1 or debugstate == 2 else None
+
         #Setup pinouts for hardware used
         #Current: Raspberry Pi 3 A+ with BCRobotics Irrigation Hat V2
         #For Blinka, the pins are defined as DXX
+
         pins = {
             'S1' : board.D13, #This is MOSFET control pin 1 (System 1). Other S pin controls n MOSFET.
             'S2' : board.D16, #DXX Corresponds to GPIO pins XX
             'S3' : board.D19,
-            'S4' : board.D20,
-            'S5' : board.D26,
-            'S6' : board.D21,
-            'B1' : board.D12, #This is button input pin 1. Other B pin receive n button command
-            'B2' : board.D6,
-            'B3' : board.D5,
-            'B4' : board.D25,
-            #'B5' : board.GP15, #Comment out any B5 or GP15 as there's currently only 4 analog control
-            'QWIIC_SCL' : board.SCL, #Define I2C pin CLOCK, use board.SCL in pi
-            'QWIIC_SDA' : board.SDA #Define I2C pin DATA, use board.SDA in pi
             }
+        
+        #Debug message
+        print('BoardMOSFETReset-grobotboot: Defining Digital I/O objects') if debugstate == 1 or debugstate == 2 else None
 
         #Setup Actuator circuts
         #print("initalizing actuator circuits on boot")
@@ -50,14 +52,17 @@ def grobotboot(): #Define a callable function by main
         s1 = digitalio.DigitalInOut(pins['S1'])
         s2 = digitalio.DigitalInOut(pins['S2'])
         s3 = digitalio.DigitalInOut(pins['S3'])
-        s4 = digitalio.DigitalInOut(pins['S4'])
-        s5 = digitalio.DigitalInOut(pins['S5'])
-        s6 = digitalio.DigitalInOut(pins['S6'])
 
-        for s in [s1, s2, s3, s4, s5, s6]:
+        #Debug message
+        print('BoardMOSFETReset-grobotboot: Setting all pin to False') if debugstate == 1 or debugstate == 2 else None
+
+        for s in [s1, s2, s3]:
             s.direction = digitalio.Direction.OUTPUT
             s.drive_mode = digitalio.DriveMode.PUSH_PULL
             s.value = False
+
+        #Debug message
+        print('BoardMOSFETReset-grobotboot: Set all pin to False') if debugstate == 1 or debugstate == 2 else None
         
         return 1
     

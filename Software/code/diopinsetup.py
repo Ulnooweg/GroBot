@@ -26,14 +26,20 @@ import digitalio
 import adafruit_ahtx0
 from adafruit_seesaw.seesaw import Seesaw
 from adafruit_ina219 import INA219
-
+from multiprocessing import shared_memory
 import subprocess
 
 ##############################################
 
 def diopinset(): #define diopinset function that takes no arguments
-    print("diopinset called")
     try: #set up try except so it it successful return 1, if not return 0
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('diopinsetup-diopinset: Defining pins') if debugstate == 1 or debugstate == 2 else None
+
         #Begin by defining pins
         #For Blinka, the pins are defined as DXX
         pins = {
@@ -43,16 +49,27 @@ def diopinset(): #define diopinset function that takes no arguments
             'QWIIC_SCL' : board.SCL, #Define I2C pin CLOCK, use board.SCL in pi
             'QWIIC_SDA' : board.SDA #Define I2C pin DATA, use board.SDA in pi
             }
-        
+
+        #Debug message
+        print('diopinsetup-diopinset: Get pin state') if debugstate == 1 or debugstate == 2 else None
+
         #Define a function to capture current pin state from system using subprocess and pinctrl
         #Step 1: Capture the result
         pinctrlresult_s1 = subprocess.run(['pinctrl', 'get', '13'], capture_output=True)
         pinctrlresult_s2 = subprocess.run(['pinctrl', 'get', '16'], capture_output=True)
         pinctrlresult_s3 = subprocess.run(['pinctrl', 'get', '19'], capture_output=True)
+
+        #Debug message
+        print('diopinsetup-diopinset: Process pin state readout') if debugstate == 1 or debugstate == 2 else None
+
         #Step 2: Decode the result stdout and strip them of extra star/end empty space
         s1_stdout = pinctrlresult_s1.stdout.decode().strip()
         s2_stdout = pinctrlresult_s2.stdout.decode().strip()
         s3_stdout = pinctrlresult_s3.stdout.decode().strip()
+
+        #Debug message
+        print('diopinsetup-diopinset: Assign value to pin state') if debugstate == 1 or debugstate == 2 else None
+
         #Check, for each pin stdout, the current value and assign original value accordingly
         if "lo" in s1_stdout: 
             s1_ori_val = False #If lo = False
@@ -75,6 +92,9 @@ def diopinset(): #define diopinset function that takes no arguments
         else:
             raise RuntimeError('DIOPIN Match failed')
 
+        #Debug message
+        print('diopinsetup-diopinset: Set up digital I/O objects') if debugstate == 1 or debugstate == 2 else None
+
         #Setup Actuator circuts
         s1 = digitalio.DigitalInOut(pins['S1'])
         s2 = digitalio.DigitalInOut(pins['S2'])
@@ -83,6 +103,9 @@ def diopinset(): #define diopinset function that takes no arguments
         s5 = 'NaN' #For compat
         s6 = 'NaN' #For compat
         b1 = 'NaN' #For compat
+
+        #Debug message
+        print('diopinsetup-diopinset: Initialize pins') if debugstate == 1 or debugstate == 2 else None
 
         s1.switch_to_output(s1_ori_val,digitalio.DriveMode.PUSH_PULL) #This instead use switch to output to switch to output while keeping the MOSFEt status as-is and doing push-pull all in one step
         s2.switch_to_output(s2_ori_val,digitalio.DriveMode.PUSH_PULL) #This instead use switch to output to switch to output while keeping the MOSFEt status as-is and doing push-pull all in one step
@@ -95,12 +118,21 @@ def diopinset(): #define diopinset function that takes no arguments
         #B1 by default of digitalIO is set up as an input to the code (read from pin)
         #so we do not need to set it up further
 
+        #Debug message
+        print('diopinsetup-diopinset: Setting up I2C') if debugstate == 1 or debugstate == 2 else None
+
         # Setup QWIIC Bus  
         qwiic = busio.I2C(scl=pins['QWIIC_SCL'], sda=pins['QWIIC_SDA'])
+
+        #Debug message
+        print('diopinsetup-diopinset: Setting up I2C sensors') if debugstate == 1 or debugstate == 2 else None
 
         #Setup the required sensors
         ths = adafruit_ahtx0.AHTx0(qwiic) # Temperature & Humidity Sensor
         sms = Seesaw(qwiic, addr=0x36) # Soil Moisture Sensor
+
+        #Debug message
+        print('diopinsetup-diopinset: Checking and setting up INA219 current sensor') if debugstate == 1 or debugstate == 2 else None
 
         #Now because the current sensor may not be present, check if it is. if it is not don't initialize it but set it as a dummy value
         currsenspresent = False #Set the flag current sensor present default to false
@@ -114,6 +146,9 @@ def diopinset(): #define diopinset function that takes no arguments
                 ina = 'NaN' #There is no current sensor
             case _: #Any other case should raise an error
                 raise RuntimeError('CURRENT SENSOR CHECK ERROR - NON STANDARD RETURN CODE') #If there is no proper match, raise an error
+
+        #Debug message
+        print('diopinsetup-diopinset: All pins and objects setup complete') if debugstate == 1 or debugstate == 2 else None
 
         return s1, s2, s3, s4, s5, s6, b1, ths, sms, ina #return the pins and sensors as tuple of objects
     except Exception as errvar:

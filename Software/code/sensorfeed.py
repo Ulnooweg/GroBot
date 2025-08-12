@@ -19,10 +19,18 @@
 # MODULE IMPORTS
 from diopinsetup import diopinset
 import subprocess
+from multiprocessing import shared_memory
 
 ##############################################
 def feedread():  # define feedread function
     try:
+        #Read the debugstate for use as condition in printing debug statement
+        ext_mem = shared_memory.SharedMemory(name='grobot_shared_mem')
+        debugstate = ext_mem.buf[0]
+
+        #Debug message
+        print('sensorfeed-feedread: Defining sensors') if debugstate == 1 or debugstate == 2 else None
+
         # Handle the pins definition and sensor definition
         diop = diopinset()
 
@@ -31,9 +39,15 @@ def feedread():  # define feedread function
         else:
             raise RuntimeError('Failed to initialize pins and sensors')
 
+        #Debug message
+        print('sensorfeed-feedread: Assigning sensors') if debugstate == 1 or debugstate == 2 else None
+
         T = ths.temperature
         RH = ths.relative_humidity
         SRH = sms.moisture_read()
+
+        #Debug message
+        print('sensorfeed-feedread: Sensors assignment completed') if debugstate == 1 or debugstate == 2 else None
 
         return T, RH, SRH  # return tuple of all values
     except Exception as errvar:
