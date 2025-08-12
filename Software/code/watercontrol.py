@@ -1,5 +1,5 @@
 #Copyright 2023-2025 Ulnooweg Education Centre. All rights reserved.
-#Licensed under the EUPL-1.2 or later
+#Licensed under Québec Free and Open-Source Licence – Strong Reciprocity (LiLiQ-R+) Version 1.1
 #
 #Source: https://github.com/Ulnooweg/GroBot
 #Contact: engineering@ulnooweg.ca

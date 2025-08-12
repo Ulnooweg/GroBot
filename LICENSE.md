@@ -1,6 +1,6 @@
 # Licensing Structure
 This collection of works is licensed under multiple license with the following structure:
-* The codes and associated configuration files are licensed under the EUPL-1.2 or later. 
+* The codes and associated configuration files are licensed under Québec Free and Open-Source Licence – Strong Reciprocity (LiLiQ-R+) version 1.1 
   - These are contained in the folder:
     + Codetest
     + Software
@@ -17,408 +17,189 @@ This collection of works is licensed under multiple license with the following s
 # Copyright statement
 Copyright 2023-2025 Ulnooweg Education Centre. All rights reserved.<br/>
 
-For EUPL:
-Licensed under the EUPL-1.2 or later
+For LiLiQ-R+:
+Licensed under Québec Free and Open-Source Licence – Strong Reciprocity (LiLiQ-R+) Version 1.1
 
 For CC:
 Licensed under CC BY-NC-SA 4.0
 
 # Notice
-The EUPL is officially available in both [English](#english-eupl-12) and [French](#french-eupl-12) which has been included here.
-Other languages are available [from the EU](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12).
+LiLiQ-R+ is officially available in both [English](#english-liliq-r-11) and [French](#french-liliq-r-11) which has been included here.
 
 CC BY-NC-SA 4.0 is available in [English](#english-cc-by-nc-sa-40) which has been included here. Other languages are available [from Creative Commons](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en)
 
-## EUPL-1.2
-### English EUPL-1.2 
+## LiLiQ-R+-1.1
+### English LiLiQ-R+-1.1
+Québec Free and Open-Source Licence – Strong Reciprocity (LiLiQ-R+)
 
-                      EUROPEAN UNION PUBLIC LICENCE v. 1.2
-                      EUPL © the European Union 2007, 2016
+Version 1.1
 
-This European Union Public Licence (the ‘EUPL’) applies to the Work (as defined
-below) which is provided under the terms of this Licence. Any use of the Work,
-other than as authorised under this Licence is prohibited (to the extent such
-use is covered by a right of the copyright holder of the Work).
+1. Preamble
+This licence applies to any distributed software stipulated by its copyright owner to be subject to the terms of the Québec Free and Open-Source Licence – Strong Reciprocity (LiLiQ-R+) (hereinafter referred to as the “licence”).
 
-The Work is provided under the terms of this Licence when the Licensor (as
-defined below) has placed the following notice immediately following the
-copyright notice for the Work:
+2. Definitions
+Unless the context indicates otherwise, the following terms are used in this licence:
+“contribution”: any original software or part of original software submitted and intended to be integrated into the software;
+“contributor”: the copyright owner or any person authorized by the copyright owner to submit a contribution to the licensor. A contributor whose contribution is integrated into the software is considered a licensor with respect to that contribution;
+“derived software”: any original software developed by a licensee, other than the software or modified software, that produces or reproduces all or a substantial part of the software;
+“distribution”: the act of delivering a copy of the software;
+“licensee”: any person possessing a copy of the software who exercises the rights granted by the licence;
+“licensor”: the software copyright owner or any person duly authorized by the copyright owner to grant this licence;
+“modified software”: any modification made by a licensee to one of the software’s source code files, or any new source code file that integrates the software or a substantial part of it;
+“software”: a copyright-protected work such as a computer program and its documentation, stipulated by the copyright owner to be subject to the terms of this licence.
 
-        Licensed under the EUPL
+3. Copyright licence
+Subject to the terms of this licence, the licensor grants the licensee a non-exclusive, royalty-free licence allowing the licensee to exercise the following rights regarding the software:
+(1) Produce or reproduce the software or a substantial part thereof;
+(2) Perform the software or any substantial part of it in public;
+(3) Publish the software or any substantial part of it.
 
-or has expressed by any other means his willingness to license under the EUPL.
+This licence is granted on a world-wide, perpetual basis.
 
-1. Definitions
+Full exercise of these rights is subject to distribution by the licensor of the software source code in a form allowing it to be modified. The licensor may also distribute the software, along with an offer to distribute the software source code, without additional charges other than reasonable charges for delivery of the source code. That offer must be valid for a reasonable period of time.
 
-In this Licence, the following terms have the following meaning:
+4. Distribution
+The licensee may distribute copies of the software, modified software or derived software, subject to the following conditions:
+(1) The software must be accompanied by a copy of this licence.
+(2) If the software has been modified, the licensee must mention this, preferably in every modified file that allows for such a mention.
+(3) Software copyright, trademark, warranty or attribution labels or notices must not be modified or removed, unless the labels or notices do not apply to specific modified or derived software.
 
-- ‘The Licence’: this Licence.
+4.1. Reciprocity
+Every time the licensee distributes the software, the licensor grants the recipient an interest in the software in accordance with the terms of this licence. The licensee must grant an interest in accordance with the terms of this licence for any modified or derived software distributed.
 
-- ‘The Original Work’: the work or software distributed or communicated by the
-  Licensor under this Licence, available as Source Code and also as Executable
-  Code as the case may be.
+Every time the licensee distributes the software, or modified or derived software, the licensee is obliged to distribute its source code in the manner prescribed in the third paragraph of section 3.
 
-- ‘Derivative Works’: the works or software that could be created by the
-  Licensee, based upon the Original Work or modifications thereof. This Licence
-  does not define the extent of modification or dependence on the Original Work
-  required in order to classify a work as a Derivative Work; this extent is
-  determined by copyright law applicable in the country mentioned in Article 15.
-
-- ‘The Work’: the Original Work or its Derivative Works.
+4.2. Compatibility
+To the extent that the licensee wishes to distribute modified or derived software combined with software subject to a compatible licence whose terms cannot possibly be fulfilled, the licensor offers, in addition to this interest, an interest in compliance with the terms of the compatible licence.
 
-- ‘The Source Code’: the human-readable form of the Work which is the most
-  convenient for people to study and modify.
-
-- ‘The Executable Code’: any code which has generally been compiled and which is
-  meant to be interpreted by a computer as a program.
-
-- ‘The Licensor’: the natural or legal person that distributes or communicates
-  the Work under the Licence.
-
-- ‘Contributor(s)’: any natural or legal person who modifies the Work under the
-  Licence, or otherwise contributes to the creation of a Derivative Work.
+A licensee who is the exclusive copyright owner of the software subject to a compatible licence is not eligible for this offer. The same applies to any other person duly authorized to sub-license by the exclusive copyright owner of the software subject to a compatible licence.
 
-- ‘The Licensee’ or ‘You’: any natural or legal person who makes any usage of
-  the Work under the terms of the Licence.
+A compatible licence is considered to be any free or open-source licence approved or certified by the Free Software Foundation or the Open Source Initiative, whose level of reciprocity is comparable to that of this licence, without being less so, in particular:
+(1) Common Public License Version 1.0 (CPL-1.0)
+(2) Contrat de licence de logiciel libre CeCILL, version 2.1 (CECILL-2.1)
+(3) Eclipse Public License - v 1.0 (EPL-1.0)
+(4) European Union Public License, version 1.1 (EUPL v. 1.1)
+(5) GNU General Public License Version 2 (GNU GPLv2)
+(6) GNU General Public License Version 3 (GNU GPLv3)
 
-- ‘Distribution’ or ‘Communication’: any act of selling, giving, lending,
-  renting, distributing, communicating, transmitting, or otherwise making
-  available, online or offline, copies of the Work or providing access to its
-  essential functionalities at the disposal of any other natural or legal
-  person.
+5. Contributions
+Subject to a separate agreement, every contribution submitted by a contributor to the licensor for inclusion in the software is subject to the terms of this licence.
 
-2. Scope of the rights granted by the Licence
+6. Trademarks
+This licence does not grant any special permission to use the licensor’s trademarks, except as needed to describe the origin of the software.
 
-The Licensor hereby grants You a worldwide, royalty-free, non-exclusive,
-sublicensable licence to do the following, for the duration of copyright vested
-in the Original Work:
+7. Warranties
+Unless otherwise specified, the licensor distributes the software without any warranty, at the risk of the acquirer of a copy of the software, and without any warranty that the software is suited to any specific need or will yield any specific results.
 
-- use the Work in any circumstance and for all usage,
-- reproduce the Work,
-- modify the Work, and make Derivative Works based upon the Work,
-- communicate to the public, including the right to make available or display
-  the Work or copies thereof to the public and perform publicly, as the case may
-  be, the Work,
-- distribute the Work or copies thereof,
-- lend and rent the Work or copies thereof,
-- sublicense rights in the Work or copies thereof.
+Without binding the licensor in any way, nothing prevents a licensee from offering or excluding warranties or support.
 
-Those rights can be exercised on any media, supports and formats, whether now
-known or later invented, as far as the applicable law permits so.
+8. Liability
+The licensee is liable for any prejudice resulting from the exercise of the rights granted under the licence.
 
-In the countries where moral rights apply, the Licensor waives his right to
-exercise his moral right to the extent allowed by law in order to make effective
-the licence of the economic rights here above listed.
-
-The Licensor grants to the Licensee royalty-free, non-exclusive usage rights to
-any patents held by the Licensor, to the extent necessary to make use of the
-rights granted on the Work under this Licence.
+The licensor cannot be held liable for any prejudice sustained by the licensee or third parties for any reason whatsoever related to the licence and the rights it grants.
 
-3. Communication of the Source Code
-
-The Licensor may provide the Work either in its Source Code form, or as
-Executable Code. If the Work is provided as Executable Code, the Licensor
-provides in addition a machine-readable copy of the Source Code of the Work
-along with each copy of the Work that the Licensor distributes or indicates, in
-a notice following the copyright notice attached to the Work, a repository where
-the Source Code is easily and freely accessible for as long as the Licensor
-continues to distribute or communicate the Work.
-
-4. Limitations on copyright
-
-Nothing in this Licence is intended to deprive the Licensee of the benefits from
-any exception or limitation to the exclusive rights of the rights owners in the
-Work, of the exhaustion of those rights or of other applicable limitations
-thereto.
-
-5. Obligations of the Licensee
-
-The grant of the rights mentioned above is subject to some restrictions and
-obligations imposed on the Licensee. Those obligations are the following:
-
-Attribution right: The Licensee shall keep intact all copyright, patent or
-trademarks notices and all notices that refer to the Licence and to the
-disclaimer of warranties. The Licensee must include a copy of such notices and a
-copy of the Licence with every copy of the Work he/she distributes or
-communicates. The Licensee must cause any Derivative Work to carry prominent
-notices stating that the Work has been modified and the date of modification.
-
-Copyleft clause: If the Licensee distributes or communicates copies of the
-Original Works or Derivative Works, this Distribution or Communication will be
-done under the terms of this Licence or of a later version of this Licence
-unless the Original Work is expressly distributed only under this version of the
-Licence — for example by communicating ‘EUPL v. 1.2 only’. The Licensee
-(becoming Licensor) cannot offer or impose any additional terms or conditions on
-the Work or Derivative Work that alter or restrict the terms of the Licence.
-
-Compatibility clause: If the Licensee Distributes or Communicates Derivative
-Works or copies thereof based upon both the Work and another work licensed under
-a Compatible Licence, this Distribution or Communication can be done under the
-terms of this Compatible Licence. For the sake of this clause, ‘Compatible
-Licence’ refers to the licences listed in the appendix attached to this Licence.
-Should the Licensee's obligations under the Compatible Licence conflict with
-his/her obligations under this Licence, the obligations of the Compatible
-Licence shall prevail.
-
-Provision of Source Code: When distributing or communicating copies of the Work,
-the Licensee will provide a machine-readable copy of the Source Code or indicate
-a repository where this Source will be easily and freely available for as long
-as the Licensee continues to distribute or communicate the Work.
-
-Legal Protection: This Licence does not grant permission to use the trade names,
-trademarks, service marks, or names of the Licensor, except as required for
-reasonable and customary use in describing the origin of the Work and
-reproducing the content of the copyright notice.
-
-6. Chain of Authorship
-
-The original Licensor warrants that the copyright in the Original Work granted
-hereunder is owned by him/her or licensed to him/her and that he/she has the
-power and authority to grant the Licence.
-
-Each Contributor warrants that the copyright in the modifications he/she brings
-to the Work are owned by him/her or licensed to him/her and that he/she has the
-power and authority to grant the Licence.
-
-Each time You accept the Licence, the original Licensor and subsequent
-Contributors grant You a licence to their contributions to the Work, under the
-terms of this Licence.
-
-7. Disclaimer of Warranty
-
-The Work is a work in progress, which is continuously improved by numerous
-Contributors. It is not a finished work and may therefore contain defects or
-‘bugs’ inherent to this type of development.
-
-For the above reason, the Work is provided under the Licence on an ‘as is’ basis
-and without warranties of any kind concerning the Work, including without
-limitation merchantability, fitness for a particular purpose, absence of defects
-or errors, accuracy, non-infringement of intellectual property rights other than
-copyright as stated in Article 6 of this Licence.
-
-This disclaimer of warranty is an essential part of the Licence and a condition
-for the grant of any rights to the Work.
-
-8. Disclaimer of Liability
+9. Termination
+This licence is terminated as of right should the rights it grants fail to be exercised in accordance with the terms of the licence.
 
-Except in the cases of wilful misconduct or damages directly caused to natural
-persons, the Licensor will in no event be liable for any direct or indirect,
-material or moral, damages of any kind, arising out of the Licence or of the use
-of the Work, including without limitation, damages for loss of goodwill, work
-stoppage, computer failure or malfunction, loss of data or any commercial
-damage, even if the Licensor has been advised of the possibility of such damage.
-However, the Licensor will be liable under statutory product liability laws as
-far such laws apply to the Work.
-
-9. Additional agreements
-
-While distributing the Work, You may choose to conclude an additional agreement,
-defining obligations or services consistent with this Licence. However, if
-accepting obligations, You may act only on your own behalf and on your sole
-responsibility, not on behalf of the original Licensor or any other Contributor,
-and only if You agree to indemnify, defend, and hold each Contributor harmless
-for any liability incurred by, or claims asserted against such Contributor by
-the fact You have accepted any warranty or additional liability.
-
-10. Acceptance of the Licence
-
-The provisions of this Licence can be accepted by clicking on an icon ‘I agree’
-placed under the bottom of a window displaying the text of this Licence or by
-affirming consent in any other similar way, in accordance with the rules of
-applicable law. Clicking on that icon indicates your clear and irrevocable
-acceptance of this Licence and all of its terms and conditions.
-
-Similarly, you irrevocably accept this Licence and all of its terms and
-conditions by exercising any rights granted to You by Article 2 of this Licence,
-such as the use of the Work, the creation by You of a Derivative Work or the
-Distribution or Communication by You of the Work or copies thereof.
-
-11. Information to the public
-
-In case of any Distribution or Communication of the Work by means of electronic
-communication by You (for example, by offering to download the Work from a
-remote location) the distribution channel or media (for example, a website) must
-at least provide to the public the information requested by the applicable law
-regarding the Licensor, the Licence and the way it may be accessible, concluded,
-stored and reproduced by the Licensee.
-
-12. Termination of the Licence
-
-The Licence and the rights granted hereunder will terminate automatically upon
-any breach by the Licensee of the terms of the Licence.
-
-Such a termination will not terminate the licences of any person who has
-received the Work from the Licensee under the Licence, provided such persons
-remain in full compliance with the Licence.
-
-13. Miscellaneous
-
-Without prejudice of Article 9 above, the Licence represents the complete
-agreement between the Parties as to the Work.
-
-If any provision of the Licence is invalid or unenforceable under applicable
-law, this will not affect the validity or enforceability of the Licence as a
-whole. Such provision will be construed or reformed so as necessary to make it
-valid and enforceable.
-
-The European Commission may publish other linguistic versions or new versions of
-this Licence or updated versions of the Appendix, so far this is required and
-reasonable, without reducing the scope of the rights granted by the Licence. New
-versions of the Licence will be published with a unique version number.
-
-All linguistic versions of this Licence, approved by the European Commission,
-have identical value. Parties can take advantage of the linguistic version of
-their choice.
-
-14. Jurisdiction
-
-Without prejudice to specific agreement between parties,
-
-- any litigation resulting from the interpretation of this License, arising
-  between the European Union institutions, bodies, offices or agencies, as a
-  Licensor, and any Licensee, will be subject to the jurisdiction of the Court
-  of Justice of the European Union, as laid down in article 272 of the Treaty on
-  the Functioning of the European Union,
-
-- any litigation arising between other parties and resulting from the
-  interpretation of this License, will be subject to the exclusive jurisdiction
-  of the competent court where the Licensor resides or conducts its primary
-  business.
-
-15. Applicable Law
-
-Without prejudice to specific agreement between parties,
-
-- this Licence shall be governed by the law of the European Union Member State
-  where the Licensor has his seat, resides or has his registered office,
-
-- this licence shall be governed by Belgian law if the Licensor has no seat,
-  residence or registered office inside a European Union Member State.
-
-Appendix
+However, if the failure is remedied within 30 days after its discovery by the person in default and it is the first failure, the licence will be granted once again.
 
-‘Compatible Licences’ according to Article 5 EUPL are:
-
-- GNU General Public License (GPL) v. 2, v. 3
-- GNU Affero General Public License (AGPL) v. 3
-- Open Software License (OSL) v. 2.1, v. 3.0
-- Eclipse Public License (EPL) v. 1.0
-- CeCILL v. 2.0, v. 2.1
-- Mozilla Public Licence (MPL) v. 2
-- GNU Lesser General Public Licence (LGPL) v. 2.1, v. 3
-- Creative Commons Attribution-ShareAlike v. 3.0 Unported (CC BY-SA 3.0) for
-  works other than software
-- European Union Public Licence (EUPL) v. 1.1, v. 1.2
-- Québec Free and Open-Source Licence — Reciprocity (LiLiQ-R) or Strong
-  Reciprocity (LiLiQ-R+).
-
-The European Commission may update this Appendix to later versions of the above
-licences without producing a new version of the EUPL, as long as they provide
-the rights granted in Article 2 of this Licence and protect the covered Source
-Code from exclusive appropriation.
-
-All other changes or additions to this Appendix require the production of a new
-EUPL version.
-
-### French EUPL-1.2 
-
-LICENCE PUBLIQUE DE L'UNION EUROPÉENNE v. 1.2 
-EUPL © Union européenne 2007, 2016
-
-La présente licence publique de l'Union européenne («EUPL») s'applique à toute œuvre (telle que définie ci-dessous) fournie aux conditions prévues par la présente licence. Toute utilisation de l'œuvre autre que ce qu'autorise la présente licence est interdite (dans la mesure où pareille utilisation est couverte par un droit du titulaire des droits d'auteur sur l'œuvre). L'œuvre est fournie aux conditions prévues par la présente licence quand le donneur de licence (tel que défini ci-dessous) a placé la mention suivante immédiatement après la déclaration relative au droit d'auteur sur l'œuvre: 
-                                   Sous licence EUPL
-ou a exprimé de toute autre manière sa volonté de fournir l'œuvre sous licence EUPL. 
-
-1.Définitions 
-Dans la présente licence, on entend par: 
-—  «licence», la présente licence, 
-—  «œuvre originale», l'œuvre ou le logiciel distribué ou communiqué par le donneur de licence en vertu de la présente licence, sous forme de code source ou de code objet, selon le cas, 
-—  «œuvres dérivées», les œuvres ou logiciels qui pourraient être créés par le licencié sur la base de l'œuvre originale ou des modifications qui y auraient été appliquées. La présente licence ne définit pas le degré de modification ou de dépendance requis par rapport à l'œuvre originale pour qu'une œuvre soit qualifiée d'œuvre dérivée; cette question est réglée par la loi applicable en matière de droit d'auteur dans le pays visé à l'article 15, 
-—  «œuvre», l'œuvre originale ou ses œuvres dérivées, 
-—  «code source», la forme de l'œuvre, lisible par l'homme, la plus appropriée pour que des personnes puissent l'examiner et la modifier, 
-—  «code objet», l'œuvre codée, généralement après compilation, destinée à être exécutée en tant que programme par un ordinateur, —  «donneur de licence», la personne physique ou morale qui distribue ou communique l'œuvre sous licence, 
-—  «contributeur», toute personne physique ou morale qui modifie l'œuvre sous licence, ou contribue de toute autre manière à en faire une œuvre dérivée, 
-—  «licencié» ou «vous», toute personne physique ou morale qui utilise l'œuvre conformément à la licence, 
-—  «distribution» ou «communication», tout acte de vente, don, prêt, location, distribution, communication, transmission ou mise à disposition, en ligne ou hors ligne, de copies de l'œuvre, et tout acte donnant accès à ses fonctions essentielles à toute autre personne physique ou morale. 
-
-2.Portée des droits accordés par la licence 
-Par la présente, le donneur de licence vous concède, pour la durée de la protection de son droit d'auteur sur l'œuvre originale, une licence mondiale, libre de redevances, non exclusive et pouvant faire l'objet de sous-licences, en vertu de laquelle vous pouvez: 
-—  utiliser l'œuvre en toute circonstance et pour tout usage, 
-—  reproduire l'œuvre, 
-—  modifier l'œuvre et créer des œuvres dérivées sur la base de l'œuvre, 
-—  communiquer l'œuvre au public, ce qui inclut le droit de mettre à disposition du public ou de lui présenter l'œuvre ou des copies de l'œuvre et d'en effectuer des représentations publiques, le cas échéant, 
-—  distribuer l'œuvre ou des copies de celle-ci, 
-—  prêter et louer l'œuvre ou des copies de celles-ci, 
-—  accorder en sous-licence des droits sur l'œuvre ou sur des copies de celle-ci. 
-Ces droits peuvent être exercés sur tout support et format, connu ou encore à inventer, dans la mesure où le droit applicable le permet. Dans les pays où des droits moraux s'appliquent, le donneur de licence renonce à son droit d'exercer son droit moral dans la mesure permise par la loi afin que la licence sur les droits patrimoniaux susmentionnés produise ses effets. Le donneur de licence vous concède un droit d'usage libre de redevances et non exclusif sur tout brevet qu'il détient, dans la mesure nécessaire à l'exercice des droits qui vous sont concédés sur l'œuvre sous licence. 
-
-3.Communication du code source 
-Le donneur de licence fournit l'œuvre sous forme de code source ou de code objet. Si l'œuvre est fournie sous forme de code objet, le donneur de licence accompagne chacune des copies de l'œuvre qu'il distribue d'une copie lisible par machine du code source de l'œuvre ou indique, dans un avis qui suit la déclaration relative au droit d'auteur jointe à l'œuvre, l'endroit où le code source est aisément et gratuitement accessible aussi longtemps que le donneur de licence continue à distribuer ou communiquer l'œuvre. 
-
-4.Limitations du droit d'auteur 
-Rien dans la présente licence n'a pour but de priver le licencié des avantages résultant de toute exception ou limitation aux droits exclusifs des titulaires de droits sur l'œuvre, de l'épuisement de ces droits ou de toute autre limitation qui s'y applique. 
-
-5.Obligations du licencié 
-La concession des droits susmentionnés est soumise à des restrictions et à des obligations pour le licencié. Ces obligations sont les suivantes: 
-
-Droit d'attribution: le licencié laisse intactes toutes les déclarations concernant le droit d'auteur, le brevet ou les marques et toutes les déclarations concernant la licence et l'exclusion de garantie. Le licencié assortit chaque copie de l'œuvre qu'il distribue ou communique d'une copie de ces déclarations et d'une copie de la licence. Le licencié veille à ce que toute œuvre dérivée soit assortie d'un avis bien visible indiquant que l'œuvre a été modifiée et mentionnant la date de la modification. 
-
-Clause copyleft: si le licencié distribue ou communique des copies d'œuvres originales ou d'œuvres dérivées, cette distribution ou cette communication est effectuée dans les conditions prévues par la présente licence ou une version ultérieure de cette licence, sauf si l'œuvre originale est expressément distribuée en vertu de la présente version de la licence uniquement, par exemple au moyen de la mention «EUPL v. 1.2 seulement». Le licencié (qui devient donneur de licence) ne peut pas, en ce qui concerne l'œuvre ou les œuvres dérivées, offrir ou imposer des conditions supplémentaires qui restreignent ou modifient les conditions de la licence. 
-
-Clause de compatibilité: si le licencié distribue ou communique des œuvres dérivées ou des copies de telles œuvres basées à la fois sur l'œuvre et sur une autre œuvre concédée sous une licence compatible, la distribution ou la communication peut être faite aux conditions de cette licence compatible. Aux fins de la présente clause, une «licence compatible» est l'une des licences énumérées dans l'appendice de la présente licence. Dans le cas où les obligations du licencié au titre de la licence compatible entrent en conflit avec les obligations du licencié au titre de la présente licence, les premières prévalent. 
-
-Fourniture du code source: lorsqu'il distribue ou communique des copies de l'œuvre, le licencié fournit une copie lisible par machine du code source ou indique l'endroit où ce code source restera aisément et gratuitement accessible aussi longtemps que le donneur de licence continuera à distribuer ou communiquer l'œuvre. 
-
-Protection des droits: la présente licence ne donne pas le droit d'utiliser les noms commerciaux, les marques commerciales, les marques de service ou les noms du donneur de licence, sauf dans la mesure nécessaire, conformément à une utilisation raisonnable et aux pratiques habituelles, pour décrire l'origine de l'œuvre et reproduire la déclaration concernant le droit d'auteur.
-
-6.Chaîne d'auteurs 
-Le donneur de licence initial garantit que les droits d'auteur sur l'œuvre originale concédés par la présente licence lui appartiennent ou lui ont été donnés sous licence, et qu'il a le pouvoir et la capacité de concéder la licence. Tout contributeur garantit que les droits d'auteur sur les modifications qu'il apporte à l'œuvre lui appartiennent ou lui ont été donnés sous licence, et qu'il a le pouvoir et la capacité de concéder la licence. Chaque fois que vous acceptez la licence, le donneur de licence initial et les contributeurs successifs vous concèdent une licence sur leurs contributions à l'œuvre selon les conditions de la présente licence. 
-
-7.Exclusion de garantie 
-L'œuvre est un travail en cours, amélioré de manière continue par de nombreux contributeurs. Elle constitue un travail inachevé et peut dès lors contenir des défauts ou bogues inhérents à ce type de développement. Pour cette raison, l'œuvre est fournie sous licence telle quelle, sans aucune garantie d'aucune sorte la concernant, y compris, sans que cette liste soit exhaustive, eu égard à sa qualité marchande, son aptitude à un usage particulier, l'absence de défauts ou d'erreurs, l'exactitude ou la non-violation de droits de propriété intellectuelle autres que le droit d'auteur comme prévu à l'article 6 de la présente licence. Cette exclusion de garantie est une partie essentielle de la licence et une condition de la concession de droits sur l'œuvre. 
-
-8.Exclusion de responsabilité 
-Sauf dans les cas de faute intentionnelle ou de dommages directement causés à des personnes physiques, le donneur de licence n'est en aucun cas responsable des dommages, quelle qu'en soit la nature, directs ou indirects, matériels ou moraux, résultant de la licence ou de l'utilisation de l'œuvre, y compris, sans que cette liste soit exhaustive, des dommages causés par les atteintes à la réputation, les interruptions de travail, les défaillances ou le mauvais fonctionnement de matériel informatique, les pertes de données ou tout autre dommage économique, même si le donneur de licence a été informé de la possibilité de tels dommages. Cependant, le donneur de licence est responsable en vertu des dispositions législatives et réglementaires relatives à la responsabilité du fait des produits, dans la mesure où celles-ci sont applicables à l'œuvre. 
-
-9.Accords additionnels 
-Lorsque vous distribuez l'œuvre, vous pouvez choisir de conclure un accord additionnel définissant des obligations ou des services compatibles avec la présente licence. Cependant, si vous acceptez des obligations, vous ne pouvez agir qu'en votre nom et sous votre seule responsabilité, et non au nom du donneur de licence initial ou de tout autre contributeur, et seulement si vous acceptez d'indemniser, de défendre et de mettre hors de cause tous les contributeurs s'ils encourent une responsabilité quelconque ou si des réclamations sont formulées à leur encontre du fait que vous avez accepté des garanties ou des responsabilités additionnelles. 
-
-10.Acceptation de la licence
-Vous pouvez exprimer votre accord sur le contenu de la présente licence en cliquant sur l'icône «J'accepte» placée au bas d'une fenêtre faisant apparaître le texte de la présente licence, ou par toute autre manifestation de consentement similaire, conformément à la loi applicable. Le fait de cliquer sur cette icône indique votre acceptation claire et irrévocable de la présente licence et de toutes ses conditions. De même, vous acceptez irrévocablement la présente licence et toutes ses conditions dès lors que vous exercez un des droits qui vous sont concédés par l'article 2 de la présente licence, tels que l'utilisation de l'œuvre, la création d'une œuvre dérivée ou la distribution ou la communication de l'œuvre ou de copies de l'œuvre. 
-
-11.Information du public
-En cas de distribution ou de communication électronique de l'œuvre (par exemple en permettant son téléchargement à distance), le canal de distribution ou le support (par exemple un site web) doit au minimum fournir au public les informations requises par le droit applicable en ce qui concerne le donneur de licence et la licence ainsi que la manière dont le licencié peut accéder à celle-ci, la conclure, la stocker et la reproduire.
-
-12.Fin de la licence
-La licence et les droits qu'elle concède prennent automatiquement fin dès que le licencié viole l'une de ses conditions. Un tel événement ne met pas fin aux licences des personnes ayant reçu l'œuvre sous licence de la part du licencié, pour autant que ces personnes respectent pleinement la licence. 
-
-13.Divers
-Sous réserve de l'article 9, la licence représente l'entièreté de l'accord entre les parties quant à l'œuvre. Le fait qu'une clause quelconque de la licence soit invalide ou inapplicable en vertu du droit applicable n'affecte pas la validité ou l'applicabilité de la licence dans son ensemble. Une telle clause sera interprétée ou modifiée dans la mesure nécessaire pour la rendre valide ou applicable. La Commission européenne peut publier d'autres versions linguistiques ou de nouvelles versions de la présente licence ou des versions actualisées de son appendice, dans la mesure de ce qui est nécessaire et raisonnable, sans réduire la portée des droits accordés par la licence. Les nouvelles versions de la licence seront publiées avec un numéro de version unique. Toutes les versions linguistiques de la présente licence, approuvées par la Commission européenne, ont la même valeur. Les parties peuvent se prévaloir de la version linguistique de leur choix. 
-
-14.Juridiction compétente
-Sans préjudice d'accords spécifiques entre les parties, 
-— tout litige résultant de l'interprétation de la présente licence survenant entre des institutions, organes, bureaux ou agences de l'Union européenne en tant que donneurs de licence et un licencié relève de la juridiction de la Cour de justice de l'Union européenne, conformément à l'article 272 du traité sur le fonctionnement de l'Union européenne, 
-— tout litige survenant entre d'autres parties et résultant de l'interprétation de la présente licence relève de la compétence exclusive de la juridiction compétente du lieu où le donneur de licence réside ou exerce son activité principale. 
-
-15.Droit applicable
-Sans préjudice d'accords spécifiques entre les parties, 
-— la présente licence est régie par le droit de l'État membre de l'Union européenne où le donneur de licence réside ou a son siège social ou statutaire, 
-— la présente licence est régie par le droit belge si le donneur de licence ne réside pas et n'a pas son siège social ou statutaire dans un État membre de l'Union européenne.  
-    
-Appendice 
-Aux fins de l'article 5 de l'EUPL, les licences compatibles sont les suivantes: 
-—  GNU General Public License (GPL) v. 2, v. 3 
-—  GNU Affero General Public License (AGPL) v. 3 
-—  Open Software License (OSL) v. 2.1, v. 3.0 
-—  Eclipse Public License (EPL) v. 1.0 
-—  CeCILL v. 2.0, v. 2.1 
-—  Mozilla Public licence (MPL) v. 2 
-—  GNU Lesser General Public licence (LGPL) v. 2.1, v. 3 
-—  Creative Commons Attribution-ShareAlike v. 3.0 Unported (CC BY-SA 3.0) pour les œuvres autres que logicielles 
-—  Licence publique de l'Union européenne (EUPL) v. 1.1, v. 1.2 
-—  Licence libre du Québec — Réciprocité (LiLiQ-R) ou Réciprocité forte (LiLiQ-R+) 
-La Commission européenne pourra actualiser le présent appendice afin d'y inclure des versions ultérieures des licences ci-dessus sans produire de nouvelle version de l'EUPL, dès lors que ces versions prévoient la concession des droits visés à l'article 2 de la présente licence et empêchent l'appropriation exclusive du code source couvert. 
-Tout autre changement ou ajout au présent appendice requiert la production d'une nouvelle version de l'EUPL.
+For any subsequent failure, the licensor’s express consent is required for the licence to be granted once again.
+
+10. Licence version
+The Centre de services partagés du Québec, its successors or any person it designates may release revised or modified versions of this licence. Each version will be given a unique number. If software is already subject to the terms of a specific version, the parties to the licence will be bound solely by that version.
+
+The licensor may also choose to grant the licence in its current version or any subsequent version, in which case the licensee may choose the license version to be granted.
+
+11. Miscellaneous
+To the extent that the licensor is a government department, public body or legal person established in the public interest and created under a law of the National Assembly of Québec, the licence is governed by the laws applicable in Québec and, in the event of a dispute, the courts of Québec have sole jurisdiction.
+
+This licence may be distributed without any special conditions. However, a modified version must be distributed under a different name. Any reference to the Centre de services partagés du Québec or its successors, where applicable, must be withdrawn, except as needed to describe the origin of the licence.
+
+### French LiLiQ-R+-1.1
+Licence Libre du Québec – Réciprocité forte (LiLiQ-R+)
+
+Version 1.1
+
+1. Préambule
+Cette licence s'applique à tout logiciel distribué dont le titulaire du droit d'auteur précise qu'il est sujet aux termes de la Licence Libre du Québec – Réciprocité forte (LiLiQ-R+) (ci-après appelée la « licence »).
+
+2. Définitions
+Dans la présente licence, à moins que le contexte n'indique un sens différent, on entend par:
+« concédant » : le titulaire du droit d'auteur sur le logiciel, ou toute personne dûment autorisée par ce dernier à accorder la présente licence;
+« contributeur » : le titulaire du droit d'auteur ou toute personne autorisée par ce dernier à soumettre au concédant une contribution. Un contributeur dont sa contribution est incorporée au logiciel est considéré comme un concédant en regard de sa contribution;
+« contribution » : tout logiciel original, ou partie de logiciel original soumis et destiné à être incorporé dans le logiciel;
+« distribution » : le fait de délivrer une copie du logiciel;
+« licencié » : toute personne qui possède une copie du logiciel et qui exerce les droits concédés par la licence;
+« logiciel » : une œuvre protégée par le droit d'auteur, telle qu'un programme d'ordinateur et sa documentation, pour laquelle le titulaire du droit d'auteur a précisé qu'elle est sujette aux termes de la présente licence;
+« logiciel dérivé » : tout logiciel original réalisé par un licencié, autre que le logiciel ou un logiciel modifié, qui produit ou reproduit la totalité ou une partie importante du logiciel;
+« logiciel modifié » : toute modification par un licencié de l'un des fichiers source du logiciel ou encore tout nouveau fichier source qui incorpore le logiciel ou une partie importante de ce dernier.
+
+3. Licence de droit d'auteur
+Sous réserve des termes de la licence, le concédant accorde au licencié une licence non exclusive et libre de redevances lui permettant d’exercer les droits suivants sur le logiciel :
+1° Produire ou reproduire la totalité ou une partie importante;
+2° Exécuter ou représenter la totalité ou une partie importante en public;
+3° Publier la totalité ou une partie importante.
+
+Cette licence est accordée sans limite territoriale et sans limite de temps.
+
+L'exercice complet de ces droits est sujet à la distribution par le concédant du code source du logiciel, lequel doit être sous une forme permettant d'y apporter des modifications. Le concédant peut aussi distribuer le logiciel accompagné d'une offre de distribuer le code source du logiciel, sans frais supplémentaires, autres que ceux raisonnables afin de permettre la livraison du code source. Cette offre doit être valide pendant une durée raisonnable.
+
+4. Distribution
+Le licencié peut distribuer des copies du logiciel, d'un logiciel modifié ou dérivé, sous réserve de respecter les conditions suivantes :
+1° Le logiciel doit être accompagné d'un exemplaire de cette licence;
+2° Si le logiciel a été modifié, le licencié doit en faire la mention, de préférence dans chacun des fichiers modifiés dont la nature permet une telle mention;
+3° Les étiquettes ou mentions faisant état des droits d'auteur, des marques de commerce, des garanties ou de la paternité concernant le logiciel ne doivent pas être modifiées ou supprimées, à moins que ces étiquettes ou mentions ne soient inapplicables à un logiciel modifié ou dérivé donné.
+
+4.1. Réciprocité
+Chaque fois que le licencié distribue le logiciel, le concédant offre au récipiendaire une concession sur le logiciel selon les termes de la présente licence. Le licencié doit offrir une concession selon les termes de la présente licence pour tout logiciel modifié ou dérivé qu'il distribue.
+
+Chaque fois que le licencié distribue le logiciel, un logiciel modifié, ou un logiciel dérivé, ce dernier doit assumer l'obligation d'en distribuer le code source, de la manière prévue au troisième alinéa de l'article 3.
+
+4.2. Compatibilité
+Dans la mesure où le licencié souhaite distribuer un logiciel modifié ou dérivé combiné à un logiciel assujetti à une licence compatible, mais dont il ne serait pas possible d'en respecter les termes, le concédant offre, en plus de la présente concession, une concession selon les termes de cette licence compatible.
+
+Un licencié qui est titulaire exclusif du droit d'auteur sur le logiciel assujetti à une licence compatible ne peut pas se prévaloir de cette offre. Il en est de même pour toute autre personne dûment autorisée à sous-licencier par le titulaire exclusif du droit d'auteur sur le logiciel assujetti à une licence compatible.
+
+Est considérée comme une licence compatible toute licence libre approuvée ou certifiée par la Free Software Foundation ou l'Open Source Initiative, dont le niveau de réciprocité est comparable à celui de la présente licence, sans toutefois être moindre, notamment :
+1° Common Public License Version 1.0 (CPL-1.0)
+2° Contrat de licence de logiciel libre CeCILL, version 2.1 (CECILL-2.1)
+3° Eclipse Public License - v 1.0 (EPL-1.0)
+4° European Union Public License, version 1.1 (EUPL v. 1.1)
+5° GNU General Public License Version 2 (GNU GPLv2)
+6° GNU General Public License Version 3 (GNU GPLv3)
+
+5. Contributions
+Sous réserve d'une entente distincte, toute contribution soumise par un contributeur au concédant pour inclusion dans le logiciel sera soumise aux termes de cette licence.
+
+6. Marques de commerce
+La licence n'accorde aucune permission particulière qui permettrait d'utiliser les marques de commerce du concédant, autre que celle requise permettant d'identifier la provenance du logiciel.
+
+7. Garanties
+Sauf mention contraire, le concédant distribue le logiciel sans aucune garantie, aux risques et périls de l'acquéreur de la copie du logiciel, et ce, sans assurer que le logiciel puisse répondre à un besoin particulier ou puisse donner un résultat quelconque. 
+
+Sans lier le concédant d'une quelconque manière, rien n'empêche un licencié d'offrir ou d'exclure des garanties ou du support.
+
+8. Responsabilité
+Le licencié est responsable de tout préjudice résultant de l'exercice des droits accordés par la licence.
+
+Le concédant ne saurait être tenu responsable du préjudice subi par le licencié ou par des tiers, pour quelque cause que ce soit en lien avec la licence et les droits qui y sont accordés.
+
+9. Résiliation
+La présente licence est résiliée de plein droit dès que les droits qui y sont accordés ne sont pas exercés conformément aux termes qui y sont stipulés.
+
+Toutefois, si le défaut est corrigé dans un délai de 30 jours de sa prise de connaissance par la personne en défaut, et qu'il s'agit du premier défaut, la licence est accordée de nouveau.
+
+Pour tout défaut subséquent, le consentement exprès du concédant est nécessaire afin que la licence soit accordée de nouveau.
+
+10. Version de la licence
+Le Centre de services partagés du Québec, ses ayants cause ou toute personne qu'il désigne, peuvent diffuser des versions révisées ou modifiées de cette licence. Chaque version recevra un numéro unique. Si un logiciel est déjà soumis aux termes d'une version spécifique, c'est seulement cette version qui liera les parties à la licence.
+
+Le concédant peut aussi choisir de concéder la licence sous la version actuelle ou toute version ultérieure, auquel cas le licencié peut choisir sous quelle version la licence lui est accordée.
+
+11. Divers
+Dans la mesure où le concédant est un ministère, un organisme public ou une personne morale de droit public, créés en vertu d'une loi de l'Assemblée nationale du Québec, la licence est régie par le droit applicable au Québec et en cas de contestation, les tribunaux du Québec seront seuls compétents.
+
+La présente licence peut être distribuée sans conditions particulières. Toutefois, une version modifiée doit être distribuée sous un nom différent. Toute référence au Centre de services partagés du Québec, et, le cas échéant, ses ayant cause, doit être retirée, autre que celle permettant d'identifier la provenance de la licence.
 
 ## CC BY-NC-SA 4.0
 ### English CC BY-NC-SA 4.0
