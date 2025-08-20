@@ -65,10 +65,10 @@ def grobotfwupdate():
             subprocess.run("echo grobot | sudo -S sed -i '/^[^#]*SystemMaxUse=/s/^/#/' /etc/systemd/journald.conf", shell=True)
 
             #Update 2, turn off wifi to strengthen security
-            subprocess.run("echo grobot | sudo -S rfkill block wifi", shell=True)
+            #subprocess.run("echo grobot | sudo -S rfkill block wifi", shell=True)
 
             #Update 3, turn off bluetooth to strengthen security
-            subprocess.run("echo grobot | sudo -S rfkill block bluetooth", shell=True)
+            #subprocess.run("echo grobot | sudo -S rfkill block bluetooth", shell=True)
 
             #Update 4, disable grobotboot and remove its service unit file
             subprocess.run("echo grobot | sudo -S systemctl stop grobotboot", shell=True)
