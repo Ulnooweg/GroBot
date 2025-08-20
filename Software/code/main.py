@@ -62,7 +62,6 @@ from fancontrol import fanmanon, fanoff, fanon
 from lightcontrol import growlightoff, growlighton
 from grobotpicam import picam_capture
 from dataout import excelout
-from diopinsetup import diopinset
 
 # config.py is for linux.
 import config
