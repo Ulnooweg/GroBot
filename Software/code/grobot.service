@@ -5,8 +5,10 @@ StartLimitIntervalSec=30
 StartLimitBurst=10
 
 [Service]
-WorkingDirectory=/mnt/grobotextdat/code
-ExecStart=/home/grobot/adapi/bin/python /mnt/grobotextdat/code/main.py
+RuntimeDirectory=grobot_runtime
+WorkingDirectory=/run/grobot_runtime
+User=grobot
+ExecStart=/home/grobot/adapi/bin/python -u /mnt/grobotextdat/code/main.py
 Restart=always
 RestartSec=5
 Nice=-20

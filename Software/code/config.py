@@ -1,5 +1,5 @@
 #Copyright 2023-2025 Ulnooweg Education Centre. All rights reserved.
-#Licensed under the EUPL-1.2 or later
+#Licensed under Québec Free and Open-Source Licence – Strong Reciprocity (LiLiQ-R+) Version 1.1
 #
 #Source: https://github.com/Ulnooweg/GroBot
 #Contact: engineering@ulnooweg.ca
@@ -8,12 +8,12 @@
 #
 #GroBot
 #Code: config
-#Version: 1.2
+#Version: 2.0
 #Description: Code to read and manipulate configuration file grobot_cfg.ini, read system info from ulnoowegdat csv
 #Function: get_plant _settings(), read config and return plant settings as a tuple of data
 #          read_config(), read config.ini and return a dictionary value of all data
 #          update_config(section, parameter, value), write "value" to config file under "parameter" parameter in "section" section
-#          readcsv(csventryname), read data from ulnoowegdat and return value for entry csventryname
+#          readcsv(csventryname), read data from ulnoowegdat and return value (in string) for entry csventryname
 #          writecsv(csventryname,csventryvalue), take strings entry name and entry value and write it to the appropriate entry columns in ulnoowegdat csv
 #          writecsvnote(csventryname,csventryvalue,csventrynote) same as writecsv except also takes entry note and write that string also to the note column of the appropriate entry in ulnoowegdat csv
 #          readcsv_softver(csventryname), same as readcsv except it reads the file/code/softver instead of /userdata/ulnoowegdat
@@ -29,7 +29,6 @@ import configparser
 import csv
 import threading
 import subprocess
-from lcdfuncdef import set_lcd_color
 
 config = configparser.ConfigParser()
 config.optionxform = str #Force keep case-sensititvity in config file
@@ -41,6 +40,7 @@ grobotdict_lock = threading.Lock() #Define a thread lock class
 csv_ulnoodat_lock = threading.Lock() #Define a thread lock class
 csv_softver_lock = threading.Lock() #Define a thread lock class
 csv_mainflags_lock = threading.Lock() #Define a thread lock class as csv_mainflags_lock
+csv_waterparam_lock = threading.Lock() #Define a thread lock class as csv_waterparam_lock
 
 def read_config():
     try:
@@ -49,7 +49,7 @@ def read_config():
             return config
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def get_plant_settings(): #Define get_plant_settings which read config file and put them in a dictionaried variable
@@ -69,7 +69,7 @@ def get_plant_settings(): #Define get_plant_settings which read config file and 
             return settings #return variable as a dictionary
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def update_config(section, parameter, value): #Define function to write variable back to config file
@@ -82,7 +82,7 @@ def update_config(section, parameter, value): #Define function to write variable
             return 1
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def readcsv(csventryname): #define a function to read csv file and return the value corresponding to entry
@@ -101,34 +101,7 @@ def readcsv(csventryname): #define a function to read csv file and return the va
             raise RuntimeError('CSV ENTRY NOT FOUND')
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
-        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
-    
-def readlocal(csventryname): #define a function to read csv file and return the value corresponding to entry
-    #csv entry name must be a string
-    try:
-        csvdata = [] #define an empty list
-        with grobotdict_lock: #Acquire thread lock before operation
-            with open('/mnt/grobotextdat/code/dictionary', 'r') as csvfile: #open the csv file as csvfile object
-                csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
-                for row in csvraw: #iterate through each row in cswraw
-                    if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
-                        csventryvalue = row[1]  #read the value for row that matched the desired entry
-                        editedcsventryvalue = csventryvalue.replace('é','\x00')
-                        editedcsventryvalue = editedcsventryvalue.replace('à','\x01')
-                        editedcsventryvalue = editedcsventryvalue.replace('è','\x02')
-                        editedcsventryvalue = editedcsventryvalue.replace('ê','\x03')
-                        editedcsventryvalue = editedcsventryvalue.replace('ô','\x04')
-                        editedcsventryvalue = editedcsventryvalue.replace('û','\x05')
-                        editedcsventryvalue = editedcsventryvalue.replace('â','\x06')
-                        editedcsventryvalue = editedcsventryvalue.replace('ɨ','\x07')
-                        return editedcsventryvalue
-                    else:
-                        pass
-            raise RuntimeError('CSV ENTRY NOT FOUND')
-    except Exception as errvar:
-        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def writecsv(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
@@ -153,7 +126,7 @@ def writecsv(csventryname,csventryvalue): #define a function to write to csv fil
             return 1 #return the csv data in list form
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def writecsvnote(csventryname,csventryvalue,csventrynote): #define a function to write to csv file taking in name of entry, value of the entry, and value of note to update to
@@ -179,7 +152,7 @@ def writecsvnote(csventryname,csventryvalue,csventrynote): #define a function to
             return 1 #return the csv data in list form
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def readcsv_softver(csventryname): #define a function to read csv file and return the value corresponding to entry
@@ -198,7 +171,7 @@ def readcsv_softver(csventryname): #define a function to read csv file and retur
             raise RuntimeError('CSV ENTRY NOT FOUND') #If entry not found raise an error
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv file with 3 column
@@ -214,7 +187,7 @@ def writecsvnewrow(col1,col2,col3): #define a function to write a new row to csv
             return 1 #return the csv data in list form
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
 def readcsv_mainflags(csventryname): #define a function to read csv file and return the value corresponding to entry
@@ -233,7 +206,7 @@ def readcsv_mainflags(csventryname): #define a function to read csv file and ret
             raise RuntimeError('CSV ENTRY NOT FOUND')
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
     
 def writecsv_mainflags(csventryname,csventryvalue): #define a function to write to csv file taking in name of entry and value of the entry to update to
@@ -258,5 +231,24 @@ def writecsv_mainflags(csventryname,csventryvalue): #define a function to write 
             return 1 #return the csv data in list form
     except Exception as errvar:
         subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
-        set_lcd_color("error")
+        #LCD COLOUR HANDLING CODE (RED) HERE
+        raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
+    
+def readcsv_waterparam(csventryname): #define a function to read csv file and return the value corresponding to entry
+    #csv entry name must be a string
+    try:
+        csvdata = [] #define an empty list
+        with csv_waterparam_lock: #Acquire thread lock before operation using csv_mainflags_lock. Any subsequent attempt to access will wait for with statement to release the lock
+            with open('/mnt/grobotextdat/code/waterlogicparam', 'r') as csvfile: #open the csv file as csvfile object
+                csvraw = csv.reader(csvfile) #read csvfile into csvraw using reader class from csv library
+                for row in csvraw: #iterate through each row in cswraw
+                    if row[0] == csventryname: #Check for row where the first column, name in the file, match desired csv entry
+                        csventryvalue = row[1]  #read the value for row that matched the desired entry
+                        return csventryvalue
+                    else:
+                        pass
+            raise RuntimeError('CSV ENTRY NOT FOUND')
+    except Exception as errvar:
+        subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+        #LCD COLOUR HANDLING CODE (RED) HERE
         raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
