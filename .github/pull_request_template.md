@@ -1,12 +1,3 @@
----
-name: Pull request
-about: Pull request template
-title: "PR: {Title here}"
-labels: Triage
-assignees: ''
-
----
-
 ### Desciption
 A description of the pull requests including:
 - What are the changes.
