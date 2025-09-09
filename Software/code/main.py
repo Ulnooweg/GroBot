@@ -365,7 +365,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
             ) # Back Button
 
-            # Data Monitor
+            # Data Monitor ----------------------------------------------------------------------------------
         
         self.graphwindow = self.findChild(pg.PlotWidget, "graphwindow")
 
@@ -383,12 +383,17 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.graphwindow.setXRange(pltdmnmin, pltdmnmax)
         self.graphwindow.setYRange(pltrgemin, pltrgemax)
 
-        self.plot( 
-            [1, 2, 3, 4, 5], # First array is the hour
-            [10, 20, 15, 30, 25], 
-        )
+        self.datax = []
+        self.datay = [] 
 
-        # Irrigation ---------------
+        last_n_items = self.read_csv("/mnt/grobotextdat/data/datalog.csv", 24)
+        for row in last_n_items:
+            #print(row[1])
+            self.datay.append(float(row[1]))   
+
+        self.graphwindow.plot([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], self.datay)
+
+        # Irrigation ------------------------------------------------------------------------------------------
             # Buttons
         self.ui.wateringtime_page_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.watertiming_page)
@@ -606,8 +611,12 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     ### Graphing
 
         # Defines plot function to display hardcoded data
-    def plot(self, hour, temperature):
-            self.graphwindow.plot(hour, temperature)
+
+    def read_csv(self, file_path, n=24):
+        with open(file_path, 'r', newline='') as csvfile:
+            reader = csv.reader(csvfile)
+            data = list(reader)  # Read all rows into a list
+            return data[max(0, len(data) - n):] # Slice the last n items
 
     def watertime_select(self, selection): # When a given time selection is requested for edit by the user, the corresponding label text changes
         global currentwatersave # Variable for interaction with watertime_save; whatever time is selected will be saved in that function
