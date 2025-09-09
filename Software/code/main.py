@@ -18,6 +18,8 @@
 #
 ########################################
 import sys
+import csv
+import pyqtgraph as pg
 import os
 import updatefw
 import time
@@ -171,6 +173,7 @@ except Exception as errvar:
 
 # Important notes for GUI buttons: when connecting a function to a QPushButton object, the function must be preceeded by
 # "lambda:". Without this, any function placed inside the clicked.connect() method will be called on Grobot startup.
+
 
 class Widget(QMainWindow): # Creates a class containing attributes imported from ui_form.py
     def __init__(self, parent=None): 
@@ -361,6 +364,29 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.ui.monitordata_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
             ) # Back Button
+
+            # Data Monitor
+        
+        self.graphwindow = self.findChild(pg.PlotWidget, "graphwindow")
+
+        # Range - Moisture level
+        pltrgemin = 0
+        pltrgemax = 100
+        
+        # Domain - Timestamp
+        pltdmnmin = 0
+        pltdmnmax = 100
+
+        # self.graphwindow.setLabel("left", "Moisture Level")
+        # self.graphwindow.setLabel("bottom", "Time")
+
+        self.graphwindow.setXRange(pltdmnmin, pltdmnmax)
+        self.graphwindow.setYRange(pltrgemin, pltrgemax)
+
+        self.plot( 
+            [1, 2, 3, 4, 5], # First array is the hour
+            [10, 20, 15, 30, 25], 
+        )
 
         # Irrigation ---------------
             # Buttons
@@ -576,6 +602,12 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 ##################################################
 ################# GUI FUNCTIONS ##################
 ##################################################
+
+    ### Graphing
+
+        # Defines plot function to display hardcoded data
+    def plot(self, hour, temperature):
+            self.graphwindow.plot(hour, temperature)
 
     def watertime_select(self, selection): # When a given time selection is requested for edit by the user, the corresponding label text changes
         global currentwatersave # Variable for interaction with watertime_save; whatever time is selected will be saved in that function

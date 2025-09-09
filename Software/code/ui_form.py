@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formRtZDjn.ui'
+## Form generated from reading UI file 'formLJaDGD.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -17,6 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QGroupBox, QLabel, QPushButton,
     QSizePolicy, QSlider, QStackedWidget, QWidget)
+
+from pyqtgraph import PlotWidget
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -131,13 +133,16 @@ class Ui_Form(object):
         self.monitordata_page.setObjectName(u"monitordata_page")
         self.monitordata_back_btn = QPushButton(self.monitordata_page)
         self.monitordata_back_btn.setObjectName(u"monitordata_back_btn")
-        self.monitordata_back_btn.setGeometry(QRect(250, 360, 201, 151))
+        self.monitordata_back_btn.setGeometry(QRect(300, 440, 161, 111))
         self.monitordata_back_btn.setFont(font2)
         self.monitordata_back_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);\n"
 "	border-radius: 25px;\n"
 "	border: 5px solid rgb(120, 120, 120);\n"
 "}")
+        self.graphwindow = PlotWidget(self.monitordata_page)
+        self.graphwindow.setObjectName(u"graphwindow")
+        self.graphwindow.setGeometry(QRect(10, 10, 451, 421))
         self.pagelayoutwidget.addWidget(self.monitordata_page)
         self.manualcontrols_page = QWidget()
         self.manualcontrols_page.setObjectName(u"manualcontrols_page")
@@ -855,7 +860,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.pagelayoutwidget.setCurrentIndex(0)
+        self.pagelayoutwidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(Form)
