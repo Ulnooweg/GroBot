@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formLJaDGD.ui'
+## Form generated from reading UI file 'formoIrirI.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -133,7 +133,7 @@ class Ui_Form(object):
         self.monitordata_page.setObjectName(u"monitordata_page")
         self.monitordata_back_btn = QPushButton(self.monitordata_page)
         self.monitordata_back_btn.setObjectName(u"monitordata_back_btn")
-        self.monitordata_back_btn.setGeometry(QRect(300, 440, 161, 111))
+        self.monitordata_back_btn.setGeometry(QRect(315, 440, 151, 111))
         self.monitordata_back_btn.setFont(font2)
         self.monitordata_back_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);\n"
@@ -143,6 +143,24 @@ class Ui_Form(object):
         self.graphwindow = PlotWidget(self.monitordata_page)
         self.graphwindow.setObjectName(u"graphwindow")
         self.graphwindow.setGeometry(QRect(10, 10, 451, 421))
+        self.monitordata_update_btn = QPushButton(self.monitordata_page)
+        self.monitordata_update_btn.setObjectName(u"monitordata_update_btn")
+        self.monitordata_update_btn.setGeometry(QRect(160, 440, 151, 111))
+        self.monitordata_update_btn.setFont(font2)
+        self.monitordata_update_btn.setStyleSheet(u"QPushButton{\n"
+"	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);\n"
+"	border-radius: 25px;\n"
+"	border: 5px solid rgb(120, 120, 120);\n"
+"}")
+        self.monitordata_clear_btn = QPushButton(self.monitordata_page)
+        self.monitordata_clear_btn.setObjectName(u"monitordata_clear_btn")
+        self.monitordata_clear_btn.setGeometry(QRect(5, 440, 151, 111))
+        self.monitordata_clear_btn.setFont(font2)
+        self.monitordata_clear_btn.setStyleSheet(u"QPushButton{\n"
+"	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);\n"
+"	border-radius: 25px;\n"
+"	border: 5px solid rgb(120, 120, 120);\n"
+"}")
         self.pagelayoutwidget.addWidget(self.monitordata_page)
         self.manualcontrols_page = QWidget()
         self.manualcontrols_page.setObjectName(u"manualcontrols_page")
@@ -879,6 +897,8 @@ class Ui_Form(object):
         self.monitordata_page_btn.setText(QCoreApplication.translate("Form", u"Monitor Data\n"
 "(WIP)", None))
         self.monitordata_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
+        self.monitordata_update_btn.setText(QCoreApplication.translate("Form", u"Update", None))
+        self.monitordata_clear_btn.setText(QCoreApplication.translate("Form", u"Clear", None))
         self.waternow_btn.setText(QCoreApplication.translate("Form", u"Water\n"
 "Toggle", None))
         self.lightswitch_btn.setText(QCoreApplication.translate("Form", u"Light\n"

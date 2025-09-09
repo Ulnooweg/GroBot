@@ -368,30 +368,24 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Data Monitor ----------------------------------------------------------------------------------
         
         self.graphwindow = self.findChild(pg.PlotWidget, "graphwindow")
+        self.graphwindowsize = 100
 
-        # Range - Moisture level
-        pltrgemin = 0
-        pltrgemax = 100
+        self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
+        #print(self.datax)
+
+        self.ui.monitordata_update_btn.clicked.connect(
+            self.update_graph
+            ) # Button event when pressed: changes page to monitordata_page
         
-        # Domain - Timestamp
-        pltdmnmin = 0
-        pltdmnmax = 100
+        self.ui.monitordata_clear_btn.clicked.connect(
+            lambda: self.graphwindow.clear()
+            ) # Button event when pressed: changes page to monitordata_page
 
-        # self.graphwindow.setLabel("left", "Moisture Level")
-        # self.graphwindow.setLabel("bottom", "Time")
-
-        self.graphwindow.setXRange(pltdmnmin, pltdmnmax)
-        self.graphwindow.setYRange(pltrgemin, pltrgemax)
-
-        self.datax = []
-        self.datay = [] 
-
-        last_n_items = self.read_csv("/mnt/grobotextdat/data/datalog.csv", 24)
-        for row in last_n_items:
-            #print(row[1])
-            self.datay.append(float(row[1]))   
-
-        self.graphwindow.plot([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], self.datay)
+        # Defines empty arrays and creates plots
+        self.datay1 = [] 
+        self.datay2 = []
+        # self.create_plot(self.datay1, 1)
+        # self.create_plot(self.datay2, 2)
 
         # Irrigation ------------------------------------------------------------------------------------------
             # Buttons
@@ -612,8 +606,22 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
         # Defines plot function to display hardcoded data
 
-    def read_csv(self, file_path, n=24):
-        with open(file_path, 'r', newline='') as csvfile:
+    def create_plot(self, name, column):
+        item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
+        for row in item_pull:
+            name.append(float(row[column])) 
+        self.graphwindow.plot(self.datax, name)
+
+    def update_graph(self):
+        self.graphwindow.clear()
+        self.datay1.clear()
+        self.datay2.clear()        
+        self.create_plot(self.datay1, 1)
+        self.create_plot(self.datay2, 2)
+ 
+    # Defines plot function to display hardcoded data
+    def read_datalog(self, file_path, n = 24):
+        with open(file_path, 'r', newline = '') as csvfile:
             reader = csv.reader(csvfile)
             data = list(reader)  # Read all rows into a list
             return data[max(0, len(data) - n):] # Slice the last n items
