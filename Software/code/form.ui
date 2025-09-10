@@ -284,9 +284,9 @@ QPushButton:pressed{
      <property name="geometry">
       <rect>
        <x>315</x>
-       <y>440</y>
+       <y>450</y>
        <width>151</width>
-       <height>111</height>
+       <height>101</height>
       </rect>
      </property>
      <property name="font">
@@ -312,18 +312,18 @@ QPushButton:pressed{
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>451</width>
-       <height>421</height>
+       <width>211</width>
+       <height>211</height>
       </rect>
      </property>
     </widget>
     <widget class="QPushButton" name="monitordata_update_btn">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>440</y>
+       <x>5</x>
+       <y>450</y>
        <width>151</width>
-       <height>111</height>
+       <height>101</height>
       </rect>
      </property>
      <property name="font">
@@ -344,31 +344,116 @@ QPushButton:pressed{
       <string>Update</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="monitordata_clear_btn">
+    <widget class="PlotWidget" name="graphwindow_2" native="true">
      <property name="geometry">
       <rect>
-       <x>5</x>
-       <y>440</y>
-       <width>151</width>
-       <height>111</height>
+       <x>250</x>
+       <y>10</y>
+       <width>211</width>
+       <height>211</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="PlotWidget" name="graphwindow_3" native="true">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>230</y>
+       <width>211</width>
+       <height>211</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="monitordata_data_label">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>230</y>
+       <width>211</width>
+       <height>91</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <family>TikTok Sans 28pt</family>
-       <pointsize>18</pointsize>
-       <bold>false</bold>
+       <family>Myriad Pro</family>
+       <pointsize>11</pointsize>
       </font>
      </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
-	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);
-	border-radius: 25px;
-	border: 5px solid rgb(120, 120, 120);
-}</string>
+     <property name="text">
+      <string>&lt;&lt;Data Label&gt;&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+     </property>
+    </widget>
+    <widget class="QSlider" name="graphdomain_slider">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>360</y>
+       <width>231</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QSlider" name="probe_x_slider">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>420</y>
+       <width>231</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="graphdomain_label">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>340</y>
+       <width>211</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Myriad Pro</family>
+       <pointsize>11</pointsize>
+      </font>
      </property>
      <property name="text">
-      <string>Clear</string>
+      <string>&lt;&lt;Graph Domain&gt;&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="probedata_label">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>400</y>
+       <width>211</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Myriad Pro</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>&lt;&lt;Probe Datapoint Location&gt;&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </widget>
