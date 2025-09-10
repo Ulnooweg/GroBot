@@ -368,6 +368,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Data Monitor ----------------------------------------------------------------------------------
         
         self.graphwindow = self.findChild(pg.PlotWidget, "graphwindow")
+        self.graphwindow_2 = self.findChild(pg.PlotWidget, "graphwindow_2")
+        self.graphwindow_3 = self.findChild(pg.PlotWidget, "graphwindow_3")
         self.graphwindowsize = 100
 
         self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
@@ -377,10 +379,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             self.update_graph
             ) # Button event when pressed: changes page to monitordata_page
         
-        self.ui.monitordata_clear_btn.clicked.connect(
-            lambda: self.graphwindow.clear()
-            ) # Button event when pressed: changes page to monitordata_page
-
         # Defines empty arrays and creates plots
         self.datay1 = [] 
         self.datay2 = []
