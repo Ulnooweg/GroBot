@@ -372,6 +372,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.graphwindow_3 = self.findChild(pg.PlotWidget, "graphwindow_3")
         self.graphwindowsize = 100
 
+        self.recent_data_label = self.findChild(QLabel, "monitordata_data_label")
+        self.data_label_2 = self.findChild(QLabel, "graphdomain_label")
+
         self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
         #print(self.datax)
 
@@ -379,11 +382,22 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             self.update_graph
             ) # Button event when pressed: changes page to monitordata_page
         
-        # Defines empty arrays and creates plots
-        self.datay1 = [] 
-        self.datay2 = []
-        # self.create_plot(self.datay1, 1)
-        # self.create_plot(self.datay2, 2)
+            # Domain Slider
+        self.domain_changer = self.findChild(
+            QSlider, "domain_slider"
+            ) # Finds QSlider object "humidset_slider" in Ui_Form
+        self.domain_changer.setValue(
+            100
+            ) # Sets displayed value of slider to stored cfg value
+        self.domain_changer.valueChanged.connect(
+            self.change_domain
+            ) # On a changed value from QSlider, calls function that writes to cfg
+
+            # Defines empty arrays and creates plots
+        self.timestamps = [] # Timestamp
+        self.datay1 = [] # Temperature
+        self.datay2 = [] # Humidity
+        self.datay3 = [] # Soil Moisture
 
         # Irrigation ------------------------------------------------------------------------------------------
             # Buttons
@@ -603,20 +617,108 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     ### Graphing
 
         # Defines plot function to display hardcoded data
+        # /mnt/grobotextdat/data/datalog.csv
 
-    def create_plot(self, name, column):
+    def change_domain(self):
+            domain_expansion = str(self.domain_changer.value())
+            self.data_label_2.setText(f"Hours of Data: {domain_expansion}")
+            self.graphwindowsize = int(domain_expansion)
+            self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
+            self.datax.reverse()
+            self.update_graph()
+
+    def retrieve_timestamps(self):
+        self.timestamps.clear()
         item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
         for row in item_pull:
-            name.append(float(row[column])) 
-        self.graphwindow.plot(self.datax, name)
+            self.timestamps.append(row[0])
+        #print(self.timestamp)
+
+    # Creates a plot of a desired data column from the csv file. 1 is temperature, 2 is humidity, and 3 is moisture.
+    def create_plot(self, name, column, graph_name, colour, y_label, y_units, x_label, x_units, title):
+
+        graph_widget = getattr(self, graph_name, None)
+        if graph_widget is None:
+            raise AttributeError(f"No graph window found with name '{graph_name}'")
+
+        graph_widget.clear()
+        name.clear()
+
+        item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
+        for row in item_pull:
+            name.append(float(row[column]))
+
+        # Define Graph axis labels
+        graph_widget.plot(self.datax, name, clear=True, pen=colour)
+        graph_widget.setLabel('left', y_label, units = y_units)
+        graph_widget.setLabel('bottom', x_label, units = x_units)
+        graph_widget.setTitle(title)
+        graph_widget.showGrid(x=True, y=True)
+        graph_widget.invertX(True)
+
+        # Populate graph with adjustable probe line
+
+        self.retrieve_timestamps()
+
+        probe_x = int(self.graphwindowsize)
+        probe_y = int(name[0])
+
+        # Probe Indicator 
+        text_item = pg.TextItem('x', color='w')
+        text_item.setPos(probe_x, probe_y)
+        graph_widget.addItem(text_item)
+
+        probe_label_x = self.graphwindowsize
+        probe_label_y = max(name)
+
+        # Probe Label
+        text_item = pg.TextItem(self.timestamps[0], color='w')
+        text_item.setPos(probe_label_x, probe_label_y)
+        graph_widget.addItem(text_item)
+
+    def clear_graph(self):
+        self.graphwindow.clear()
+        self.graphwindow_2.clear()
+        self.graphwindow_3.clear()
 
     def update_graph(self):
-        self.graphwindow.clear()
-        self.datay1.clear()
-        self.datay2.clear()        
-        self.create_plot(self.datay1, 1)
-        self.create_plot(self.datay2, 2)
- 
+        self.create_plot(self.datay1, 1, 
+                        graph_name="graphwindow", 
+                        colour='y', 
+                        y_label = 'Temperature', 
+                        y_units = '°C', 
+                        x_label = 'Time', 
+                        x_units = 'Hours From Last Point', 
+                        title = 'Enclosure Temperature')
+        
+        self.create_plot(self.datay2, 2, 
+                        graph_name="graphwindow_2", 
+                        colour='r', 
+                        y_label = 'Humidity', 
+                        y_units = '%', 
+                        x_label = 'Time', 
+                        x_units = 'Hours From Last Point', 
+                        title = 'Air Humidity')
+        
+        self.create_plot(self.datay3, 3, 
+                        graph_name="graphwindow_3", 
+                        colour='b', 
+                        y_label = 'Sensor Readout', 
+                        y_units = '', 
+                        x_label = 'Time', 
+                        x_units = 'Hours From Last Point', 
+                        title = 'Soil Moisture Level')
+        
+        self.recent_data_label.setText(
+            f"Recent Data:\nTemperature: {round(self.datay1[-1], 2)} °C\nHumidity: {round(self.datay2[-1], 2)} %\nSoil Moisture: {round(self.datay3[-1], 2)}"
+            )
+
+    # Defines plot function to display hardcoded data
+    def read_datalog(self, file_path, graphwindowsize):
+        with open(file_path, 'r', newline = '') as csvfile:
+            reader = csv.reader(csvfile)
+            data = list(reader)  # Read all rows into a list
+            return data[max(0, len(data) - graphwindowsize):] # Slice the last n items
     # Defines plot function to display hardcoded data
     def read_datalog(self, file_path, n = 24):
         with open(file_path, 'r', newline = '') as csvfile:
