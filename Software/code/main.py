@@ -366,7 +366,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             ) # Back Button
 
             # Data Monitor ----------------------------------------------------------------------------------
-        
+
         self.graphwindow = self.findChild(pg.PlotWidget, "graphwindow")
         self.graphwindow_2 = self.findChild(pg.PlotWidget, "graphwindow_2")
         self.graphwindow_3 = self.findChild(pg.PlotWidget, "graphwindow_3")
@@ -382,16 +382,16 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             self.update_graph
             ) # Button event when pressed: changes page to monitordata_page
         
-        #     # Domain Slider
-        # self.domain_changer = self.findChild(
-        #     QSlider, "graphdomain_slider"
-        #     ) # Finds QSlider object "humidset_slider" in Ui_Form
-        # self.domain_changer.setValue(
-        #     100
-        #     ) # Sets displayed value of slider to stored cfg value
-        # self.domain_changer.valueChanged.connect(
-        #     self.change_domain
-        #     ) # On a changed value from QSlider, calls function that writes to cfg
+            # Domain Slider
+        self.domain_changer = self.findChild(
+            QSlider, "graphdomain_slider"
+            ) # Finds QSlider object "graphdomain_slider" in Ui_Form
+        self.domain_changer.setValue(
+            100
+            ) # Sets displayed value of slider to stored cfg value
+        self.domain_changer.valueChanged.connect(
+            self.change_domain
+            ) # On a changed value from QSlider, calls function that writes to cfg
 
             # Defines empty arrays and creates plots
         self.timestamps = [] # Timestamp

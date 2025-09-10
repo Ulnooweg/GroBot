@@ -370,7 +370,7 @@ QPushButton:pressed{
        <x>240</x>
        <y>230</y>
        <width>211</width>
-       <height>91</height>
+       <height>61</height>
       </rect>
      </property>
      <property name="font">
@@ -390,10 +390,37 @@ QPushButton:pressed{
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>360</y>
+       <y>310</y>
        <width>231</width>
-       <height>18</height>
+       <height>68</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">.QSlider {
+    min-height: 68px;
+    max-height: 68px;
+}
+
+.QSlider::groove:horizontal {
+	border-radius: 5px;
+    border: 3px solid #262626;
+    height: 5px;
+    margin: 0 12px;
+}
+
+.QSlider::handle:horizontal {
+    background: Grey;
+	border-radius: 10px;
+    width: 46px;
+    height: 100px;
+	margin: -24px -12px
+}</string>
+     </property>
+     <property name="minimum">
+      <number>10</number>
+     </property>
+     <property name="maximum">
+      <number>250</number>
      </property>
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
@@ -403,10 +430,37 @@ QPushButton:pressed{
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>420</y>
+       <y>380</y>
        <width>231</width>
-       <height>18</height>
+       <height>68</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">.QSlider {
+    min-height: 68px;
+    max-height: 68px;
+}
+
+.QSlider::groove:horizontal {
+	border-radius: 5px;
+    border: 3px solid #262626;
+    height: 5px;
+    margin: 0 12px;
+}
+
+.QSlider::handle:horizontal {
+    background: Grey;
+	border-radius: 10px;
+    width: 46px;
+    height: 100px;
+	margin: -24px -12px
+}</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
      </property>
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
@@ -416,7 +470,7 @@ QPushButton:pressed{
      <property name="geometry">
       <rect>
        <x>240</x>
-       <y>340</y>
+       <y>300</y>
        <width>211</width>
        <height>21</height>
       </rect>
@@ -438,7 +492,7 @@ QPushButton:pressed{
      <property name="geometry">
       <rect>
        <x>240</x>
-       <y>400</y>
+       <y>370</y>
        <width>211</width>
        <height>21</height>
       </rect>
