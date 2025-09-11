@@ -609,7 +609,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.editsettings_page)
             ) # Back Button
         
-
 ##################################################
 ################# GUI FUNCTIONS ##################
 ##################################################
