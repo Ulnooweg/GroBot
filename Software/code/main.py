@@ -378,6 +378,10 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
         #print(self.datax)
 
+        self.ui.monitordata_live_btn.clicked.connect(
+            self.graph_live_mode
+            ) # Button event when pressed: changes page to monitordata_page
+
         self.ui.monitordata_update_btn.clicked.connect(
             self.update_graph
             ) # Button event when pressed: changes page to monitordata_page
@@ -623,6 +627,23 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         # Defines plot function to display hardcoded data
         # /mnt/grobotextdat/data/datalog.csv
 
+    def graph_live_mode(self):
+        print("main-graph_live_mode: running update_graph") if debugstate == 1 or debugstate == 2 else None
+        x = 0
+        count = 20
+        while x < count:
+            ReadVal = feedread() # T RH SRH in order
+            # Write data out to excel file
+            self.recent_data_label.setText(
+            f"Recent Data:\nTemperature: {round(ReadVal[0], 2)} °C\nHumidity: {round(ReadVal[1], 2)} %\nSoil Moisture: {round(ReadVal[2], 2)}"
+            )
+            self.ui.statusbar_label.setText(f"Live Mode Active: Updating Graph\nfor {count - x} more cycles")
+            x = x + 1
+            self.tasksleep(1)
+        self.ui.statusbar_label.setText("Live Mode Finished")
+        self.tasksleep(2)
+        self.ui.statusbar_label.setText(self.welcome_message())
+
     def update_datamonitor_page(self):
         self.ui.pagelayoutwidget.setCurrentWidget(self.ui.monitordata_page)
         print("main-update_datamonitor_page: running update_graph") if debugstate == 1 or debugstate == 2 else None
@@ -708,8 +729,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                         colour='y', 
                         y_label = 'Temperature', 
                         y_units = '°C', 
-                        x_label = 'Time', 
-                        x_units = 'Hours From Last Point', 
+                        x_label = 'Datapoints', 
+                        x_units = '', 
                         title = 'Enclosure Temperature')
         
         print("main-update_graph: creating plots given defined labels and datay2") if debugstate == 1 or debugstate == 2 else None
@@ -718,8 +739,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                         colour='r', 
                         y_label = 'Humidity', 
                         y_units = '%', 
-                        x_label = 'Time', 
-                        x_units = 'Hours From Last Point', 
+                        x_label = 'Datapoints', 
+                        x_units = '', 
                         title = 'Air Humidity')
         
         print("main-update_graph: creating plots given defined labels and datay3") if debugstate == 1 or debugstate == 2 else None
@@ -728,13 +749,16 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                         colour='b', 
                         y_label = 'Sensor Readout', 
                         y_units = '', 
-                        x_label = 'Time', 
-                        x_units = 'Hours From Last Point', 
+                        x_label = 'Datapoints', 
+                        x_units = '', 
                         title = 'Soil Moisture Level')
         
         print("main-update_graph: setting label text to newest point") if debugstate == 1 or debugstate == 2 else None
+
+        self.retrieve_timestamps()
+
         self.recent_data_label.setText(
-            f"Recent Data:\nTemperature: {round(self.datay1[-1], 2)} °C\nHumidity: {round(self.datay2[-1], 2)} %\nSoil Moisture: {round(self.datay3[-1], 2)}"
+            f"Recent Data: {self.timestamps[-1]}\nTemperature: {round(self.datay1[-1], 2)} °C\nHumidity: {round(self.datay2[-1], 2)} %\nSoil Moisture: {round(self.datay3[-1], 2)}"
             )
 
     # Defines plot function to display hardcoded data
