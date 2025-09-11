@@ -231,7 +231,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         # Start
             # Buttons
         self.ui.continue_btn.clicked.connect(
-            self.start_thread(self.mainmenu_transistion)
+            self.mainmenu_transistion
             ) # Button event when pressed: changes page to mainmenu_page
 
         #### Clock Logic ---------------
@@ -730,12 +730,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             reader = csv.reader(csvfile)
             data = list(reader)  # Read all rows into a list
             return data[max(0, len(data) - graphwindowsize):] # Slice the last n items
-    # Defines plot function to display hardcoded data
-    def read_datalog(self, file_path, n = 24):
-        with open(file_path, 'r', newline = '') as csvfile:
-            reader = csv.reader(csvfile)
-            data = list(reader)  # Read all rows into a list
-            return data[max(0, len(data) - n):] # Slice the last n items
 
     def watertime_select(self, selection): # When a given time selection is requested for edit by the user, the corresponding label text changes
         global currentwatersave # Variable for interaction with watertime_save; whatever time is selected will be saved in that function
