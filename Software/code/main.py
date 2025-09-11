@@ -373,7 +373,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.graphwindowsize = 100
 
         self.recent_data_label = self.findChild(QLabel, "monitordata_data_label")
+
         self.data_label_2 = self.findChild(QLabel, "graphdomain_label")
+        self.data_label_2.setText(f"Hours of Data: {self.graphwindowsize}")
 
         self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
         #print(self.datax)
@@ -391,7 +393,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             QSlider, "graphdomain_slider"
             ) # Finds QSlider object "graphdomain_slider" in Ui_Form
         self.domain_changer.setValue(
-            100
+            50
             ) # Sets displayed value of slider to stored cfg value
         self.domain_changer.valueChanged.connect(
             self.change_domain
@@ -402,6 +404,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.datay1 = [] # Temperature
         self.datay2 = [] # Humidity
         self.datay3 = [] # Soil Moisture
+
+        self.update_graph()
 
         # Irrigation ------------------------------------------------------------------------------------------
             # Buttons
@@ -618,6 +622,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 ##################################################
 
     # Page Changes
+
     def mainmenu_transistion(self):
         self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
         print("main-mainmenu_transistion: Transistioning to main menu page") if debugstate == 1 or debugstate == 2 else None
