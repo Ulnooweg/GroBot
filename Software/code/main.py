@@ -655,6 +655,9 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         graph_widget.showGrid(x=True, y=True)
         graph_widget.invertX(True)
 
+        plot_window = graph_widget.getViewBox()
+        plot_window.setMouseEnabled(x=False, y=False)  # Disable zooming and panning due to obscuring data
+
         # Populate graph with adjustable probe line
 
         self.retrieve_timestamps()
@@ -1255,7 +1258,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             #LCD COLOUR HANDLING CODE (RED) HERE
             raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
-    def EveryXX25(*args, **kwargs): # This code runs at every 25 minute mark of the hour
+    def EveryXX25(self, *args, **kwargs): # This code runs at every 25 minute mark of the hour
         try:
             #LCD COLOUR HANDLING CODE (BLUE) HERE  # Set LCD color to blue when in progress
             # Read value from sensor and write it out to excel
@@ -1263,6 +1266,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             ReadVal = feedread() # T RH SRH in order
             # Write data out to excel file
             excelout(ReadVal[0], ReadVal[1], ReadVal[2])
+
+            self.update_graph() # Update graph after writing new data to datalog.csv
 
             writecsv_mainflags("EveryXX25","0") #Set the execution flag for the function back to 0
             #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
