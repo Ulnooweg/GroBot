@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formxnGNyo.ui'
+## Form generated from reading UI file 'formxavyiG.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -142,7 +142,7 @@ class Ui_Form(object):
 "}")
         self.graphwindow = PlotWidget(self.monitordata_page)
         self.graphwindow.setObjectName(u"graphwindow")
-        self.graphwindow.setGeometry(QRect(10, 10, 211, 211))
+        self.graphwindow.setGeometry(QRect(0, 5, 241, 218))
         self.monitordata_update_btn = QPushButton(self.monitordata_page)
         self.monitordata_update_btn.setObjectName(u"monitordata_update_btn")
         self.monitordata_update_btn.setGeometry(QRect(5, 450, 151, 101))
@@ -154,13 +154,13 @@ class Ui_Form(object):
 "}")
         self.graphwindow_2 = PlotWidget(self.monitordata_page)
         self.graphwindow_2.setObjectName(u"graphwindow_2")
-        self.graphwindow_2.setGeometry(QRect(250, 10, 211, 211))
+        self.graphwindow_2.setGeometry(QRect(240, 5, 231, 218))
         self.graphwindow_3 = PlotWidget(self.monitordata_page)
         self.graphwindow_3.setObjectName(u"graphwindow_3")
-        self.graphwindow_3.setGeometry(QRect(10, 230, 211, 211))
+        self.graphwindow_3.setGeometry(QRect(0, 220, 241, 218))
         self.monitordata_data_label = QLabel(self.monitordata_page)
         self.monitordata_data_label.setObjectName(u"monitordata_data_label")
-        self.monitordata_data_label.setGeometry(QRect(240, 230, 211, 61))
+        self.monitordata_data_label.setGeometry(QRect(260, 240, 201, 51))
         font5 = QFont()
         font5.setFamilies([u"Myriad Pro"])
         font5.setPointSize(8)
@@ -168,7 +168,7 @@ class Ui_Form(object):
         self.monitordata_data_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.graphdomain_slider = QSlider(self.monitordata_page)
         self.graphdomain_slider.setObjectName(u"graphdomain_slider")
-        self.graphdomain_slider.setGeometry(QRect(230, 310, 231, 68))
+        self.graphdomain_slider.setGeometry(QRect(250, 310, 211, 68))
         self.graphdomain_slider.setStyleSheet(u".QSlider {\n"
 "    min-height: 68px;\n"
 "    max-height: 68px;\n"
@@ -189,11 +189,11 @@ class Ui_Form(object):
 "	margin: -24px -12px\n"
 "}")
         self.graphdomain_slider.setMinimum(10)
-        self.graphdomain_slider.setMaximum(250)
+        self.graphdomain_slider.setMaximum(100)
         self.graphdomain_slider.setOrientation(Qt.Orientation.Horizontal)
         self.probe_x_slider = QSlider(self.monitordata_page)
         self.probe_x_slider.setObjectName(u"probe_x_slider")
-        self.probe_x_slider.setGeometry(QRect(230, 380, 231, 68))
+        self.probe_x_slider.setGeometry(QRect(250, 380, 211, 68))
         self.probe_x_slider.setStyleSheet(u".QSlider {\n"
 "    min-height: 68px;\n"
 "    max-height: 68px;\n"
@@ -218,12 +218,12 @@ class Ui_Form(object):
         self.probe_x_slider.setOrientation(Qt.Orientation.Horizontal)
         self.graphdomain_label = QLabel(self.monitordata_page)
         self.graphdomain_label.setObjectName(u"graphdomain_label")
-        self.graphdomain_label.setGeometry(QRect(240, 300, 211, 21))
+        self.graphdomain_label.setGeometry(QRect(250, 300, 211, 21))
         self.graphdomain_label.setFont(font5)
         self.graphdomain_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.probedata_label = QLabel(self.monitordata_page)
         self.probedata_label.setObjectName(u"probedata_label")
-        self.probedata_label.setGeometry(QRect(240, 370, 211, 21))
+        self.probedata_label.setGeometry(QRect(250, 370, 211, 21))
         self.probedata_label.setFont(font5)
         self.probedata_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.monitordata_live_btn = QPushButton(self.monitordata_page)

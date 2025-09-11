@@ -310,10 +310,10 @@ QPushButton:pressed{
     <widget class="PlotWidget" name="graphwindow" native="true">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>211</width>
-       <height>211</height>
+       <x>0</x>
+       <y>5</y>
+       <width>241</width>
+       <height>218</height>
       </rect>
      </property>
     </widget>
@@ -347,30 +347,30 @@ QPushButton:pressed{
     <widget class="PlotWidget" name="graphwindow_2" native="true">
      <property name="geometry">
       <rect>
-       <x>250</x>
-       <y>10</y>
-       <width>211</width>
-       <height>211</height>
+       <x>240</x>
+       <y>5</y>
+       <width>231</width>
+       <height>218</height>
       </rect>
      </property>
     </widget>
     <widget class="PlotWidget" name="graphwindow_3" native="true">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>230</y>
-       <width>211</width>
-       <height>211</height>
+       <x>0</x>
+       <y>220</y>
+       <width>241</width>
+       <height>218</height>
       </rect>
      </property>
     </widget>
     <widget class="QLabel" name="monitordata_data_label">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>230</y>
-       <width>211</width>
-       <height>61</height>
+       <x>260</x>
+       <y>240</y>
+       <width>201</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="font">
@@ -389,9 +389,9 @@ QPushButton:pressed{
     <widget class="QSlider" name="graphdomain_slider">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>250</x>
        <y>310</y>
-       <width>231</width>
+       <width>211</width>
        <height>68</height>
       </rect>
      </property>
@@ -420,7 +420,7 @@ QPushButton:pressed{
       <number>10</number>
      </property>
      <property name="maximum">
-      <number>250</number>
+      <number>100</number>
      </property>
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
@@ -429,9 +429,9 @@ QPushButton:pressed{
     <widget class="QSlider" name="probe_x_slider">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>250</x>
        <y>380</y>
-       <width>231</width>
+       <width>211</width>
        <height>68</height>
       </rect>
      </property>
@@ -469,7 +469,7 @@ QPushButton:pressed{
     <widget class="QLabel" name="graphdomain_label">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>250</x>
        <y>300</y>
        <width>211</width>
        <height>21</height>
@@ -491,7 +491,7 @@ QPushButton:pressed{
     <widget class="QLabel" name="probedata_label">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>250</x>
        <y>370</y>
        <width>211</width>
        <height>21</height>
