@@ -231,7 +231,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         # Start
             # Buttons
         self.ui.continue_btn.clicked.connect(
-            self.start_thread(self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page))
+            self.start_thread(self.mainmenu_transistion)
             ) # Button event when pressed: changes page to mainmenu_page
 
         #### Clock Logic ---------------
@@ -277,7 +277,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.manualcontrols_page)
             ) # Button event when pressed: changes page to manualcontrols_page
         self.ui.monitordata_page_btn.clicked.connect(
-            lambda: self.update_datamonitor_page
+            self.update_datamonitor_page
             ) # Button event when pressed: changes page to monitordata_page
         self.ui.mainmenu_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.start_page)
@@ -612,6 +612,11 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 ##################################################
 ################# GUI FUNCTIONS ##################
 ##################################################
+
+    # Page Changes
+    def mainmenu_transistion(self):
+        self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
+        print("main-mainmenu_transistion: Transistioning to main menu page") if debugstate == 1 or debugstate == 2 else None
 
     ### Graphing
 
