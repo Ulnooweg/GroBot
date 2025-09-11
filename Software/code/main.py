@@ -231,7 +231,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         # Start
             # Buttons
         self.ui.continue_btn.clicked.connect(
-            lambda: self.start_thread(self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page))
+            self.start_thread(self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page))
             ) # Button event when pressed: changes page to mainmenu_page
 
         #### Clock Logic ---------------
@@ -277,7 +277,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.manualcontrols_page)
             ) # Button event when pressed: changes page to manualcontrols_page
         self.ui.monitordata_page_btn.clicked.connect(
-            lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.monitordata_page)
+            lambda: self.update_datamonitor_page
             ) # Button event when pressed: changes page to monitordata_page
         self.ui.mainmenu_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.start_page)
@@ -617,6 +617,10 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
         # Defines plot function to display hardcoded data
         # /mnt/grobotextdat/data/datalog.csv
+
+    def update_datamonitor_page(self):
+        self.ui.pagelayoutwidget.setCurrentWidget(self.ui.monitordata_page)
+        self.update_graph()
 
     def change_domain(self):
             domain_expansion = str(self.domain_changer.value())
@@ -1266,8 +1270,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             ReadVal = feedread() # T RH SRH in order
             # Write data out to excel file
             excelout(ReadVal[0], ReadVal[1], ReadVal[2])
-
-            self.update_graph() # Update graph after writing new data to datalog.csv
 
             writecsv_mainflags("EveryXX25","0") #Set the execution flag for the function back to 0
             #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
