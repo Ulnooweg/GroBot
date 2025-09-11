@@ -625,18 +625,34 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     def update_datamonitor_page(self):
         self.ui.pagelayoutwidget.setCurrentWidget(self.ui.monitordata_page)
+        print("main-update_datamonitor_page: running update_graph") if debugstate == 1 or debugstate == 2 else None
         self.update_graph()
 
     def change_domain(self):
-            domain_expansion = str(self.domain_changer.value())
-            self.data_label_2.setText(f"Hours of Data: {domain_expansion}")
-            self.graphwindowsize = int(domain_expansion)
-            self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
-            self.datax.reverse()
-            self.update_graph()
+        print("main-change_domain: defining domain_expansion") if debugstate == 1 or debugstate == 2 else None
+        domain_expansion = str(self.domain_changer.value())
+
+        print("main-change_domain: Setting data_label_2 to Hours of Data") if debugstate == 1 or debugstate == 2 else None
+        self.data_label_2.setText(f"Hours of Data: {domain_expansion}")
+
+        print("main-change_domain: setting graphwindowsize to domain_expansion") if debugstate == 1 or debugstate == 2 else None
+        self.graphwindowsize = int(domain_expansion)
+
+        print("main-change_domain: creating datax") if debugstate == 1 or debugstate == 2 else None
+        self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
+
+        print("main-change_domain: reversing datax") if debugstate == 1 or debugstate == 2 else None
+        self.datax.reverse()
+
+        print("main-change_domain: running updategraph") if debugstate == 1 or debugstate == 2 else None
+        self.update_graph()
 
     def retrieve_timestamps(self):
+
+        print("main-retrieve_timestamps: clearing timestamps array") if debugstate == 1 or debugstate == 2 else None
         self.timestamps.clear()
+
+        print("main-retrieve_timestamps: creating item_pull for row[0]") if debugstate == 1 or debugstate == 2 else None
         item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
         for row in item_pull:
             self.timestamps.append(row[0])
@@ -645,18 +661,22 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     # Creates a plot of a desired data column from the csv file. 1 is temperature, 2 is humidity, and 3 is moisture.
     def create_plot(self, name, column, graph_name, colour, y_label, y_units, x_label, x_units, title):
 
+        print("main-create_plot: retrieving graph_name") if debugstate == 1 or debugstate == 2 else None
         graph_widget = getattr(self, graph_name, None)
         if graph_widget is None:
             raise AttributeError(f"No graph window found with name '{graph_name}'")
 
+        print("main-create_plot: clearing named graphs") if debugstate == 1 or debugstate == 2 else None
         graph_widget.clear()
         name.clear()
 
+        print("main-create_plot: creating item_pull for desired row[column]") if debugstate == 1 or debugstate == 2 else None
         item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
         for row in item_pull:
             name.append(float(row[column]))
 
         # Define Graph axis labels
+        print("main-create_plot: creating plot labels") if debugstate == 1 or debugstate == 2 else None
         graph_widget.plot(self.datax, name, clear=True, pen=colour)
         graph_widget.setLabel('left', y_label, units = y_units)
         graph_widget.setLabel('bottom', x_label, units = x_units)
@@ -664,35 +684,25 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         graph_widget.showGrid(x=True, y=True)
         graph_widget.invertX(True)
 
+        print("main-create_plot: getting viewbox") if debugstate == 1 or debugstate == 2 else None
         plot_window = graph_widget.getViewBox()
+
+        print("main-create_plot: removing mouse controls") if debugstate == 1 or debugstate == 2 else None
         plot_window.setMouseEnabled(x=False, y=False)  # Disable zooming and panning due to obscuring data
 
         # Populate graph with adjustable probe line
 
+        print("main-create_plot: retrieving timestamps") if debugstate == 1 or debugstate == 2 else None
         self.retrieve_timestamps()
 
-        probe_x = int(self.graphwindowsize)
-        probe_y = int(name[0])
-
-        # Probe Indicator 
-        text_item = pg.TextItem('x', color='w')
-        text_item.setPos(probe_x, probe_y)
-        graph_widget.addItem(text_item)
-
-        probe_label_x = self.graphwindowsize
-        probe_label_y = max(name)
-
-        # Probe Label
-        text_item = pg.TextItem(self.timestamps[0], color='w')
-        text_item.setPos(probe_label_x, probe_label_y)
-        graph_widget.addItem(text_item)
-
     def clear_graph(self):
+        print("main-clear_graph: clearing graphs") if debugstate == 1 or debugstate == 2 else None
         self.graphwindow.clear()
         self.graphwindow_2.clear()
         self.graphwindow_3.clear()
 
     def update_graph(self):
+        print("main-update_graph: creating plots given defined labels and datay1") if debugstate == 1 or debugstate == 2 else None
         self.create_plot(self.datay1, 1, 
                         graph_name="graphwindow", 
                         colour='y', 
@@ -702,6 +712,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                         x_units = 'Hours From Last Point', 
                         title = 'Enclosure Temperature')
         
+        print("main-update_graph: creating plots given defined labels and datay2") if debugstate == 1 or debugstate == 2 else None
         self.create_plot(self.datay2, 2, 
                         graph_name="graphwindow_2", 
                         colour='r', 
@@ -711,6 +722,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                         x_units = 'Hours From Last Point', 
                         title = 'Air Humidity')
         
+        print("main-update_graph: creating plots given defined labels and datay3") if debugstate == 1 or debugstate == 2 else None
         self.create_plot(self.datay3, 3, 
                         graph_name="graphwindow_3", 
                         colour='b', 
@@ -720,15 +732,18 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                         x_units = 'Hours From Last Point', 
                         title = 'Soil Moisture Level')
         
+        print("main-update_graph: setting label text to newest point") if debugstate == 1 or debugstate == 2 else None
         self.recent_data_label.setText(
             f"Recent Data:\nTemperature: {round(self.datay1[-1], 2)} °C\nHumidity: {round(self.datay2[-1], 2)} %\nSoil Moisture: {round(self.datay3[-1], 2)}"
             )
 
     # Defines plot function to display hardcoded data
     def read_datalog(self, file_path, graphwindowsize):
+        print("main-read_datalog: opening filepath") if debugstate == 1 or debugstate == 2 else None
         with open(file_path, 'r', newline = '') as csvfile:
             reader = csv.reader(csvfile)
             data = list(reader)  # Read all rows into a list
+            print("main-update_graph: returning data from filepath") if debugstate == 1 or debugstate == 2 else None
             return data[max(0, len(data) - graphwindowsize):] # Slice the last n items
 
     def watertime_select(self, selection): # When a given time selection is requested for edit by the user, the corresponding label text changes
