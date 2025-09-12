@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formbQCpYJ.ui'
+## Form generated from reading UI file 'formGTRkni.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -922,7 +922,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.pagelayoutwidget.setCurrentIndex(0)
+        self.pagelayoutwidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Form)
@@ -938,8 +938,7 @@ class Ui_Form(object):
         self.editsettings_page_btn.setText(QCoreApplication.translate("Form", u"Edit Settings", None))
         self.mainmenu_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.manualcontrols_page_btn.setText(QCoreApplication.translate("Form", u"Manual Controls", None))
-        self.monitordata_page_btn.setText(QCoreApplication.translate("Form", u"Monitor Data\n"
-"(WIP)", None))
+        self.monitordata_page_btn.setText(QCoreApplication.translate("Form", u"Monitor Data", None))
         self.monitordata_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.monitordata_update_btn.setText(QCoreApplication.translate("Form", u"Update", None))
         self.monitordata_data_label.setText(QCoreApplication.translate("Form", u"<<Data Label>>", None))
