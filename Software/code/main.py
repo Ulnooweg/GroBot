@@ -367,19 +367,21 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
             # Data Monitor ----------------------------------------------------------------------------------
 
+            # Define Graphical Objects
         self.graphwindow = self.findChild(pg.PlotWidget, "graphwindow")
         self.graphwindow_2 = self.findChild(pg.PlotWidget, "graphwindow_2")
         self.graphwindow_3 = self.findChild(pg.PlotWidget, "graphwindow_3")
         self.graphwindowsize = 100
 
+            # Define Data Labels
         self.recent_data_label = self.findChild(QLabel, "monitordata_data_label")
-
         self.data_label_2 = self.findChild(QLabel, "graphdomain_label")
         self.data_label_2.setText(f"Hours of Data: {self.graphwindowsize}")
 
+            # Set initial graph domain
         self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
-        #print(self.datax)
 
+            # Buttons
         self.ui.monitordata_live_btn.clicked.connect(
             self.graph_live_mode
             ) # Button event when pressed: changes page to monitordata_page
@@ -405,7 +407,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.datay2 = [] # Humidity
         self.datay3 = [] # Soil Moisture
 
-        self.update_graph()
+        self.update_graph() # Force update graphs
 
         # Irrigation ------------------------------------------------------------------------------------------
             # Buttons
@@ -623,79 +625,86 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
     # Page Changes
 
+        # Calls menu transistion and debug message
     def mainmenu_transistion(self):
         self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
         print("main-mainmenu_transistion: Transistioning to main menu page") if debugstate == 1 or debugstate == 2 else None
+
 
     ### Graphing
 
         # Defines plot function to display hardcoded data
         # /mnt/grobotextdat/data/datalog.csv
 
+
+        # Live Mode - Updates graph every second for 20 cycles 
     def graph_live_mode(self):
         print("main-graph_live_mode: running update_graph") if debugstate == 1 or debugstate == 2 else None
-        x = 0
-        count = 20
-        while x < count:
+        x = 0 # Sets inital counter to 0
+        count = 20 # Sets maximum number of cycles to 20
+        while x < count: # While counter is less than maximum cycles
             ReadVal = feedread() # T RH SRH in order
             # Write data out to excel file
             self.recent_data_label.setText(
             f"Recent Data:\nTemperature: {round(ReadVal[0], 2)} °C\nHumidity: {round(ReadVal[1], 2)} %\nSoil Moisture: {round(ReadVal[2], 2)}"
-            )
+            ) # Data label updates with recent input from all sensors in the GroBot
             self.ui.statusbar_label.setText(f"Live Mode Active: Updating Graph\nfor {count - x} more cycles")
-            x = x + 1
-            self.tasksleep(1)
-        self.ui.statusbar_label.setText("Live Mode Finished")
-        self.tasksleep(2)
-        self.ui.statusbar_label.setText(self.welcome_message())
+            x = x + 1 # Increments counter by one
+            self.tasksleep(1) # Sleeps for one second
+        self.ui.statusbar_label.setText("Live Mode Finished") # When the loop is finished, update status bar
+        self.tasksleep(2) # Sleep for two seconds
+        self.ui.statusbar_label.setText(self.welcome_message()) # Reset status bar to welcome message
 
+        # Updates the data monitor page and forces an update of the graph
     def update_datamonitor_page(self):
-        self.ui.pagelayoutwidget.setCurrentWidget(self.ui.monitordata_page)
+        self.ui.pagelayoutwidget.setCurrentWidget(self.ui.monitordata_page) # Transistion to data monitor page
         print("main-update_datamonitor_page: running update_graph") if debugstate == 1 or debugstate == 2 else None
-        self.update_graph()
-
+        self.update_graph() # Force update graphs
+ 
+        # Changes the domain of the graph based on slider value
     def change_domain(self):
         print("main-change_domain: defining domain_expansion") if debugstate == 1 or debugstate == 2 else None
-        domain_expansion = str(self.domain_changer.value())
+        domain_expansion = str(self.domain_changer.value()) # Defines domain_expansion as the value of the domain slider
 
         print("main-change_domain: Setting data_label_2 to Hours of Data") if debugstate == 1 or debugstate == 2 else None
-        self.data_label_2.setText(f"Hours of Data: {domain_expansion}")
+        self.data_label_2.setText(f"Hours of Data: {domain_expansion}") # Sets text of label to the value of the domain slider
 
         print("main-change_domain: setting graphwindowsize to domain_expansion") if debugstate == 1 or debugstate == 2 else None
-        self.graphwindowsize = int(domain_expansion)
+        self.graphwindowsize = int(domain_expansion) # Sets domain array size to the value of the domain slider
 
         print("main-change_domain: creating datax") if debugstate == 1 or debugstate == 2 else None
         self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
 
         print("main-change_domain: reversing datax") if debugstate == 1 or debugstate == 2 else None
-        self.datax.reverse()
+        self.datax.reverse() # Reverses order of x axis to have most recent data on left
 
         print("main-change_domain: running updategraph") if debugstate == 1 or debugstate == 2 else None
-        self.update_graph()
+        self.update_graph() # Force update graphs
 
+        # Retrieves timestamps from csv file from row[0] and places them into an array
     def retrieve_timestamps(self):
 
         print("main-retrieve_timestamps: clearing timestamps array") if debugstate == 1 or debugstate == 2 else None
-        self.timestamps.clear()
+        self.timestamps.clear() # Clears timestamps array
 
         print("main-retrieve_timestamps: creating item_pull for row[0]") if debugstate == 1 or debugstate == 2 else None
         item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
         for row in item_pull:
-            self.timestamps.append(row[0])
-        #print(self.timestamp)
+            self.timestamps.append(row[0]) # adds timestamp from row[0] to timestamps array
 
-    # Creates a plot of a desired data column from the csv file. 1 is temperature, 2 is humidity, and 3 is moisture.
+        # Creates a plot of a desired data column from the csv file. 1 is temperature, 2 is humidity, and 3 is moisture.
     def create_plot(self, name, column, graph_name, colour, y_label, y_units, x_label, x_units, title):
 
         print("main-create_plot: retrieving graph_name") if debugstate == 1 or debugstate == 2 else None
-        graph_widget = getattr(self, graph_name, None)
+        graph_widget = getattr(self, graph_name, None) # Retrieves graph object based on string passed to function
         if graph_widget is None:
-            raise AttributeError(f"No graph window found with name '{graph_name}'")
+            raise AttributeError(f"No graph window found with name '{graph_name}'") # Error handling if graph name is invalid
 
         print("main-create_plot: clearing named graphs") if debugstate == 1 or debugstate == 2 else None
-        graph_widget.clear()
-        name.clear()
+        graph_widget.clear() # Clears graph of previous data
+        name.clear() # Clears data array of previous data
 
+        # Reads data from csv file and places it into an array
         print("main-create_plot: creating item_pull for desired row[column]") if debugstate == 1 or debugstate == 2 else None
         item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
         for row in item_pull:
@@ -715,8 +724,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
         print("main-create_plot: removing mouse controls") if debugstate == 1 or debugstate == 2 else None
         plot_window.setMouseEnabled(x=False, y=False)  # Disable zooming and panning due to obscuring data
-
-        # Populate graph with adjustable probe line
 
         print("main-create_plot: retrieving timestamps") if debugstate == 1 or debugstate == 2 else None
         self.retrieve_timestamps()
