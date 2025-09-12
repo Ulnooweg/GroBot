@@ -639,21 +639,28 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
 
         # Live Mode - Updates graph every second for 20 cycles 
     def graph_live_mode(self):
-        print("main-graph_live_mode: running update_graph") if debugstate == 1 or debugstate == 2 else None
-        x = 0 # Sets inital counter to 0
-        count = 20 # Sets maximum number of cycles to 20
-        while x < count: # While counter is less than maximum cycles
-            ReadVal = feedread() # T RH SRH in order
-            # Write data out to excel file
-            self.recent_data_label.setText(
-            f"Recent Data:\nTemperature: {round(ReadVal[0], 2)} °C\nHumidity: {round(ReadVal[1], 2)} %\nSoil Moisture: {round(ReadVal[2], 2)}"
-            ) # Data label updates with recent input from all sensors in the GroBot
-            self.ui.statusbar_label.setText(f"Live Mode Active: Updating Graph\nfor {count - x} more cycles")
-            x = x + 1 # Increments counter by one
-            self.tasksleep(1) # Sleeps for one second
-        self.ui.statusbar_label.setText("Live Mode Finished") # When the loop is finished, update status bar
-        self.tasksleep(2) # Sleep for two seconds
-        self.ui.statusbar_label.setText(self.welcome_message()) # Reset status bar to welcome message
+        print("main-graph_live_mode: updating graph") if debugstate == 1 or debugstate == 2 else None
+        try:
+
+            x = 0 # Sets inital counter to 0
+            count = 20 # Sets maximum number of cycles to 20
+            while x < count: # While counter is less than maximum cycles
+                ReadVal = feedread() # T RH SRH in order
+                # Write data out to excel file
+                self.recent_data_label.setText(
+                f"Recent Data:\nTemperature: {round(ReadVal[0], 2)} °C\nHumidity: {round(ReadVal[1], 2)} %\nSoil Moisture: {round(ReadVal[2], 2)}"
+                ) # Data label updates with recent input from all sensors in the GroBot
+                self.ui.statusbar_label.setText(f"Live Mode Active: Updating Graph\nfor {count - x} more cycles")
+                x = x + 1 # Increments counter by one
+                self.tasksleep(1) # Sleeps for one second
+            self.ui.statusbar_label.setText("Live Mode Finished") # When the loop is finished, update status bar
+            self.tasksleep(2) # Sleep for two seconds
+            self.ui.statusbar_label.setText(self.welcome_message()) # Reset status bar to welcome message
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
         # Updates the data monitor page and forces an update of the graph
     def update_datamonitor_page(self):
@@ -663,124 +670,166 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
  
         # Changes the domain of the graph based on slider value
     def change_domain(self):
-        print("main-change_domain: defining domain_expansion") if debugstate == 1 or debugstate == 2 else None
-        domain_expansion = str(self.domain_changer.value()) # Defines domain_expansion as the value of the domain slider
+        print("main-create_plot: started domain change") if debugstate == 1 or debugstate == 2 else None
+        try:
 
-        print("main-change_domain: Setting data_label_2 to Hours of Data") if debugstate == 1 or debugstate == 2 else None
-        self.data_label_2.setText(f"Hours of Data: {domain_expansion}") # Sets text of label to the value of the domain slider
+            print("main-change_domain: defining domain_expansion") if debugstate == 1 or debugstate == 2 else None
+            domain_expansion = str(self.domain_changer.value()) # Defines domain_expansion as the value of the domain slider
 
-        print("main-change_domain: setting graphwindowsize to domain_expansion") if debugstate == 1 or debugstate == 2 else None
-        self.graphwindowsize = int(domain_expansion) # Sets domain array size to the value of the domain slider
+            print("main-change_domain: Setting data_label_2 to Hours of Data") if debugstate == 1 or debugstate == 2 else None
+            self.data_label_2.setText(f"Hours of Data: {domain_expansion}") # Sets text of label to the value of the domain slider
 
-        print("main-change_domain: creating datax") if debugstate == 1 or debugstate == 2 else None
-        self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
+            print("main-change_domain: setting graphwindowsize to domain_expansion") if debugstate == 1 or debugstate == 2 else None
+            self.graphwindowsize = int(domain_expansion) # Sets domain array size to the value of the domain slider
 
-        print("main-change_domain: reversing datax") if debugstate == 1 or debugstate == 2 else None
-        self.datax.reverse() # Reverses order of x axis to have most recent data on left
+            print("main-change_domain: creating datax") if debugstate == 1 or debugstate == 2 else None
+            self.datax = list(range(1, self.graphwindowsize + 1))  # X-axis values from 1 to graphwindowsize
 
-        print("main-change_domain: running updategraph") if debugstate == 1 or debugstate == 2 else None
-        self.update_graph() # Force update graphs
+            print("main-change_domain: reversing datax") if debugstate == 1 or debugstate == 2 else None
+            self.datax.reverse() # Reverses order of x axis to have most recent data on left
+
+            print("main-change_domain: running updategraph") if debugstate == 1 or debugstate == 2 else None
+            self.update_graph() # Force update graphs
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
         # Retrieves timestamps from csv file from row[0] and places them into an array
     def retrieve_timestamps(self):
+        print("main-retrieve_timestamps: starting to retrieve timestamps") if debugstate == 1 or debugstate == 2 else None
 
-        print("main-retrieve_timestamps: clearing timestamps array") if debugstate == 1 or debugstate == 2 else None
-        self.timestamps.clear() # Clears timestamps array
+        try:
 
-        print("main-retrieve_timestamps: creating item_pull for row[0]") if debugstate == 1 or debugstate == 2 else None
-        item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
-        for row in item_pull:
-            self.timestamps.append(row[0]) # adds timestamp from row[0] to timestamps array
+            print("main-retrieve_timestamps: clearing timestamps array") if debugstate == 1 or debugstate == 2 else None
+            self.timestamps.clear() # Clears timestamps array
+
+            print("main-retrieve_timestamps: creating item_pull for row[0]") if debugstate == 1 or debugstate == 2 else None
+            item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
+            for row in item_pull:
+                self.timestamps.append(row[0]) # adds timestamp from row[0] to timestamps array
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
         # Creates a plot of a desired data column from the csv file. 1 is temperature, 2 is humidity, and 3 is moisture.
     def create_plot(self, name, column, graph_name, colour, y_label, y_units, x_label, x_units, title):
+        print("main-create_plot: creating plot...") if debugstate == 1 or debugstate == 2 else None
+        try:
 
-        print("main-create_plot: retrieving graph_name") if debugstate == 1 or debugstate == 2 else None
-        graph_widget = getattr(self, graph_name, None) # Retrieves graph object based on string passed to function
-        if graph_widget is None:
-            raise AttributeError(f"No graph window found with name '{graph_name}'") # Error handling if graph name is invalid
+            print("main-create_plot: retrieving graph_name") if debugstate == 1 or debugstate == 2 else None
+            graph_widget = getattr(self, graph_name, None) # Retrieves graph object based on string passed to function
 
-        print("main-create_plot: clearing named graphs") if debugstate == 1 or debugstate == 2 else None
-        graph_widget.clear() # Clears graph of previous data
-        name.clear() # Clears data array of previous data
+            print("main-create_plot: clearing named graphs") if debugstate == 1 or debugstate == 2 else None
+            graph_widget.clear() # Clears graph of previous data
+            name.clear() # Clears data array of previous data
 
-        # Reads data from csv file and places it into an array
-        print("main-create_plot: creating item_pull for desired row[column]") if debugstate == 1 or debugstate == 2 else None
-        item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
-        for row in item_pull:
-            name.append(float(row[column]))
+            # Reads data from csv file and places it into an array
+            print("main-create_plot: creating item_pull for desired row[column]") if debugstate == 1 or debugstate == 2 else None
+            item_pull = self.read_datalog("/mnt/grobotextdat/data/datalog.csv", self.graphwindowsize)
+            for row in item_pull:
+                name.append(float(row[column]))
 
-        # Define Graph axis labels
-        print("main-create_plot: creating plot labels") if debugstate == 1 or debugstate == 2 else None
-        graph_widget.plot(self.datax, name, clear=True, pen=colour)
-        graph_widget.setLabel('left', y_label, units = y_units)
-        graph_widget.setLabel('bottom', x_label, units = x_units)
-        graph_widget.setTitle(title)
-        graph_widget.showGrid(x=True, y=True)
-        graph_widget.invertX(True)
+            # Define Graph axis labels
+            print("main-create_plot: creating plot labels") if debugstate == 1 or debugstate == 2 else None
+            graph_widget.plot(self.datax, name, clear=True, pen=colour)
+            graph_widget.setLabel('left', y_label, units = y_units)
+            graph_widget.setLabel('bottom', x_label, units = x_units)
+            graph_widget.setTitle(title)
+            graph_widget.showGrid(x=True, y=True)
+            graph_widget.invertX(True)
 
-        print("main-create_plot: getting viewbox") if debugstate == 1 or debugstate == 2 else None
-        plot_window = graph_widget.getViewBox()
+            print("main-create_plot: getting viewbox") if debugstate == 1 or debugstate == 2 else None
+            plot_window = graph_widget.getViewBox()
 
-        print("main-create_plot: removing mouse controls") if debugstate == 1 or debugstate == 2 else None
-        plot_window.setMouseEnabled(x=False, y=False)  # Disable zooming and panning due to obscuring data
+            print("main-create_plot: removing mouse controls") if debugstate == 1 or debugstate == 2 else None
+            plot_window.setMouseEnabled(x=False, y=False)  # Disable zooming and panning due to obscuring data
 
-        print("main-create_plot: retrieving timestamps") if debugstate == 1 or debugstate == 2 else None
-        self.retrieve_timestamps()
+            print("main-create_plot: retrieving timestamps") if debugstate == 1 or debugstate == 2 else None
+            self.retrieve_timestamps()
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
     def clear_graph(self):
         print("main-clear_graph: clearing graphs") if debugstate == 1 or debugstate == 2 else None
-        self.graphwindow.clear()
-        self.graphwindow_2.clear()
-        self.graphwindow_3.clear()
+        try:
+
+            self.graphwindow.clear()
+            self.graphwindow_2.clear()
+            self.graphwindow_3.clear()
+
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
     def update_graph(self):
         print("main-update_graph: creating plots given defined labels and datay1") if debugstate == 1 or debugstate == 2 else None
-        self.create_plot(self.datay1, 1, 
-                        graph_name="graphwindow", 
-                        colour='y', 
-                        y_label = 'Temperature', 
-                        y_units = '°C', 
-                        x_label = 'Datapoints', 
-                        x_units = '', 
-                        title = 'Enclosure Temperature')
-        
-        print("main-update_graph: creating plots given defined labels and datay2") if debugstate == 1 or debugstate == 2 else None
-        self.create_plot(self.datay2, 2, 
-                        graph_name="graphwindow_2", 
-                        colour='r', 
-                        y_label = 'Humidity', 
-                        y_units = '%', 
-                        x_label = 'Datapoints', 
-                        x_units = '', 
-                        title = 'Air Humidity')
-        
-        print("main-update_graph: creating plots given defined labels and datay3") if debugstate == 1 or debugstate == 2 else None
-        self.create_plot(self.datay3, 3, 
-                        graph_name="graphwindow_3", 
-                        colour='b', 
-                        y_label = 'Sensor Readout', 
-                        y_units = '', 
-                        x_label = 'Datapoints', 
-                        x_units = '', 
-                        title = 'Soil Moisture Level')
-        
-        print("main-update_graph: setting label text to newest point") if debugstate == 1 or debugstate == 2 else None
+        try:
 
-        self.retrieve_timestamps()
+            self.create_plot(self.datay1, 1, 
+                            graph_name="graphwindow", 
+                            colour='y', 
+                            y_label = 'Temperature', 
+                            y_units = '°C', 
+                            x_label = 'Datapoints', 
+                            x_units = '', 
+                            title = 'Enclosure Temperature')
+            
+            print("main-update_graph: creating plots given defined labels and datay2") if debugstate == 1 or debugstate == 2 else None
+            self.create_plot(self.datay2, 2, 
+                            graph_name="graphwindow_2", 
+                            colour='r', 
+                            y_label = 'Humidity', 
+                            y_units = '%', 
+                            x_label = 'Datapoints', 
+                            x_units = '', 
+                            title = 'Air Humidity')
+            
+            print("main-update_graph: creating plots given defined labels and datay3") if debugstate == 1 or debugstate == 2 else None
+            self.create_plot(self.datay3, 3, 
+                            graph_name="graphwindow_3", 
+                            colour='b', 
+                            y_label = 'Sensor Readout', 
+                            y_units = '', 
+                            x_label = 'Datapoints', 
+                            x_units = '', 
+                            title = 'Soil Moisture Level')
+            
+            print("main-update_graph: setting label text to newest point") if debugstate == 1 or debugstate == 2 else None
 
-        self.recent_data_label.setText(
-            f"Recent Data: {self.timestamps[-1]}\nTemperature: {round(self.datay1[-1], 2)} °C\nHumidity: {round(self.datay2[-1], 2)} %\nSoil Moisture: {round(self.datay3[-1], 2)}"
-            )
+            self.retrieve_timestamps()
+
+            self.recent_data_label.setText(
+                f"Recent Data:\n{self.timestamps[-1]}\nTemperature: {round(self.datay1[-1], 2)} °C\nHumidity: {round(self.datay2[-1], 2)} %\nSoil Moisture: {round(self.datay3[-1], 2)}"
+                )
+            
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
     # Defines plot function to display hardcoded data
     def read_datalog(self, file_path, graphwindowsize):
         print("main-read_datalog: opening filepath") if debugstate == 1 or debugstate == 2 else None
-        with open(file_path, 'r', newline = '') as csvfile:
-            reader = csv.reader(csvfile)
-            data = list(reader)  # Read all rows into a list
-            print("main-update_graph: returning data from filepath") if debugstate == 1 or debugstate == 2 else None
-            return data[max(0, len(data) - graphwindowsize):] # Slice the last n items
+        try:
+
+            with open(file_path, 'r', newline = '') as csvfile:
+                reader = csv.reader(csvfile)
+                data = list(reader)  # Read all rows into a list
+                print("main-update_graph: returning data from filepath") if debugstate == 1 or debugstate == 2 else None
+                return data[max(0, len(data) - graphwindowsize):] # Slice the last n items
+        
+        except Exception as errvar:
+            subprocess.run("(sleep 3 && echo grobot | sudo -S shutdown -r now) &", shell=True)
+            #LCD COLOUR HANDLING CODE (RED) HERE
+            raise Warning(f"{type(errvar).__name__}({errvar}) in {__file__} at line {errvar.__traceback__.tb_lineno}") from None
 
     def watertime_select(self, selection): # When a given time selection is requested for edit by the user, the corresponding label text changes
         global currentwatersave # Variable for interaction with watertime_save; whatever time is selected will be saved in that function
