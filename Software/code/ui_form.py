@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formRtZDjn.ui'
+## Form generated from reading UI file 'formczkoBf.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -17,6 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QGroupBox, QLabel, QPushButton,
     QSizePolicy, QSlider, QStackedWidget, QWidget)
+
+from pyqtgraph import PlotWidget
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -131,9 +133,77 @@ class Ui_Form(object):
         self.monitordata_page.setObjectName(u"monitordata_page")
         self.monitordata_back_btn = QPushButton(self.monitordata_page)
         self.monitordata_back_btn.setObjectName(u"monitordata_back_btn")
-        self.monitordata_back_btn.setGeometry(QRect(250, 360, 201, 151))
+        self.monitordata_back_btn.setGeometry(QRect(315, 450, 151, 101))
         self.monitordata_back_btn.setFont(font2)
         self.monitordata_back_btn.setStyleSheet(u"QPushButton{\n"
+"	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);\n"
+"	border-radius: 25px;\n"
+"	border: 5px solid rgb(120, 120, 120);\n"
+"}")
+        self.graphwindow = PlotWidget(self.monitordata_page)
+        self.graphwindow.setObjectName(u"graphwindow")
+        self.graphwindow.setGeometry(QRect(0, 5, 241, 218))
+        self.monitordata_update_btn = QPushButton(self.monitordata_page)
+        self.monitordata_update_btn.setObjectName(u"monitordata_update_btn")
+        self.monitordata_update_btn.setGeometry(QRect(5, 450, 151, 101))
+        self.monitordata_update_btn.setFont(font2)
+        self.monitordata_update_btn.setStyleSheet(u"QPushButton{\n"
+"	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);\n"
+"	border-radius: 25px;\n"
+"	border: 5px solid rgb(120, 120, 120);\n"
+"}")
+        self.graphwindow_2 = PlotWidget(self.monitordata_page)
+        self.graphwindow_2.setObjectName(u"graphwindow_2")
+        self.graphwindow_2.setGeometry(QRect(240, 5, 231, 218))
+        self.graphwindow_3 = PlotWidget(self.monitordata_page)
+        self.graphwindow_3.setObjectName(u"graphwindow_3")
+        self.graphwindow_3.setGeometry(QRect(0, 220, 241, 218))
+        self.monitordata_data_label = QLabel(self.monitordata_page)
+        self.monitordata_data_label.setObjectName(u"monitordata_data_label")
+        self.monitordata_data_label.setGeometry(QRect(250, 230, 211, 111))
+        font5 = QFont()
+        font5.setFamilies([u"TikTok Sans 28pt"])
+        font5.setPointSize(13)
+        self.monitordata_data_label.setFont(font5)
+        self.monitordata_data_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+        self.graphdomain_slider = QSlider(self.monitordata_page)
+        self.graphdomain_slider.setObjectName(u"graphdomain_slider")
+        self.graphdomain_slider.setGeometry(QRect(250, 370, 211, 68))
+        self.graphdomain_slider.setStyleSheet(u".QSlider {\n"
+"    min-height: 68px;\n"
+"    max-height: 68px;\n"
+"}\n"
+"\n"
+".QSlider::groove:horizontal {\n"
+"	border-radius: 5px;\n"
+"    border: 3px solid #262626;\n"
+"    height: 5px;\n"
+"    margin: 0 12px;\n"
+"}\n"
+"\n"
+".QSlider::handle:horizontal {\n"
+"    background: Grey;\n"
+"	border-radius: 10px;\n"
+"    width: 46px;\n"
+"    height: 100px;\n"
+"	margin: -24px -12px\n"
+"}")
+        self.graphdomain_slider.setMinimum(10)
+        self.graphdomain_slider.setMaximum(100)
+        self.graphdomain_slider.setOrientation(Qt.Orientation.Horizontal)
+        self.graphdomain_label = QLabel(self.monitordata_page)
+        self.graphdomain_label.setObjectName(u"graphdomain_label")
+        self.graphdomain_label.setGeometry(QRect(250, 350, 211, 21))
+        font6 = QFont()
+        font6.setFamilies([u"TikTok Sans"])
+        font6.setPointSize(13)
+        self.graphdomain_label.setFont(font6)
+        self.graphdomain_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.monitordata_live_btn = QPushButton(self.monitordata_page)
+        self.monitordata_live_btn.setObjectName(u"monitordata_live_btn")
+        self.monitordata_live_btn.setGeometry(QRect(160, 450, 151, 101))
+        self.monitordata_live_btn.setFont(font2)
+        self.monitordata_live_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-3, y1:0, x2:2, y2:0, stop:0 white, stop:1 #ed7a2a);\n"
 "	border-radius: 25px;\n"
 "	border: 5px solid rgb(120, 120, 120);\n"
@@ -237,11 +307,11 @@ class Ui_Form(object):
         self.systemversion_label = QLabel(self.systeminfo_page)
         self.systemversion_label.setObjectName(u"systemversion_label")
         self.systemversion_label.setGeometry(QRect(10, 330, 451, 61))
-        font5 = QFont()
-        font5.setFamilies([u"TikTok Sans 28pt"])
-        font5.setPointSize(17)
-        font5.setBold(False)
-        self.systemversion_label.setFont(font5)
+        font7 = QFont()
+        font7.setFamilies([u"TikTok Sans 28pt"])
+        font7.setPointSize(17)
+        font7.setBold(False)
+        self.systemversion_label.setFont(font7)
         self.grand_debugger_btn = QPushButton(self.systeminfo_page)
         self.grand_debugger_btn.setObjectName(u"grand_debugger_btn")
         self.grand_debugger_btn.setGeometry(QRect(260, 170, 201, 151))
@@ -294,11 +364,11 @@ class Ui_Form(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.brightness_slider.sizePolicy().hasHeightForWidth())
         self.brightness_slider.setSizePolicy(sizePolicy)
-        font6 = QFont()
-        font6.setFamilies([u"TikTok Sans 28pt"])
-        font6.setPointSize(10)
-        font6.setBold(False)
-        self.brightness_slider.setFont(font6)
+        font8 = QFont()
+        font8.setFamilies([u"TikTok Sans 28pt"])
+        font8.setPointSize(10)
+        font8.setBold(False)
+        self.brightness_slider.setFont(font8)
         self.brightness_slider.setStyleSheet(u".QSlider {\n"
 "    min-height: 68px;\n"
 "    max-height: 68px;\n"
@@ -327,15 +397,15 @@ class Ui_Form(object):
         self.brightness_label = QLabel(self.editsettings_page)
         self.brightness_label.setObjectName(u"brightness_label")
         self.brightness_label.setGeometry(QRect(170, 380, 201, 61))
-        font7 = QFont()
-        font7.setFamilies([u"TikTok Sans 28pt"])
-        font7.setPointSize(20)
-        font7.setBold(False)
-        self.brightness_label.setFont(font7)
+        font9 = QFont()
+        font9.setFamilies([u"TikTok Sans 28pt"])
+        font9.setPointSize(20)
+        font9.setBold(False)
+        self.brightness_label.setFont(font9)
         self.brightness_label_2 = QLabel(self.editsettings_page)
         self.brightness_label_2.setObjectName(u"brightness_label_2")
         self.brightness_label_2.setGeometry(QRect(30, 380, 201, 61))
-        self.brightness_label_2.setFont(font7)
+        self.brightness_label_2.setFont(font9)
         self.pagelayoutwidget.addWidget(self.editsettings_page)
         self.datetime_page = QWidget()
         self.datetime_page.setObjectName(u"datetime_page")
@@ -352,30 +422,30 @@ class Ui_Form(object):
         self.systemhours_label = QLabel(self.datetime_page)
         self.systemhours_label.setObjectName(u"systemhours_label")
         self.systemhours_label.setGeometry(QRect(130, 80, 91, 111))
-        font8 = QFont()
-        font8.setFamilies([u"Myriad Pro"])
-        font8.setPointSize(50)
-        font8.setBold(True)
-        self.systemhours_label.setFont(font8)
+        font10 = QFont()
+        font10.setFamilies([u"Myriad Pro"])
+        font10.setPointSize(50)
+        font10.setBold(True)
+        self.systemhours_label.setFont(font10)
         self.systemhours_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.timesep_label_2 = QLabel(self.datetime_page)
         self.timesep_label_2.setObjectName(u"timesep_label_2")
         self.timesep_label_2.setGeometry(QRect(220, 80, 21, 111))
-        self.timesep_label_2.setFont(font8)
+        self.timesep_label_2.setFont(font10)
         self.timesep_label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.systemminutes_label = QLabel(self.datetime_page)
         self.systemminutes_label.setObjectName(u"systemminutes_label")
         self.systemminutes_label.setGeometry(QRect(240, 80, 121, 111))
-        self.systemminutes_label.setFont(font8)
+        self.systemminutes_label.setFont(font10)
         self.systemminutes_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.systemhoursplus_btn = QPushButton(self.datetime_page)
         self.systemhoursplus_btn.setObjectName(u"systemhoursplus_btn")
         self.systemhoursplus_btn.setGeometry(QRect(140, 30, 75, 51))
-        font9 = QFont()
-        font9.setFamilies([u"TikTok Sans 28pt"])
-        font9.setPointSize(20)
-        font9.setBold(True)
-        self.systemhoursplus_btn.setFont(font9)
+        font11 = QFont()
+        font11.setFamilies([u"TikTok Sans 28pt"])
+        font11.setPointSize(20)
+        font11.setBold(True)
+        self.systemhoursplus_btn.setFont(font11)
         self.systemhoursplus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -384,7 +454,7 @@ class Ui_Form(object):
         self.systemhoursminus_btn = QPushButton(self.datetime_page)
         self.systemhoursminus_btn.setObjectName(u"systemhoursminus_btn")
         self.systemhoursminus_btn.setGeometry(QRect(140, 190, 75, 51))
-        self.systemhoursminus_btn.setFont(font9)
+        self.systemhoursminus_btn.setFont(font11)
         self.systemhoursminus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -393,7 +463,7 @@ class Ui_Form(object):
         self.systemminutesminus_btn = QPushButton(self.datetime_page)
         self.systemminutesminus_btn.setObjectName(u"systemminutesminus_btn")
         self.systemminutesminus_btn.setGeometry(QRect(260, 190, 75, 51))
-        self.systemminutesminus_btn.setFont(font9)
+        self.systemminutesminus_btn.setFont(font11)
         self.systemminutesminus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -402,7 +472,7 @@ class Ui_Form(object):
         self.systemminutesplus_btn = QPushButton(self.datetime_page)
         self.systemminutesplus_btn.setObjectName(u"systemminutesplus_btn")
         self.systemminutesplus_btn.setGeometry(QRect(260, 30, 75, 51))
-        self.systemminutesplus_btn.setFont(font9)
+        self.systemminutesplus_btn.setFont(font11)
         self.systemminutesplus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -420,16 +490,16 @@ class Ui_Form(object):
         self.systemyear_label = QLabel(self.datetime_page)
         self.systemyear_label.setObjectName(u"systemyear_label")
         self.systemyear_label.setGeometry(QRect(20, 300, 171, 91))
-        self.systemyear_label.setFont(font8)
+        self.systemyear_label.setFont(font10)
         self.systemyear_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.systemmonthplus_btn = QPushButton(self.datetime_page)
         self.systemmonthplus_btn.setObjectName(u"systemmonthplus_btn")
         self.systemmonthplus_btn.setGeometry(QRect(194, 250, 111, 51))
-        font10 = QFont()
-        font10.setFamilies([u"TikTok Sans 28pt"])
-        font10.setPointSize(18)
-        font10.setBold(True)
-        self.systemmonthplus_btn.setFont(font10)
+        font12 = QFont()
+        font12.setFamilies([u"TikTok Sans 28pt"])
+        font12.setPointSize(18)
+        font12.setBold(True)
+        self.systemmonthplus_btn.setFont(font12)
         self.systemmonthplus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -438,7 +508,7 @@ class Ui_Form(object):
         self.systemmonthminus_btn = QPushButton(self.datetime_page)
         self.systemmonthminus_btn.setObjectName(u"systemmonthminus_btn")
         self.systemmonthminus_btn.setGeometry(QRect(194, 390, 111, 51))
-        self.systemmonthminus_btn.setFont(font10)
+        self.systemmonthminus_btn.setFont(font12)
         self.systemmonthminus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -447,7 +517,7 @@ class Ui_Form(object):
         self.systemdayplus_btn = QPushButton(self.datetime_page)
         self.systemdayplus_btn.setObjectName(u"systemdayplus_btn")
         self.systemdayplus_btn.setGeometry(QRect(340, 250, 75, 51))
-        self.systemdayplus_btn.setFont(font10)
+        self.systemdayplus_btn.setFont(font12)
         self.systemdayplus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -456,7 +526,7 @@ class Ui_Form(object):
         self.systemdayminus_btn = QPushButton(self.datetime_page)
         self.systemdayminus_btn.setObjectName(u"systemdayminus_btn")
         self.systemdayminus_btn.setGeometry(QRect(340, 390, 75, 51))
-        self.systemdayminus_btn.setFont(font10)
+        self.systemdayminus_btn.setFont(font12)
         self.systemdayminus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -465,7 +535,7 @@ class Ui_Form(object):
         self.systemyearminus_btn = QPushButton(self.datetime_page)
         self.systemyearminus_btn.setObjectName(u"systemyearminus_btn")
         self.systemyearminus_btn.setGeometry(QRect(70, 390, 75, 51))
-        self.systemyearminus_btn.setFont(font10)
+        self.systemyearminus_btn.setFont(font12)
         self.systemyearminus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -474,7 +544,7 @@ class Ui_Form(object):
         self.systemyearplus_btn = QPushButton(self.datetime_page)
         self.systemyearplus_btn.setObjectName(u"systemyearplus_btn")
         self.systemyearplus_btn.setGeometry(QRect(70, 250, 75, 51))
-        self.systemyearplus_btn.setFont(font10)
+        self.systemyearplus_btn.setFont(font12)
         self.systemyearplus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -483,12 +553,12 @@ class Ui_Form(object):
         self.systemmonth_label = QLabel(self.datetime_page)
         self.systemmonth_label.setObjectName(u"systemmonth_label")
         self.systemmonth_label.setGeometry(QRect(170, 300, 171, 91))
-        self.systemmonth_label.setFont(font8)
+        self.systemmonth_label.setFont(font10)
         self.systemmonth_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.systemday_label = QLabel(self.datetime_page)
         self.systemday_label.setObjectName(u"systemday_label")
         self.systemday_label.setGeometry(QRect(290, 300, 171, 91))
-        self.systemday_label.setFont(font8)
+        self.systemday_label.setFont(font10)
         self.systemday_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.pagelayoutwidget.addWidget(self.datetime_page)
         self.irrigation_page = QWidget()
@@ -505,7 +575,7 @@ class Ui_Form(object):
         self.wateringtime_page_btn = QPushButton(self.irrigation_page)
         self.wateringtime_page_btn.setObjectName(u"wateringtime_page_btn")
         self.wateringtime_page_btn.setGeometry(QRect(10, 20, 191, 131))
-        self.wateringtime_page_btn.setFont(font7)
+        self.wateringtime_page_btn.setFont(font9)
         self.wateringtime_page_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 25px;\n"
@@ -551,16 +621,16 @@ class Ui_Form(object):
         self.watervol_label = QLabel(self.irrigation_page)
         self.watervol_label.setObjectName(u"watervol_label")
         self.watervol_label.setGeometry(QRect(30, 190, 71, 16))
-        font11 = QFont()
-        font11.setFamilies([u"TikTok Sans 28pt"])
-        font11.setBold(False)
-        font11.setUnderline(True)
-        self.watervol_label.setFont(font11)
+        font13 = QFont()
+        font13.setFamilies([u"TikTok Sans 28pt"])
+        font13.setBold(False)
+        font13.setUnderline(True)
+        self.watervol_label.setFont(font13)
         self.watervol_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.moistthresh_label = QLabel(self.irrigation_page)
         self.moistthresh_label.setObjectName(u"moistthresh_label")
         self.moistthresh_label.setGeometry(QRect(30, 250, 71, 16))
-        self.moistthresh_label.setFont(font11)
+        self.moistthresh_label.setFont(font13)
         self.moistthresh_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.moistthresh_slider = QSlider(self.irrigation_page)
         self.moistthresh_slider.setObjectName(u"moistthresh_slider")
@@ -640,57 +710,57 @@ class Ui_Form(object):
         self.tempset_label = QLabel(self.irrigation_page)
         self.tempset_label.setObjectName(u"tempset_label")
         self.tempset_label.setGeometry(QRect(20, 310, 91, 16))
-        self.tempset_label.setFont(font11)
+        self.tempset_label.setFont(font13)
         self.tempset_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.humidset_label = QLabel(self.irrigation_page)
         self.humidset_label.setObjectName(u"humidset_label")
         self.humidset_label.setGeometry(QRect(30, 370, 71, 16))
-        self.humidset_label.setFont(font11)
+        self.humidset_label.setFont(font13)
         self.humidset_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.irrigation_description_label = QLabel(self.irrigation_page)
         self.irrigation_description_label.setObjectName(u"irrigation_description_label")
         self.irrigation_description_label.setGeometry(QRect(210, 20, 161, 161))
-        font12 = QFont()
-        font12.setFamilies([u"TikTok Sans 28pt"])
-        font12.setPointSize(12)
-        font12.setBold(True)
-        self.irrigation_description_label.setFont(font12)
+        font14 = QFont()
+        font14.setFamilies([u"TikTok Sans 28pt"])
+        font14.setPointSize(12)
+        font14.setBold(True)
+        self.irrigation_description_label.setFont(font14)
         self.irrigation_description_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.irrigation_description_label.setWordWrap(True)
         self.irrigation_description_label_2 = QLabel(self.irrigation_page)
         self.irrigation_description_label_2.setObjectName(u"irrigation_description_label_2")
         self.irrigation_description_label_2.setGeometry(QRect(380, 20, 91, 161))
-        self.irrigation_description_label_2.setFont(font12)
+        self.irrigation_description_label_2.setFont(font14)
         self.irrigation_description_label_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.irrigation_description_label_2.setWordWrap(True)
         self.watervol_indicator = QLabel(self.irrigation_page)
         self.watervol_indicator.setObjectName(u"watervol_indicator")
         self.watervol_indicator.setGeometry(QRect(20, 210, 91, 20))
-        font13 = QFont()
-        font13.setFamilies([u"TikTok Sans 28pt"])
-        font13.setPointSize(13)
-        font13.setBold(False)
-        font13.setUnderline(False)
-        self.watervol_indicator.setFont(font13)
+        font15 = QFont()
+        font15.setFamilies([u"TikTok Sans 28pt"])
+        font15.setPointSize(13)
+        font15.setBold(False)
+        font15.setUnderline(False)
+        self.watervol_indicator.setFont(font15)
         self.watervol_indicator.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.moistthresh_idicator = QLabel(self.irrigation_page)
         self.moistthresh_idicator.setObjectName(u"moistthresh_idicator")
         self.moistthresh_idicator.setGeometry(QRect(20, 270, 91, 20))
-        font14 = QFont()
-        font14.setFamilies([u"TikTok Sans 28pt"])
-        font14.setPointSize(13)
-        font14.setBold(False)
-        self.moistthresh_idicator.setFont(font14)
+        font16 = QFont()
+        font16.setFamilies([u"TikTok Sans 28pt"])
+        font16.setPointSize(13)
+        font16.setBold(False)
+        self.moistthresh_idicator.setFont(font16)
         self.moistthresh_idicator.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.tempset_indicator = QLabel(self.irrigation_page)
         self.tempset_indicator.setObjectName(u"tempset_indicator")
         self.tempset_indicator.setGeometry(QRect(20, 330, 91, 20))
-        self.tempset_indicator.setFont(font14)
+        self.tempset_indicator.setFont(font16)
         self.tempset_indicator.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.humidset_indicator = QLabel(self.irrigation_page)
         self.humidset_indicator.setObjectName(u"humidset_indicator")
         self.humidset_indicator.setGeometry(QRect(20, 390, 91, 20))
-        self.humidset_indicator.setFont(font14)
+        self.humidset_indicator.setFont(font16)
         self.humidset_indicator.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.groupBox = QGroupBox(self.irrigation_page)
         self.groupBox.setObjectName(u"groupBox")
@@ -724,22 +794,22 @@ class Ui_Form(object):
         self.waterhours_label = QLabel(self.watertiming_page)
         self.waterhours_label.setObjectName(u"waterhours_label")
         self.waterhours_label.setGeometry(QRect(120, 110, 91, 111))
-        self.waterhours_label.setFont(font8)
+        self.waterhours_label.setFont(font10)
         self.waterhours_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.waterminutes_label = QLabel(self.watertiming_page)
         self.waterminutes_label.setObjectName(u"waterminutes_label")
         self.waterminutes_label.setGeometry(QRect(230, 110, 121, 111))
-        self.waterminutes_label.setFont(font8)
+        self.waterminutes_label.setFont(font10)
         self.waterminutes_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.timesep_label = QLabel(self.watertiming_page)
         self.timesep_label.setObjectName(u"timesep_label")
         self.timesep_label.setGeometry(QRect(210, 110, 21, 111))
-        self.timesep_label.setFont(font8)
+        self.timesep_label.setFont(font10)
         self.timesep_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.hoursplus_btn = QPushButton(self.watertiming_page)
         self.hoursplus_btn.setObjectName(u"hoursplus_btn")
         self.hoursplus_btn.setGeometry(QRect(130, 60, 75, 51))
-        self.hoursplus_btn.setFont(font9)
+        self.hoursplus_btn.setFont(font11)
         self.hoursplus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -748,7 +818,7 @@ class Ui_Form(object):
         self.minutesplus_btn = QPushButton(self.watertiming_page)
         self.minutesplus_btn.setObjectName(u"minutesplus_btn")
         self.minutesplus_btn.setGeometry(QRect(250, 60, 75, 51))
-        self.minutesplus_btn.setFont(font9)
+        self.minutesplus_btn.setFont(font11)
         self.minutesplus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -757,7 +827,7 @@ class Ui_Form(object):
         self.minutesminus_btn = QPushButton(self.watertiming_page)
         self.minutesminus_btn.setObjectName(u"minutesminus_btn")
         self.minutesminus_btn.setGeometry(QRect(250, 220, 75, 51))
-        self.minutesminus_btn.setFont(font9)
+        self.minutesminus_btn.setFont(font11)
         self.minutesminus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -766,7 +836,7 @@ class Ui_Form(object):
         self.hoursminus_btn = QPushButton(self.watertiming_page)
         self.hoursminus_btn.setObjectName(u"hoursminus_btn")
         self.hoursminus_btn.setGeometry(QRect(130, 220, 75, 51))
-        self.hoursminus_btn.setFont(font9)
+        self.hoursminus_btn.setFont(font11)
         self.hoursminus_btn.setStyleSheet(u"QPushButton{\n"
 "	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
 "	border-radius: 10px;\n"
@@ -833,25 +903,25 @@ class Ui_Form(object):
         self.statusbar_label = QLabel(self.statusbar)
         self.statusbar_label.setObjectName(u"statusbar_label")
         self.statusbar_label.setGeometry(QRect(20, 10, 361, 61))
-        font15 = QFont()
-        font15.setFamilies([u"Myriad Pro"])
-        font15.setPointSize(15)
-        self.statusbar_label.setFont(font15)
+        font17 = QFont()
+        font17.setFamilies([u"Myriad Pro"])
+        font17.setPointSize(15)
+        self.statusbar_label.setFont(font17)
         self.water_status_label = QLabel(self.statusbar)
         self.water_status_label.setObjectName(u"water_status_label")
         self.water_status_label.setGeometry(QRect(390, 10, 81, 16))
-        font16 = QFont()
-        font16.setFamilies([u"TikTok Sans 28pt"])
-        font16.setBold(True)
-        self.water_status_label.setFont(font16)
+        font18 = QFont()
+        font18.setFamilies([u"TikTok Sans 28pt"])
+        font18.setBold(True)
+        self.water_status_label.setFont(font18)
         self.water_status_label_2 = QLabel(self.statusbar)
         self.water_status_label_2.setObjectName(u"water_status_label_2")
         self.water_status_label_2.setGeometry(QRect(390, 30, 81, 16))
-        self.water_status_label_2.setFont(font16)
+        self.water_status_label_2.setFont(font18)
         self.water_status_label_3 = QLabel(self.statusbar)
         self.water_status_label_3.setObjectName(u"water_status_label_3")
         self.water_status_label_3.setGeometry(QRect(390, 50, 81, 16))
-        self.water_status_label_3.setFont(font16)
+        self.water_status_label_3.setFont(font18)
 
         self.retranslateUi(Form)
 
@@ -871,9 +941,12 @@ class Ui_Form(object):
         self.editsettings_page_btn.setText(QCoreApplication.translate("Form", u"Edit Settings", None))
         self.mainmenu_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.manualcontrols_page_btn.setText(QCoreApplication.translate("Form", u"Manual Controls", None))
-        self.monitordata_page_btn.setText(QCoreApplication.translate("Form", u"Monitor Data\n"
-"(WIP)", None))
+        self.monitordata_page_btn.setText(QCoreApplication.translate("Form", u"Monitor Data", None))
         self.monitordata_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
+        self.monitordata_update_btn.setText(QCoreApplication.translate("Form", u"Update", None))
+        self.monitordata_data_label.setText(QCoreApplication.translate("Form", u"<<Data Label>>", None))
+        self.graphdomain_label.setText(QCoreApplication.translate("Form", u"<<Graph Domain>>", None))
+        self.monitordata_live_btn.setText(QCoreApplication.translate("Form", u"Live", None))
         self.waternow_btn.setText(QCoreApplication.translate("Form", u"Water\n"
 "Toggle", None))
         self.lightswitch_btn.setText(QCoreApplication.translate("Form", u"Light\n"
