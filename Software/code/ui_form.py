@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formczkoBf.ui'
+## Form generated from reading UI file 'formtiVMiV.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -312,15 +312,6 @@ class Ui_Form(object):
         font7.setPointSize(17)
         font7.setBold(False)
         self.systemversion_label.setFont(font7)
-        self.grand_debugger_btn = QPushButton(self.systeminfo_page)
-        self.grand_debugger_btn.setObjectName(u"grand_debugger_btn")
-        self.grand_debugger_btn.setGeometry(QRect(260, 170, 201, 151))
-        self.grand_debugger_btn.setFont(font2)
-        self.grand_debugger_btn.setStyleSheet(u"QPushButton{\n"
-"	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);\n"
-"	border-radius: 25px;\n"
-"	border: 5px solid rgb(120, 120, 120);\n"
-"}")
         self.pagelayoutwidget.addWidget(self.systeminfo_page)
         self.editsettings_page = QWidget()
         self.editsettings_page.setObjectName(u"editsettings_page")
@@ -925,7 +916,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.pagelayoutwidget.setCurrentIndex(0)
+        self.pagelayoutwidget.setCurrentIndex(4)
 
 
         QMetaObject.connectSlotsByName(Form)
@@ -961,7 +952,6 @@ class Ui_Form(object):
         self.logexport_page_btn.setText(QCoreApplication.translate("Form", u"Log Export", None))
         self.systeminfo_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.systemversion_label.setText(QCoreApplication.translate("Form", u"<<System Version>>", None))
-        self.grand_debugger_btn.setText(QCoreApplication.translate("Form", u"Debugger", None))
         self.irrigation_page_btn.setText(QCoreApplication.translate("Form", u"Irrigation", None))
         self.editsettings_back_btn.setText(QCoreApplication.translate("Form", u"Back", None))
         self.datetime_page_btn.setText(QCoreApplication.translate("Form", u"Date/Time", None))
