@@ -302,9 +302,6 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.ui.systeminfo_back_btn.clicked.connect(
             lambda: self.ui.pagelayoutwidget.setCurrentWidget(self.ui.mainmenu_page)
             ) # Back Button
-        self.ui.grand_debugger_btn.clicked.connect(
-            lambda: self.start_thread(self.debug_press)
-            ) # Back Button
 
         # Edit Settings ------------
             # Buttons

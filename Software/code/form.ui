@@ -771,33 +771,6 @@ Pump</string>
       <string>&lt;&lt;System Version&gt;&gt;</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="grand_debugger_btn">
-     <property name="geometry">
-      <rect>
-       <x>260</x>
-       <y>170</y>
-       <width>201</width>
-       <height>151</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>TikTok Sans 28pt</family>
-       <pointsize>18</pointsize>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
-	background-color: qlineargradient(x1:-1, y1:0, x2:2, y2:0, stop:0 white, stop:1 gray);
-	border-radius: 25px;
-	border: 5px solid rgb(120, 120, 120);
-}</string>
-     </property>
-     <property name="text">
-      <string>Debugger</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="editsettings_page">
     <widget class="QPushButton" name="irrigation_page_btn">
