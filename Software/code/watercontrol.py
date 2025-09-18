@@ -25,7 +25,7 @@
 ########################################
 # MODULE IMPORTS
 from multiprocessing import shared_memory
-from time import sleep
+from time import sleep, monotonic
 from diopinsetup import diopinset
 import subprocess
 from config import readcsv_waterparam, writecsv_mainflags, readcsv_mainflags
@@ -133,15 +133,25 @@ def pumprefillcycle():
 
             Amps = ina.current # Measured in milliamps
             A_filtered = currentFilter.update(Amps) # Filtered Current measured in milliamps
+            pumprefillcycle_timestart = monotonic(); #The start time recorded using monotonic clock 
+            pumprefillcycle_timediff = monotonic() - pumprefillcycle_timestart #Calculate time difference
+            #Debug message
+            print(f"watercontrol-pumprefillcycle: Time elapsed = {pumprefillcycle_timediff} seconds") if debugstate == 1 or debugstate == 2 else None
 
-            if A_filtered < 350: # if the filtered current is greater than 350 mA
+            if pumprefillcycle_timediff > 10: #Set an exit condition if time spent is greater than 10 seconds
+                #Debug message
+                print(f"watercontrol-pumprefillcycle: Time elapsed of {pumprefillcycle_timediff} exceeds 10s limit. Turning off pump and marking it as dry.") if debugstate == 1 or debugstate == 2 else None
+                s1.value = False # Turn off pump MOSFET
+                writecsv_mainflags("PumpRunDry","1") # Write RunDry Flag back to 1 if time runs out and current value still too low
+
+            elif A_filtered < 350 and pumprefillcycle_timediff <= 10: # if the filtered current is less than 350 mA
                 #Debug message
                 print(f"watercontrol-pumprefillcycle: Amps = {Amps} mA, A_filtered = {A_filtered} mA") if debugstate == 1 or debugstate == 2 else None
                 print(f"watercontrol-pumprefillcycle: Current value too low, sleeping for {samplerate} seconds") if debugstate == 1 or debugstate == 2 else None
 
                 sleep(samplerate) # Sleep for the specified sample rate
 
-            elif A_filtered >= 350: # if the filtered current is less than 350 mA
+            elif A_filtered >= 350 and pumprefillcycle_timediff <= 10: # if the filtered current is greater than 350 mA
                 #Debug message
                 print('watercontrol-pumprefillcycle: Current OK, turning off pump') if debugstate == 1 or debugstate == 2 else None
 
@@ -149,8 +159,7 @@ def pumprefillcycle():
                 writecsv_mainflags("PumpRunDry","0") # Write RunDry Flag back to 0
 
             else:
-
-                raise RuntimeError('CURRENT VALUE IS INVALID') # Current should be a logical value
+                raise RuntimeError('CURRENT OR TIME VALUE IS INVALID') # Current should be a logical value
             
         #Debug message
         print('watercontrol-pumprefillcycle: Pump cycling completed') if debugstate == 1 or debugstate == 2 else None
