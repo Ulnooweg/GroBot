@@ -125,7 +125,7 @@ def pumprefillcycle():
         samplerate = (1/32) # Seconds
         s1.value = True
         sleep(2)
-
+        pumprefillcycle_timestart = monotonic(); #The start time recorded using monotonic clock
         while s1.value == True: # If MOSFET S1 is enabled
 
             #Debug message
@@ -133,7 +133,6 @@ def pumprefillcycle():
 
             Amps = ina.current # Measured in milliamps
             A_filtered = currentFilter.update(Amps) # Filtered Current measured in milliamps
-            pumprefillcycle_timestart = monotonic(); #The start time recorded using monotonic clock 
             pumprefillcycle_timediff = monotonic() - pumprefillcycle_timestart #Calculate time difference
             #Debug message
             print(f"watercontrol-pumprefillcycle: Time elapsed = {pumprefillcycle_timediff} seconds") if debugstate == 1 or debugstate == 2 else None
