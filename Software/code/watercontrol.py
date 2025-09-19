@@ -81,23 +81,23 @@ def wateringwithlogic(timetowater): #Define a func that handles the run-dry dete
                 A_filtered = currentFilter.update(Amps) # Filtered Current measured in milliamps
                 #Debug message
                 print(f"watercontrol-wateringwithlogic: At time {counter} of {timetowater} Amps = {Amps} mA, A_filtered ={A_filtered} mA") if debugstate == 1 or debugstate == 2 else None
-                if counter > 0 and counter % 2 == 0: # if counter is divisible by 2 and leaves a remainder of 0
+                if counter > 0 and counter % 4 == 0: # if counter is divisible by 4 and leaves a remainder of 0
                     #Debug message
-                    print(f"watercontrol-wateringwithlogic: Counter of {counter} is divisible by 2") if debugstate == 1 or debugstate == 2 else None
-                    if A_filtered >= 350: # if the filtered current is greater than 350 mA
+                    print(f"watercontrol-wateringwithlogic: Counter of {counter} is divisible by 4") if debugstate == 1 or debugstate == 2 else None
+                    if A_filtered >= 300: # if the filtered current is greater than 300 mA
                         #Debug message
-                        print(f"watercontrol-wateringwithlogic: A_filtered of {A_filtered} >= 350 mA, water level OK, continuing") if debugstate == 1 or debugstate == 2 else None
+                        print(f"watercontrol-wateringwithlogic: A_filtered of {A_filtered} >= 300 mA, water level OK, continuing") if debugstate == 1 or debugstate == 2 else None
                         pass # Current is at normal levels for normal 
-                    elif A_filtered < 350: # if the filtered current is less than 350 mA
+                    elif A_filtered < 300: # if the filtered current is less than 300 mA
                         #Debug message
-                        print(f"watercontrol-wateringwithlogic: A_filtered of {A_filtered} < 350 mA, pump dry, stopping") if debugstate == 1 or debugstate == 2 else None
+                        print(f"watercontrol-wateringwithlogic: A_filtered of {A_filtered} < 300 mA, pump dry, stopping") if debugstate == 1 or debugstate == 2 else None
                         s1.value = False # Turn off pump MOSFET
                         writecsv_mainflags("PumpRunDry","1") # Raise RunDry Flag
                     else:
                         raise RuntimeError('CURRENT VALUE IS INVALID') # Current should be a logical value
                 else:
                     #Debug message
-                    print(f"watercontrol-wateringwithlogic: Counter of {counter} is not divisible by 2") if debugstate == 1 or debugstate == 2 else None
+                    print(f"watercontrol-wateringwithlogic: Counter of {counter} is not divisible by 4") if debugstate == 1 or debugstate == 2 else None
                     pass
                 sleep(samplerate) # Sleep for the specified sample rate
                 counter = counter + (samplerate) # Increment counter by one samplerate 
@@ -143,14 +143,14 @@ def pumprefillcycle():
                 s1.value = False # Turn off pump MOSFET
                 writecsv_mainflags("PumpRunDry","1") # Write RunDry Flag back to 1 if time runs out and current value still too low
 
-            elif A_filtered < 350 and pumprefillcycle_timediff <= 10: # if the filtered current is less than 350 mA
+            elif A_filtered < 300 and pumprefillcycle_timediff <= 10: # if the filtered current is less than 300 mA
                 #Debug message
                 print(f"watercontrol-pumprefillcycle: Amps = {Amps} mA, A_filtered = {A_filtered} mA") if debugstate == 1 or debugstate == 2 else None
                 print(f"watercontrol-pumprefillcycle: Current value too low, sleeping for {samplerate} seconds") if debugstate == 1 or debugstate == 2 else None
 
                 sleep(samplerate) # Sleep for the specified sample rate
 
-            elif A_filtered >= 350 and pumprefillcycle_timediff <= 10: # if the filtered current is greater than 350 mA
+            elif A_filtered >= 300 and pumprefillcycle_timediff <= 10: # if the filtered current is greater than 300 mA
                 #Debug message
                 print('watercontrol-pumprefillcycle: Current OK, turning off pump') if debugstate == 1 or debugstate == 2 else None
 
