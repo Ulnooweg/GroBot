@@ -816,10 +816,58 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     def read_datalog(self, file_path, graphwindowsize):
         print("main-read_datalog: opening filepath") if debugstate == 1 or debugstate == 2 else None
         try:
+            #First check if the file exists, if not change path to dummy path
+
+            #Debug message
+            print('main-read_datalog: Checking if file exists') if debugstate == 1 or debugstate == 2 else None
+
+            if os.path.isfile(file_path) == True:
+                pass
+            else: #use dummy path instead
+                #Debug message
+                print('main-read_datalog: File does not exist, using dummy path') if debugstate == 1 or debugstate == 2 else None
+                file_path = "/mnt/grobotextdat/userdata/initdata.csv"
 
             with open(file_path, 'r', newline = '') as csvfile:
                 reader = csv.reader(csvfile)
-                data = list(reader)  # Read all rows into a list
+                data = list(reader)  # Read all rows into a list of rows
+
+                #Check if the data is empty or not
+                #Debug message
+                print('main-read_datalog: Checking if data is empty or not') if debugstate == 1 or debugstate == 2 else None
+                if data == []:
+                    #Debug message
+                    print('main-read_datalog: Data is empty, putting in dummy list as data') if debugstate == 1 or debugstate == 2 else None
+                    data = [['00:01:00 1970-01-01', '0.000000000000000', '0.000000000000000', '000'], ['00:01:00 1970-01-01', '0.000000000000000', '0.000000000000000', '000'], ['00:01:00 1970-01-01', '0.000000000000000', '0.000000000000000', '000']]
+                else:
+                    pass
+
+                #Debug message
+                print('main-read_datalog: Checking if data has text header or not') if debugstate == 1 or debugstate == 2 else None
+                #Also check if there is a text header row and remove it if it exists
+                if data and 'Time' in data[0]: #Check if there is the word time in row 0
+                    #Debug message
+                    print('main-read_datalog: Had header - removing them from data') if debugstate == 1 or debugstate == 2 else None
+                    data.pop(0) #Use pop to remove the row
+                else:
+                    pass
+
+                #Now need to check if the number of data point matched graph window size. if not inject dummy before the actual data
+                #Debug message
+                print('main-read_datalog: Checking if number of datapoints matched graph window size') if debugstate == 1 or debugstate == 2 else None
+                data_row = len(data)
+                if data_row <= graphwindowsize:
+                    #Debug message
+                    print('main-read_datalog: Number of datapoints do not match graph window size, prepending dummy data') if debugstate == 1 or debugstate == 2 else None
+                    #Calculate how many rows to add
+                    rowstoadd = (graphwindowsize - data_row)+1 #adds 1 extra as insurance policy
+                    appendrow = [['00:01:00 1970-01-01', '0.000000000000000', '0.000000000000000', '000']]*rowstoadd #Double bracket to force nested list to ensure same format as existing data
+                    data = appendrow+data #Prepend the dummy data to actual list
+                elif data_row > graphwindowsize:
+                    pass
+                else:
+                    raise RuntimeError('gaphwindowsize count error')
+
                 print("main-update_graph: returning data from filepath") if debugstate == 1 or debugstate == 2 else None
                 return data[max(0, len(data) - graphwindowsize):] # Slice the last n items
         
