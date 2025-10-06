@@ -857,6 +857,8 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                 print('main-read_datalog: Checking if number of datapoints matched graph window size') if debugstate == 1 or debugstate == 2 else None
                 data_row = len(data)
                 if data_row <= graphwindowsize:
+                    #Debug message
+                    print('main-read_datalog: Number of datapoints do not match graph window size, prepending dummy data') if debugstate == 1 or debugstate == 2 else None
                     #Calculate how many rows to add
                     rowstoadd = (graphwindowsize - data_row)+1 #adds 1 extra as insurance policy
                     appendrow = [['00:01:00 1970-01-01', '0.000000000000000', '0.000000000000000', '000']]*rowstoadd #Double bracket to force nested list to ensure same format as existing data
