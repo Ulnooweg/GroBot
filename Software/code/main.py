@@ -852,6 +852,20 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                 else:
                     pass
 
+                #Now need to check if the number of data point matched graph window size. if not inject dummy before the actual data
+                #Debug message
+                print('main-read_datalog: Checking if number of datapoints matched graph window size') if debugstate == 1 or debugstate == 2 else None
+                data_row = len(data)
+                if data_row <= graphwindowsize:
+                    #Calculate how many rows to add
+                    rowstoadd = (data_row - graphwindowsize)+1 #adds 1 extra as insurance policy
+                    appendrow = [['00:01:00 1970-01-01', '0.000000000000000', '0.000000000000000', '000']]*rowstoadd #Double bracket to force nested list to ensure same format as existing data
+                    data = appendrow+data #Prepend the dummy data to actual list
+                elif data_row > graphwindowsize:
+                    pass
+                else:
+                    raise RuntimeError('gaphwindowsize count error')
+
                 print("main-update_graph: returning data from filepath") if debugstate == 1 or debugstate == 2 else None
                 return data[max(0, len(data) - graphwindowsize):] # Slice the last n items
         
