@@ -816,10 +816,42 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     def read_datalog(self, file_path, graphwindowsize):
         print("main-read_datalog: opening filepath") if debugstate == 1 or debugstate == 2 else None
         try:
+            #First check if the file exists, if not change path to dummy path
+
+            #Debug message
+            print('main-read_datalog: Checking if file exists') if debugstate == 1 or debugstate == 2 else None
+
+            if os.path.isfile(file_path) == True:
+                pass
+            else: #use dummy path instead
+                #Debug message
+                print('main-read_datalog: File does not exist, using dummy path') if debugstate == 1 or debugstate == 2 else None
+                file_path = "/mnt/grobotextdat/userdata/initdata.csv"
 
             with open(file_path, 'r', newline = '') as csvfile:
                 reader = csv.reader(csvfile)
-                data = list(reader)  # Read all rows into a list
+                data = list(reader)  # Read all rows into a list of rows
+
+                #Check if the data is empty or not
+                #Debug message
+                print('main-read_datalog: Checking if data is empty or not') if debugstate == 1 or debugstate == 2 else None
+                if data == []:
+                    #Debug message
+                    print('main-read_datalog: Data is empty, putting in dummy list as data') if debugstate == 1 or debugstate == 2 else None
+                    data = [['13:37:01 1979-04-20', '23.283192389128319', '42.104530334472656', '333'], ['06:41:02 2022-04-10', '24.728173287123787', '68.699723192398213', '444'], ['15:10:03 2022-09-08', '27.725982666015625', '22.372483842738742', '555']]
+                else:
+                    pass
+
+                #Debug message
+                print('main-read_datalog: Checking if data has text header or not') if debugstate == 1 or debugstate == 2 else None
+                #Also check if there is a text header row and remove it if it exists
+                if data and 'Time' in data[0]: #Check if there is the word time in row 0
+                    #Debug message
+                    print('main-read_datalog: Had header - removing them from data') if debugstate == 1 or debugstate == 2 else None
+                    data.pop(0) #Use pop to remove the row
+                else:
+                    pass
+
                 print("main-update_graph: returning data from filepath") if debugstate == 1 or debugstate == 2 else None
                 return data[max(0, len(data) - graphwindowsize):] # Slice the last n items
         
