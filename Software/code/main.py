@@ -858,7 +858,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
                 data_row = len(data)
                 if data_row <= graphwindowsize:
                     #Calculate how many rows to add
-                    rowstoadd = (data_row - graphwindowsize)+1 #adds 1 extra as insurance policy
+                    rowstoadd = (graphwindowsize - data_row)+1 #adds 1 extra as insurance policy
                     appendrow = [['00:01:00 1970-01-01', '0.000000000000000', '0.000000000000000', '000']]*rowstoadd #Double bracket to force nested list to ensure same format as existing data
                     data = appendrow+data #Prepend the dummy data to actual list
                 elif data_row > graphwindowsize:
