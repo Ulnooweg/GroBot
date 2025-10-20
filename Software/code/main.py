@@ -392,7 +392,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             QSlider, "graphdomain_slider"
             ) # Finds QSlider object "graphdomain_slider" in Ui_Form
         self.domain_changer.setValue(
-            50
+            24
             ) # Sets displayed value of slider to stored cfg value
         self.domain_changer.valueChanged.connect(
             self.change_domain

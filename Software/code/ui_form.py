@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formAyIEgA.ui'
+## Form generated from reading UI file 'formspFAyP.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -189,7 +189,7 @@ class Ui_Form(object):
 "	margin: -24px -12px\n"
 "}")
         self.graphdomain_slider.setMinimum(10)
-        self.graphdomain_slider.setMaximum(100)
+        self.graphdomain_slider.setMaximum(24)
         self.graphdomain_slider.setOrientation(Qt.Orientation.Horizontal)
         self.graphdomain_label = QLabel(self.monitordata_page)
         self.graphdomain_label.setObjectName(u"graphdomain_label")
