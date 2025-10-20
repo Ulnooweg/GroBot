@@ -368,7 +368,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
         self.graphwindow = self.findChild(pg.PlotWidget, "graphwindow")
         self.graphwindow_2 = self.findChild(pg.PlotWidget, "graphwindow_2")
         self.graphwindow_3 = self.findChild(pg.PlotWidget, "graphwindow_3")
-        self.graphwindowsize = 100
+        self.graphwindowsize = 24
 
             # Define Data Labels
         self.recent_data_label = self.findChild(QLabel, "monitordata_data_label")
@@ -392,7 +392,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             QSlider, "graphdomain_slider"
             ) # Finds QSlider object "graphdomain_slider" in Ui_Form
         self.domain_changer.setValue(
-            50
+            24
             ) # Sets displayed value of slider to stored cfg value
         self.domain_changer.valueChanged.connect(
             self.change_domain
