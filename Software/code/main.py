@@ -392,7 +392,7 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             QSlider, "graphdomain_slider"
             ) # Finds QSlider object "graphdomain_slider" in Ui_Form
         self.domain_changer.setValue(
-            50
+            24
             ) # Sets displayed value of slider to stored cfg value
         self.domain_changer.valueChanged.connect(
             self.change_domain
@@ -815,6 +815,13 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
     # Defines plot function to display hardcoded data
     def read_datalog(self, file_path, graphwindowsize):
         print("main-read_datalog: opening filepath") if debugstate == 1 or debugstate == 2 else None
+
+        if file_path == True: #check if exist
+            pass #if it is pass
+        else: #if not return error to force a code restart
+            print("main-read_datalog: feeding debug array") if debugstate == 1 or debugstate == 2 else None
+            return data == [0,0,0,0]
+
         try:
 
             with open(file_path, 'r', newline = '') as csvfile:
