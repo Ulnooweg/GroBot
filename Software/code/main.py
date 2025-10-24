@@ -1365,13 +1365,31 @@ class Widget(QMainWindow): # Creates a class containing attributes imported from
             # Read value from sensor
             ReadVal = feedread() # T RH SRH in order
 
+            isautofanhumiddone = 0 #Initialize a tracking variable
+
             # Turn on fan if temp or humidity exceeds the limit 
             if ReadVal[0] > settings['maxTemp'] or ReadVal[1] > settings['maxHumid']:
+                isautofanhumiddone = 1 #Set tracking variable to 1 if fan is on from auto
                 fanon(settings['fanTime'])
             elif ReadVal[0] <= settings['maxTemp'] and ReadVal[1] <= settings['maxHumid']:
+                isautofanhumiddone = 0
                 pass
             else:
                 raise RuntimeError('UKNOWN FAILURE')
+            
+            if isautofanhumiddone == 0: #If fan isn't on yet, check if it is the cadence to turn on and turn on
+                windcadencevar = readcsv_mainflags("WindCadence") #Read the windcadence value in mainflags as str
+                if windcadencevar == "0": #If windcadence is 0, execute and change it to 1
+                    writecsv_mainflags("WindCadence","1") #Write cadence to 1 to skip the next check
+                    fanon(45) #Turn fan on for 45 seconds
+                elif windcadencevar == "1": #If windcadence is 1, skip the wind generation
+                    writecsv_mainflags("WindCadence","0") #Write cadence to 0 to engage the next check
+                else:
+                    raise RuntimeError('WindCadence value error')
+            elif isautofanhumiddone == 1: #if fan already on, skip
+                pass
+            else:
+                raise RuntimeError('isautofanhumiddone value error')
             
             writecsv_mainflags("EveryXX15","0") #Set the execution flag for the function back to 0
             #LCD COLOUR HANDLING CODE (GREEN) HERE  # Set LCD color to green when done
