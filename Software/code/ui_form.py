@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formspFAyP.ui'
+## Form generated from reading UI file 'formeGilxp.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.0
 ##
@@ -605,7 +605,7 @@ class Ui_Form(object):
 "    height: 100px;\n"
 "	margin: -24px -12px\n"
 "}")
-        self.watervol_slider.setMinimum(1)
+        self.watervol_slider.setMinimum(5)
         self.watervol_slider.setMaximum(20)
         self.watervol_slider.setOrientation(Qt.Orientation.Horizontal)
         self.watervol_slider.setInvertedAppearance(False)
