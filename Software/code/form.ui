@@ -1551,7 +1551,7 @@ Parameters</string>
 }</string>
      </property>
      <property name="minimum">
-      <number>1</number>
+      <number>5</number>
      </property>
      <property name="maximum">
       <number>20</number>
